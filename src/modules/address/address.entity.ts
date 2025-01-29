@@ -7,8 +7,8 @@ export class AddressEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    // @Column(() => LocationEntity)
-    // location: LocationEntity
+    @Column(() => LocationEntity)
+    location: LocationEntity
 
     @Column(() => BaseEntity)
     base: BaseEntity
