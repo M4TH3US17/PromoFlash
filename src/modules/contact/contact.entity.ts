@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity } from "src/shared/bases/base.entity";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({name: "contacts"})
 export class ContactEntity {
