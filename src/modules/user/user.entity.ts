@@ -1,6 +1,8 @@
 import { BaseEntity } from "src/shared/bases/base.entity";
-import { Column, Entity } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
 import { UserRole } from "./enums/user.enums";
+import { ContactEntity } from "../contact/contact.entity";
+import { AddressEntity } from "../address/address.entity";
 
 @Entity({ 
     schema: "user_management", 
@@ -8,7 +10,29 @@ import { UserRole } from "./enums/user.enums";
 })
 export class UserEntity extends BaseEntity {
 
+    @Column()
+    username: string;
+
+    @Column()
+    password: string;
+
     @Column({ type: "enum", enum: UserRole, default: UserRole.USER })
     role: UserRole;
+    
+    @JoinTable({
+        schema: "user_management",
+        name: "user_addresses",
+        joinColumn: { name: "user_fk" },
+        inverseJoinColumn: { name: "address_fk" }
+    })
+    @ManyToMany(() => AddressEntity)
+    address: AddressEntity[];
+
+    @JoinColumn({ 
+        name: "contact_fk",
+        foreignKeyConstraintName: "fk_user_contact"
+    })
+    @OneToOne(() => ContactEntity, (contact) => contact.user)
+    contact: ContactEntity;
 
 };

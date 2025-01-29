@@ -1,6 +1,8 @@
 import { BaseEntity } from "src/shared/bases/base.entity";
-import { Column, Entity } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, OneToOne } from "typeorm";
 import { LocationEntity } from "../location/location.entity";
+import { UserEntity } from "../user/user.entity";
+import { EstablishmentEntity } from "../establishment/establishment.entity";
 
 @Entity({ 
     schema: "common", 
@@ -33,6 +35,12 @@ export class AddressEntity extends BaseEntity {
     complement: string;
 
     @Column(() => LocationEntity)
-    location: LocationEntity
+    location: LocationEntity;
+
+    @ManyToMany(() => UserEntity, (user) => user.address)
+    users: UserEntity[];
+
+    @OneToOne(() => EstablishmentEntity, (establishment) => establishment.address)
+    establishment: EstablishmentEntity;
 
 };
