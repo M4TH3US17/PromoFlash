@@ -2,8 +2,11 @@ import { BaseEntity } from "src/shared/bases/base.entity";
 import { Column, Entity } from "typeorm";
 import { LocationEntity } from "../location/location.entity";
 
-@Entity({name: "addresses"})
-export class AddressEntity extends BaseEntity  {
+@Entity({ 
+    schema: "common", 
+    name: "addresses"
+})
+export class AddressEntity extends BaseEntity {
 
     @Column()
     street: string;
