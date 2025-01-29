@@ -1,11 +1,11 @@
 import { BaseEntity } from "src/shared/bases/base.entity";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity } from "typeorm";
+import { UserRole } from "./enums/user.enums";
 
 @Entity({name: "users"})
-export class UserEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+export class UserEntity extends BaseEntity {
 
-    @Column(() => BaseEntity)
-    base: BaseEntity
+    @Column({ type: "enum", enum: UserRole, default: UserRole.USER })
+    role: UserRole;
+
 };
