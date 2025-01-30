@@ -1,9 +1,14 @@
 import { BaseEntity } from "src/shared/bases/base.entity";
-import { Entity } from "typeorm";
+import { Status } from "src/shared/enums/status";
+import { Column, Entity } from "typeorm";
 
 @Entity({
     name: "promotions",
     schema: "promotion_management"
 })
 export class PromotionEntity extends BaseEntity {
+
+    @Column({ type: "enum", enum: Status, default: Status.ACTIVE })
+    status: Status;
+
 };

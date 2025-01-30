@@ -1,13 +1,22 @@
 import { BaseEntity } from "src/shared/bases/base.entity";
-import { Entity, OneToOne } from "typeorm";
+import { Column, Entity, OneToOne } from "typeorm";
 import { UserEntity } from "../user/user.entity";
 import { EstablishmentEntity } from "../establishment/establishment.entity";
 
 @Entity({ 
-    schema: "common", 
-    name: "contacts"
+    schema: "common",
+    name: "contacts",
 })
 export class ContactEntity extends BaseEntity {
+
+    @Column()
+    email: string;
+
+    @Column({ name: "first_contact", nullable: false })
+    firstContact: string;
+
+    @Column({ name: "first_contact" })
+    secondContact: string;
 
     @OneToOne(() => UserEntity, (user) => user.contact)
     user: UserEntity;
