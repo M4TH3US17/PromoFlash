@@ -1,9 +1,10 @@
-import { Column, Entity, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne } from "typeorm";
 import { EstablishmentProductPK } from "./pk/establishments_products_pk.entity";
 import { ProductCategory } from "../product/enums/product.enums";
 import { EstablishmentEntity } from "../establishment/establishment.entity";
 import { Status } from "src/shared/enums/status";
 import { ProductEntity } from "../product/product.entity";
+import { PromotionEntity } from "../promotion/promotion.entity";
 
 @Entity({ 
     schema: "product_management",
@@ -21,11 +22,17 @@ export class EstablishmentProduct {
     @Column()
     description: string;
 
+    @Column()
+    stars: number;
+
     @Column({ type: "enum", enum: ProductCategory })
     category: ProductCategory;
 
     @Column({ type: "enum", enum: Status, default: Status.ACTIVE })
     status: Status;
+
+    @ManyToMany(() => PromotionEntity, (promotion) => promotion.products, { cascade: false })
+    promotions: PromotionEntity[];
 
     constructor(
         product: ProductEntity, establishment: EstablishmentEntity, price: number, description: string, category: ProductCategory, status: Status,

@@ -4,6 +4,7 @@ import { UserRole } from "./enums/user.enums";
 import { ContactEntity } from "../contact/contact.entity";
 import { AddressEntity } from "../address/address.entity";
 import { Status } from "src/shared/enums/status";
+import { EstablishmentEntity } from "../establishment/establishment.entity";
 
 @Entity({ 
     schema: "user_management", 
@@ -39,4 +40,12 @@ export class UserEntity extends BaseEntity {
     @OneToOne(() => ContactEntity, (contact) => contact.user)
     contact: ContactEntity;
 
+    @JoinTable({
+        schema: "user_management",
+        name: "user_establishments",
+        joinColumn: { name: "user_fk" },
+        inverseJoinColumn: { name: "establishments_fk" },
+    })
+    @ManyToMany(() => EstablishmentEntity)
+    followingEstablishments: EstablishmentEntity[]
 };

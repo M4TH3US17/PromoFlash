@@ -15,7 +15,7 @@ export class ContactEntity extends BaseEntity {
     @Column({ name: "first_contact", nullable: false })
     firstContact: string;
 
-    @Column({ name: "first_contact" })
+    @Column({ name: "second_contact" })
     secondContact: string;
 
     @OneToOne(() => UserEntity, (user) => user.contact)
