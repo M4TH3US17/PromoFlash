@@ -1,6 +1,5 @@
 import { PrimaryColumn } from "typeorm";
 
-
 export class EstablishmentCustomerPK {
 
     @PrimaryColumn({ name: "user_fk", nullable: false })

@@ -18,11 +18,11 @@ export class ProductEntity extends BaseEntity {
     @Column({ type: "enum", enum: Status, default: Status.ACTIVE })
     status: Status;
 
-    @OneToMany(() => EstablishmentProduct, (establishment) => establishment.pk._product)
-    _items: EstablishmentProduct[];
+    // @OneToMany(() => EstablishmentProduct, (establishment) => establishment.pk._product)
+    // _items: EstablishmentProduct[];
 
-    get establishments(): EstablishmentProduct[] {
-        return this._items;
-    };
+    // get establishments(): EstablishmentProduct[] {
+    //     return this._items;
+    // };
     
 };

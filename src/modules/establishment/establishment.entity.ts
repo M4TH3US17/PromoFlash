@@ -1,5 +1,5 @@
 import { BaseEntity } from "src/shared/bases/base.entity";
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
+import { Check, Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { ContactEntity } from "../contact/contact.entity";
 import { AddressEntity } from "../address/address.entity";
 import { EstablishmentProduct } from "../establishments_products/establishments_products.entity";
@@ -39,16 +39,17 @@ export class EstablishmentEntity extends BaseEntity {
     @OneToOne(() => AddressEntity, (address) => address.establishment, { nullable: false, cascade: true })
     address: AddressEntity;
 
-    @OneToMany(() => PromotionEntity, (promotion) => promotion.establishment, { cascade: false })
+    @OneToMany(() => PromotionEntity, (promotion) => promotion.establishment)
     promotions: PromotionEntity[]
 
     // @OneToMany(() => EstablishmentProduct, (products) => products.establishment)
     // products: EstablishmentProduct[];
-    @OneToMany(() => EstablishmentProduct, (products) => products.pk._establishment, { cascade: true })
-    _items: EstablishmentProduct[];
 
-    get products(): ProductEntity[] {
-        return this._items.map((item: EstablishmentProduct) => item.product);
-    };
+    // @OneToMany(() => EstablishmentProduct, (products) => products.pk._establishment, { cascade: true })
+    // _items: EstablishmentProduct[];
+
+    // get products(): ProductEntity[] {
+    //     return this._items.map((item: EstablishmentProduct) => item.product);
+    // };
 
 };

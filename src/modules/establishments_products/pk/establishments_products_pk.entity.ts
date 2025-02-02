@@ -7,34 +7,35 @@ import { Column, ManyToOne, PrimaryColumn } from "typeorm";
 */
 export class EstablishmentProductPK {
 
-  @Column({ name: "establishment_fk" })
-  @ManyToOne(() => EstablishmentEntity/*, (establishment) => establishment.products,*/, { nullable: false })
-  _establishment: EstablishmentEntity
+  @PrimaryColumn({name: "establishment_fk"})
+  establishmentId: number;
+  
+  @PrimaryColumn({name: "product_fk"})
+  productId: number;
 
-  @Column({ name: "product_fk" })
-  @ManyToOne(() => ProductEntity/*, (establishment) => establishment.products,*/, { nullable: false })
-  _product: ProductEntity
+  // @Column({ name: "establishment_fk" })
+  // @ManyToOne(() => EstablishmentEntity/*, (establishment) => establishment.products,*/, { nullable: false })
+  // _establishment: EstablishmentEntity
 
-  get establishment(): EstablishmentEntity {
-    return this._establishment;
-  };
+  // @Column({ name: "product_fk" })
+  // @ManyToOne(() => ProductEntity/*, (establishment) => establishment.products,*/, { nullable: false })
+  // _product: ProductEntity
 
-  set establishment(establishment: EstablishmentEntity) {
-    this._establishment = establishment;
-  };
+  // get establishment(): EstablishmentEntity {
+  //   return this._establishment;
+  // };
 
-  get product(): ProductEntity {
-    return this._product;
-  };
+  // set establishment(establishment: EstablishmentEntity) {
+  //   this._establishment = establishment;
+  // };
 
-  set product(product: ProductEntity) {
-    this._product = product;
-  };
+  // get product(): ProductEntity {
+  //   return this._product;
+  // };
+
+  // set product(product: ProductEntity) {
+  //   this._product = product;
+  // };
 
 };
 
-// @PrimaryColumn({name: "establishment_fk"})
-// establishmentId: number;
-
-// @PrimaryColumn({name: "product_fk"})
-// productId: number;

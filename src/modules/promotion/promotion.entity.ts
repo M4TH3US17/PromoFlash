@@ -1,8 +1,8 @@
 import { BaseEntity } from "src/shared/bases/base.entity";
 import { Status } from "src/shared/enums/status";
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from "typeorm";
-import { EstablishmentEntity } from "../establishment/establishment.entity";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from "typeorm";
 import { EstablishmentProduct } from "../establishments_products/establishments_products.entity";
+import { EstablishmentEntity } from "../establishment/establishment.entity";
 
 @Entity({
     name: "promotions",
@@ -30,7 +30,7 @@ export class PromotionEntity extends BaseEntity {
     @ManyToMany(() => EstablishmentProduct)
     products: EstablishmentProduct[]
 
-    @Column({ name: "establishment_fk" })
-    @ManyToOne(() => EstablishmentEntity, (establishment) => establishment.promotions)
+    @JoinColumn({ name: "establishment_fk" })
+    @ManyToOne(() => EstablishmentEntity, (establishment) => establishment.promotions, {  })
     establishment: EstablishmentEntity
 };
