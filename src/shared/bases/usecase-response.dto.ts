@@ -1,6 +1,6 @@
 import { HttpStatus } from "@nestjs/common";
 
-export class UseaseResponseDTO {
+export class UseCaseResponseDTO {
     statusCode: HttpStatus;
     message: string;
     data: any

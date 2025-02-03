@@ -1,9 +1,18 @@
+import { Injectable } from "@nestjs/common";
 import { AddressEntity } from "./address.entity";
 import { CreateAddressRequestDTO } from "./dto/create-address.dto";
 import { UpdateAddressRequestDTO } from "./dto/update-address.dto";
 import { IAddressRepositoryContract } from "src/infrastructure/repository_contracts/Iaddress.repository-contract";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
-class AddressRepositoryImpl implements IAddressRepositoryContract {
+@Injectable()
+export class AddressRepositoryImpl implements IAddressRepositoryContract {
+
+    constructor(
+        @InjectRepository(AddressEntity)
+        private readonly addressRepository: Repository<AddressEntity>,
+    ) {}
 
     getAllAsync(): Promise<AddressEntity[]> {
         throw new Error("Method not implemented.");

@@ -2,8 +2,17 @@ import { UserEntity } from "./user.entity";
 import { CreateUserRequestDTO } from "./dto/create-user.dto";
 import { UpdateUserRequestDTO } from "./dto/update-user.dto";
 import { IUserRepositoryContract } from "src/infrastructure/repository_contracts/Iuser.repository-contract";
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
-class UserRepositoryImpl implements IUserRepositoryContract {
+@Injectable()
+export class UserRepositoryImpl implements IUserRepositoryContract {
+
+    constructor(
+        @InjectRepository(UserEntity)
+        private readonly userRepository: Repository<UserEntity>,
+    ) {}
 
     getAllAsync(): Promise<UserEntity[]> {
         throw new Error("Method not implemented.");
