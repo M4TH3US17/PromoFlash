@@ -12,6 +12,13 @@ import { EstablishmentProduct } from './modules/establishments_products/establis
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { AddressModule } from './modules/address/address.module';
+import { ContactModule } from './modules/contact/contact.module';
+import { CouponModule } from './modules/coupon/coupon.module';
+import { EstablishmentModule } from './modules/establishment/establishment.module';
+import { ProductModule } from './modules/product/product.module';
+import { PromotionModule } from './modules/promotion/promotion.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -42,6 +49,15 @@ import { ConfigModule } from '@nestjs/config';
       ],
       migrationsRun: true,*/
   }),
+
+  // modules
+  AddressModule,
+  ContactModule,
+  CouponModule,
+  EstablishmentModule,
+  ProductModule,
+  PromotionModule,
+  UserModule,
   ],
 })
 export class MainModule {}

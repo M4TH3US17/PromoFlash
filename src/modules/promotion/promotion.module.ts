@@ -2,10 +2,16 @@ import { Module } from '@nestjs/common';
 import { PromotionController } from './promotion.controller';
 import { PromotionRepositoryImpl } from './promotion.repository-impl';
 import { GetAllPromotionsUseCase } from './usecases/get-all-promotions.usecase';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { PromotionEntity } from './promotion.entity';
 
 @Module({
-  imports: [],
-  controllers: [PromotionController],
+  imports: [
+    TypeOrmModule.forFeature([ PromotionEntity ]),
+  ],
+  controllers: [
+    PromotionController
+  ],
   providers: [
     {
       provide: "PROMOTION_REPOSITORY",
