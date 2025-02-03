@@ -19,11 +19,13 @@ import { EstablishmentModule } from './modules/establishment/establishment.modul
 import { ProductModule } from './modules/product/product.module';
 import { PromotionModule } from './modules/promotion/promotion.module';
 import { UserModule } from './modules/user/user.module';
+import { envValidationSchema } from './shared/validations/env.validation';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      validationSchema: envValidationSchema,
     }),
     TypeOrmModule.forRoot({
       type: "postgres",
@@ -45,7 +47,7 @@ import { UserModule } from './modules/user/user.module';
       ],
       synchronize: false,
       /*migrations: [
-          `${__dirname}/Application/Infra/Repositories/TypeOrm/migrations/{.ts,*js}`,
+          `${__dirname}/infrastructure/migrations/{.ts,*js}`,
       ],
       migrationsRun: true,*/
   }),
