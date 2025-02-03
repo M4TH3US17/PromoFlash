@@ -1,0 +1,5 @@
+import { OmitType } from "@nestjs/mapped-types";
+import { AddressEntity } from "../address.entity";
+
+export class AddressResponseDTO extends OmitType(AddressEntity, 
+    ["location", "users", "establishment"] as const) {}

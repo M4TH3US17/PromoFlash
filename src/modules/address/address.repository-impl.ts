@@ -1,28 +1,28 @@
-import { IAddressRepositoryContract } from "src/infrastructure/repository_contracts/Iaddress.repository-contract";
 import { AddressEntity } from "./address.entity";
-import { CreateAddressDTO, UpdateAddressDTO } from "./dto/address.dto";
-
+import { CreateAddressRequestDTO } from "./dto/create-address.dto";
+import { UpdateAddressRequestDTO } from "./dto/update-address.dto";
+import { IAddressRepositoryContract } from "src/infrastructure/repository_contracts/Iaddress.repository-contract";
 
 class AddressRepositoryImpl implements IAddressRepositoryContract {
 
-    getAll(): Promise<AddressEntity[]> {
+    getAllAsync(): Promise<AddressEntity[]> {
         throw new Error("Method not implemented.");
     };
 
-    getById(id: number): Promise<AddressEntity> {
+    getByIdAsync(id: number): Promise<AddressEntity> {
         throw new Error("Method not implemented.");
     };
     
-    create(entityToCreate: CreateAddressDTO): Promise<AddressEntity> {
+    createAsync(entityToCreate: CreateAddressRequestDTO): Promise<AddressEntity> {
         throw new Error("Method not implemented.");
     };
     
-    update(id: number, entityToUpdate: UpdateAddressDTO): Promise<AddressEntity> {
+    updateAsync(id: number, entityToUpdate: UpdateAddressRequestDTO): Promise<AddressEntity> {
         throw new Error("Method not implemented.");
     };
     
-    delete(id: number): Promise<void> {
+    deleteAsync(id: number): Promise<void> {
         throw new Error("Method not implemented.");
-    }
+    };
 
 }

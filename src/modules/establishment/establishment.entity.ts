@@ -1,10 +1,8 @@
 import { BaseEntity } from "src/shared/bases/base.entity";
-import { Check, Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { ContactEntity } from "../contact/contact.entity";
 import { AddressEntity } from "../address/address.entity";
-import { EstablishmentProduct } from "../establishments_products/establishments_products.entity";
 import { Status } from "src/shared/enums/status";
-import { ProductEntity } from "../product/product.entity";
 import { PromotionEntity } from "../promotion/promotion.entity";
 
 @Entity({

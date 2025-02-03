@@ -1,12 +1,13 @@
 import { CouponEntity } from "src/modules/coupon/coupon.entity";
-import { CreateCouponDTO, UpdateCouponDTO } from "src/modules/coupon/dto/coupon.dto";
+import { CreateCouponRequestDTO } from "src/modules/coupon/dto/create-coupon.dto";
+import { UpdateCouponRequestDTO } from "src/modules/coupon/dto/update-coupon.dto";
 import { IBaseRepositoryContract } from "src/shared/bases/Ibase.repository-contract";
 
 export interface ICouponRepositoryContract
     extends IBaseRepositoryContract<
-        CouponEntity,
-        UpdateCouponDTO,
-        CreateCouponDTO
+        UpdateCouponRequestDTO,
+        CreateCouponRequestDTO,
+        CouponEntity
     > {
         
 };

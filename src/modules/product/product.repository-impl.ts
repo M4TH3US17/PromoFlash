@@ -1,27 +1,27 @@
-import { IProductRepositoryContract } from "src/infrastructure/repository_contracts/Iproduct.repository-contract";
-import { CreateProductDTO, UpdateProductDTO } from "./dto/product.dto";
 import { ProductEntity } from "./product.entity";
-
+import { CreateProductRequestDTO } from "./dto/create-product.dto";
+import { UpdateProductRequestDTO } from "./dto/update-product.dto";
+import { IProductRepositoryContract } from "src/infrastructure/repository_contracts/Iproduct.repository-contract";
 
 class ProductRepositoryImpl implements IProductRepositoryContract {
 
-    getAll(): Promise<ProductEntity[]> {
+    getAllAsync(): Promise<ProductEntity[]> {
         throw new Error("Method not implemented.");
     };
 
-    getById(id: number): Promise<ProductEntity> {
+    getByIdAsync(id: number): Promise<ProductEntity> {
         throw new Error("Method not implemented.");
     };
 
-    create(entityToCreate: CreateProductDTO): Promise<ProductEntity> {
+    createAsync(entityToCreate: CreateProductRequestDTO): Promise<ProductEntity> {
         throw new Error("Method not implemented.");
     };
 
-    update(id: number, entityToUpdate: UpdateProductDTO): Promise<ProductEntity> {
+    updateAsync(id: number, entityToUpdate: UpdateProductRequestDTO): Promise<ProductEntity> {
         throw new Error("Method not implemented.");
     };
 
-    delete(id: number): Promise<void> {
+    deleteAsync(id: number): Promise<void> {
         throw new Error("Method not implemented.");
     };
 

@@ -1,26 +1,27 @@
-import { IUserRepositoryContract } from "src/infrastructure/repository_contracts/Iuser.repository-contract";
-import { CreateUserDTO, UpdateUserDTO } from "./dto/user.dto";
 import { UserEntity } from "./user.entity";
+import { CreateUserRequestDTO } from "./dto/create-user.dto";
+import { UpdateUserRequestDTO } from "./dto/update-user.dto";
+import { IUserRepositoryContract } from "src/infrastructure/repository_contracts/Iuser.repository-contract";
 
 class UserRepositoryImpl implements IUserRepositoryContract {
 
-    getAll(): Promise<UserEntity[]> {
+    getAllAsync(): Promise<UserEntity[]> {
         throw new Error("Method not implemented.");
     };
 
-    getById(id: number): Promise<UserEntity> {
+    getByIdAsync(id: number): Promise<UserEntity> {
         throw new Error("Method not implemented.");
     };
 
-    create(entityToCreate: CreateUserDTO): Promise<UserEntity> {
+    createAsync(entityToCreate: CreateUserRequestDTO): Promise<UserEntity> {
         throw new Error("Method not implemented.");
     };
 
-    update(id: number, entityToUpdate: UpdateUserDTO): Promise<UserEntity> {
+    updateAsync(id: number, entityToUpdate: UpdateUserRequestDTO): Promise<UserEntity> {
         throw new Error("Method not implemented.");
     };
 
-    delete(id: number): Promise<void> {
+    deleteAsync(id: number): Promise<void> {
         throw new Error("Method not implemented.");
     };
 

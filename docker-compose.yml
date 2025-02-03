@@ -4,17 +4,15 @@ services:
   postgres-compose:
     image: postgres
     restart: always
-    env_file:
-      - .env
     environment:
       POSTGRES_DB: promoflash_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: senha123
     container_name: postgres
-    # volumes:
-    #   - ./pgdata:/var/lib/postgresql/data
+    volumes:
+      - ./src/infrastructure/database/pgdata:/var/lib/postgresql/data
     ports:
-      - '5432:5432'
+      - 5432:5432
     networks:
       - promoflash-network
 

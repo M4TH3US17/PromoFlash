@@ -1,15 +1,15 @@
 
 
 export interface IBaseRepositoryContract<
-    Entity,
     UpdateEntity,
-    CreateEntity
+    CreateEntity,
+    Entity
 > {
     
-    getAll(): Promise<Entity[]>; 
-    getById(id: number): Promise<Entity | null>;
+    getAllAsync(): Promise<Entity[]>; 
+    getByIdAsync(id: number): Promise<Entity | null>;
 
-    create(entityToCreate: CreateEntity): Promise<Entity>;
-    update(id: number, entityToUpdate: UpdateEntity): Promise<Entity>;
-    delete(id: number): Promise<void>;
+    createAsync(entityToCreate: CreateEntity): Promise<Entity>;
+    updateAsync(id: number, entityToUpdate: UpdateEntity): Promise<Entity>;
+    deleteAsync(id: number): Promise<void>;
 }

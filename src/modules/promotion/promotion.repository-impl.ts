@@ -1,26 +1,27 @@
-import { IPromotionRepositoryContract } from "src/infrastructure/repository_contracts/Ipromotion.repository-contract";
-import { CreatePromotionDTO, UpdatePromotionDTO } from "./dto/promotion.dto";
 import { PromotionEntity } from "./promotion.entity";
+import { CreatePromotionRequestDTO } from "./dto/create-promotion.dto";
+import { UpdatePromotionRequestDTO } from "./dto/update-promotion.dto";
+import { IPromotionRepositoryContract } from "src/infrastructure/repository_contracts/Ipromotion.repository-contract";
 
 class PromotionRepositoryImpl implements IPromotionRepositoryContract {
 
-    getAll(): Promise<PromotionEntity[]> {
+    getAllAsync(): Promise<PromotionEntity[]> {
         throw new Error("Method not implemented.");
     };
 
-    getById(id: number): Promise<PromotionEntity> {
+    getByIdAsync(id: number): Promise<PromotionEntity> {
         throw new Error("Method not implemented.");
     };
 
-    create(entityToCreate: CreatePromotionDTO): Promise<PromotionEntity> {
+    createAsync(entityToCreate: CreatePromotionRequestDTO): Promise<PromotionEntity> {
         throw new Error("Method not implemented.");
     };
 
-    update(id: number, entityToUpdate: UpdatePromotionDTO): Promise<PromotionEntity> {
+    updateAsync(id: number, entityToUpdate: UpdatePromotionRequestDTO): Promise<PromotionEntity> {
         throw new Error("Method not implemented.");
     };
 
-    delete(id: number): Promise<void> {
+    deleteAsync(id: number): Promise<void> {
         throw new Error("Method not implemented.");
     };
 
