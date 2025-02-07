@@ -2,10 +2,11 @@ import { BaseEntity } from "src/shared/bases/base.entity";
 import { Status } from "src/shared/enums/status";
 import { Column, Entity, OneToMany } from "typeorm";
 import { EstablishmentProduct } from "../establishments_products/establishments_products.entity";
+import { SCHEMA } from "src/infrastructure/database/enums/schemas";
 
 @Entity({
+    schema: SCHEMA.PRODUCT,
     name: "products",
-    schema: "product_management"
 })
 export class ProductEntity extends BaseEntity {
 

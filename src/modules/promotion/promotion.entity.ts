@@ -3,10 +3,11 @@ import { Status } from "src/shared/enums/status";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from "typeorm";
 import { EstablishmentProduct } from "../establishments_products/establishments_products.entity";
 import { EstablishmentEntity } from "../establishment/establishment.entity";
+import { SCHEMA } from "src/infrastructure/database/enums/schemas";
 
 @Entity({
+    schema: SCHEMA.PROMOTION,
     name: "promotions",
-    schema: "promotion_management"
 })
 export class PromotionEntity extends BaseEntity {
 
@@ -22,7 +23,7 @@ export class PromotionEntity extends BaseEntity {
     // cupons ?
 
     @JoinTable({
-        schema: "promotion_management",
+        schema: SCHEMA.PROMOTION,
         name: "promotion_products",
         joinColumn: { name: "promotion_fk" },
         inverseJoinColumn: { name: "product_fk" },

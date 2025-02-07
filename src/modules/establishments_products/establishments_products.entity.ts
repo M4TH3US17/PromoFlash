@@ -1,13 +1,12 @@
-import { Column, Entity, ManyToMany, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToMany } from "typeorm";
 import { EstablishmentProductPK } from "./pk/establishments_products_pk.entity";
 import { ProductCategory } from "../product/enums/product.enums";
-import { EstablishmentEntity } from "../establishment/establishment.entity";
 import { Status } from "src/shared/enums/status";
-import { ProductEntity } from "../product/product.entity";
 import { PromotionEntity } from "../promotion/promotion.entity";
+import { SCHEMA } from "src/infrastructure/database/enums/schemas";
 
 @Entity({ 
-    schema: "product_management",
+    schema: SCHEMA.PRODUCT,
     name: "establishments_products", 
     comment: "Tabela que relaciona estabelecimentos e produtos",
 })

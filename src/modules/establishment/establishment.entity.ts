@@ -4,10 +4,11 @@ import { ContactEntity } from "../contact/contact.entity";
 import { AddressEntity } from "../address/address.entity";
 import { Status } from "src/shared/enums/status";
 import { PromotionEntity } from "../promotion/promotion.entity";
+import { SCHEMA } from "src/infrastructure/database/enums/schemas";
 
 @Entity({
+    schema: SCHEMA.PRODUCT,
     name: "establishments",
-    schema: "product_management",
 })
 export class EstablishmentEntity extends BaseEntity {
 
@@ -40,14 +41,14 @@ export class EstablishmentEntity extends BaseEntity {
     @OneToMany(() => PromotionEntity, (promotion) => promotion.establishment)
     promotions: PromotionEntity[]
 
-    // @OneToMany(() => EstablishmentProduct, (products) => products.establishment)
-    // products: EstablishmentProduct[];
-
-    // @OneToMany(() => EstablishmentProduct, (products) => products.pk._establishment, { cascade: true })
-    // _items: EstablishmentProduct[];
-
-    // get products(): ProductEntity[] {
-    //     return this._items.map((item: EstablishmentProduct) => item.product);
-    // };
-
+    
 };
+// @OneToMany(() => EstablishmentProduct, (products) => products.establishment)
+// products: EstablishmentProduct[];
+
+// @OneToMany(() => EstablishmentProduct, (products) => products.pk._establishment, { cascade: true })
+// _items: EstablishmentProduct[];
+
+// get products(): ProductEntity[] {
+//     return this._items.map((item: EstablishmentProduct) => item.product);
+// };

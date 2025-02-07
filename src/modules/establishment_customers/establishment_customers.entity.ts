@@ -1,8 +1,9 @@
 import { Column, CreateDateColumn, Entity } from "typeorm";
 import { EstablishmentCustomerPK } from "./pk/establishment_customers.pk.entity";
+import { SCHEMA } from "src/infrastructure/database/enums/schemas";
 
 @Entity({
-    schema: "product_management",
+    schema: SCHEMA.PRODUCT,
     name: "establishments_customers", 
     comment: "Tabela que relaciona estabelecimentos e clientes",
 })

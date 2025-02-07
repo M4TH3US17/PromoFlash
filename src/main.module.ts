@@ -23,10 +23,12 @@ import { envValidationSchema } from './shared/validations/env.validation';
 
 @Module({
   imports: [
+    
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: envValidationSchema,
     }),
+
     TypeOrmModule.forRoot({
       type: "postgres",
       database:  process.env.DB_NAME,
@@ -46,13 +48,11 @@ import { envValidationSchema } from './shared/validations/env.validation';
           EstablishmentProduct,
       ],
       synchronize: false,
-      // migrations
       migrationsRun: true,
       migrationsTableName: "migrations",
       migrations: [ `${__dirname}/infrastructure/database/migrations/{.ts,*js}` ],
   }),
 
-  // modules
   AddressModule,
   ContactModule,
   CouponModule,

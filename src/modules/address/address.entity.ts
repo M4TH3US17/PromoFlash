@@ -3,9 +3,10 @@ import { Column, Entity, ManyToMany, ManyToOne, OneToOne } from "typeorm";
 import { LocationEntity } from "../location/location.entity";
 import { UserEntity } from "../user/user.entity";
 import { EstablishmentEntity } from "../establishment/establishment.entity";
+import { SCHEMA } from "src/infrastructure/database/enums/schemas";
 
 @Entity({ 
-    schema: "common", 
+    schema: SCHEMA.COMMON, 
     name: "addresses"
 })
 export class AddressEntity extends BaseEntity {

@@ -2,9 +2,10 @@ import { BaseEntity } from "src/shared/bases/base.entity";
 import { Column, Entity, OneToOne } from "typeorm";
 import { UserEntity } from "../user/user.entity";
 import { EstablishmentEntity } from "../establishment/establishment.entity";
+import { SCHEMA } from "src/infrastructure/database/enums/schemas";
 
 @Entity({ 
-    schema: "common",
+    schema: SCHEMA.COMMON,
     name: "contacts",
 })
 export class ContactEntity extends BaseEntity {

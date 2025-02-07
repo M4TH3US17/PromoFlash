@@ -5,9 +5,10 @@ import { ContactEntity } from "../contact/contact.entity";
 import { AddressEntity } from "../address/address.entity";
 import { Status } from "src/shared/enums/status";
 import { EstablishmentEntity } from "../establishment/establishment.entity";
+import { SCHEMA } from "src/infrastructure/database/enums/schemas";
 
 @Entity({ 
-    schema: "user_management", 
+    schema: SCHEMA.USER, 
     name: "users",
 })
 export class UserEntity extends BaseEntity {
@@ -25,7 +26,7 @@ export class UserEntity extends BaseEntity {
     status: Status;
     
     @JoinTable({
-        schema: "user_management",
+        schema: SCHEMA.USER,
         name: "user_addresses",
         joinColumn: { name: "user_fk" },
         inverseJoinColumn: { name: "address_fk" },
@@ -41,7 +42,7 @@ export class UserEntity extends BaseEntity {
     contact: ContactEntity;
 
     @JoinTable({
-        schema: "user_management",
+        schema: SCHEMA.USER,
         name: "user_establishments",
         joinColumn: { name: "user_fk" },
         inverseJoinColumn: { name: "establishments_fk" },
