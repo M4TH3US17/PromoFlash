@@ -46,10 +46,10 @@ import { envValidationSchema } from './shared/validations/env.validation';
           EstablishmentProduct,
       ],
       synchronize: false,
-      /*migrations: [
-          `${__dirname}/infrastructure/migrations/{.ts,*js}`,
-      ],
-      migrationsRun: true,*/
+      // migrations
+      migrationsRun: true,
+      migrationsTableName: "migrations",
+      migrations: [ `${__dirname}/infrastructure/database/migrations/{.ts,*js}` ],
   }),
 
   // modules
