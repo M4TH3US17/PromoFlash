@@ -1,39 +1,40 @@
-version: "3"
+version: '3.8'
 
 services:
-  postgres-compose:
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_DB: promoflash_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: senha123
+  db:
+    # restart: always
+    image: postgres:15.4-alpine
     container_name: postgres
-    volumes:
-      - ./src/infrastructure/database/pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=promoflash_db
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
     ports:
       - 5432:5432
-    networks:
-      - promoflash-network
+    # volumes:
+    #   - ./src/infrastructure/database/pgdata:/var/lib/postgresql/data
+#     networks:
+#       - promoflash-network
 
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: promoflash
-    environment:
-      - PORT:${PORT}
-    env_file:
-      - .env
-    ports:
-      - '3000:3000'
-    depends_on:
-      - postgres-compose
-    volumes:
-      - .:/app
-    networks:
-      - promoflash-network
+#   app:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     container_name: promoflash
+#     environment:
+#       - PORT:${PORT}
+#     env_file:
+#       - .env
+#     ports:
+#       - '3000:3000'
+#     depends_on:
+#       - postgres-container
+#     volumes:
+#       - .:/app
+#       - /app/node_modules
+#     networks:
+#       - promoflash-network
 
-networks:
-  promoflash-network:
-    driver: bridge
+# networks:
+#   promoflash-network:
+#     driver: bridge

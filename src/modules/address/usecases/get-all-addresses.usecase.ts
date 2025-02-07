@@ -12,7 +12,6 @@ export class GetAllAddressesUseCase {
 
     public async executeAsync(): Promise<UseCaseResponseDTO> {
         try {
-
             return {
                 statusCode: HttpStatus.OK,
                 message: "",
