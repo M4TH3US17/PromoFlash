@@ -1,6 +1,8 @@
 import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { IUserRepositoryContract } from "src/infrastructure/repository_contracts/Iuser.repository-contract";
 import { UseCaseResponseDTO } from "src/shared/bases/usecase-response.dto";
+import { UserEntity } from "../user.entity";
+import { UserPaginationDTO } from "../dto/pagination-user.dto";
 
 
 @Injectable()
@@ -11,8 +13,9 @@ export class GetAllUsersUseCase {
         private readonly usersRepository: IUserRepositoryContract,
     ) { }
 
-    async executeAsync(): Promise<UseCaseResponseDTO> {
+    async executeAsync(pagination: UserPaginationDTO): Promise<UseCaseResponseDTO> {
         try {
+            const users: UserEntity[] = await this.usersRepository.getAllAsync(pagination);
 
             return {
                 statusCode: HttpStatus.OK,

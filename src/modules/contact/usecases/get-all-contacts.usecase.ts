@@ -1,6 +1,8 @@
 import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { IContactRepositoryContract } from "src/infrastructure/repository_contracts/Icontract.repository-contract";
 import { UseCaseResponseDTO } from "src/shared/bases/usecase-response.dto";
+import { ContactPaginationDTO } from "../dto/pagination-contact.dto";
+import { ContactEntity } from "../contact.entity";
 
 @Injectable()
 export class GetAllContactsUseCase {
@@ -10,8 +12,9 @@ export class GetAllContactsUseCase {
         private readonly contactRepository: IContactRepositoryContract,
     ) { }
 
-    public async executeAsync(): Promise<UseCaseResponseDTO> {
+    public async executeAsync(pagination: ContactPaginationDTO): Promise<UseCaseResponseDTO> {
         try {
+            const contacts: ContactEntity[] = await this.contactRepository.getAllAsync(pagination);
 
             return {
                 statusCode: HttpStatus.OK,

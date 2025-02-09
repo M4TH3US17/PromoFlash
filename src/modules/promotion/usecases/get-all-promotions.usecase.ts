@@ -1,6 +1,8 @@
 import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { IPromotionRepositoryContract } from "src/infrastructure/repository_contracts/Ipromotion.repository-contract";
 import { UseCaseResponseDTO } from "src/shared/bases/usecase-response.dto";
+import { PromotionPaginationDTO } from "../dto/pagination-promotion.dto";
+import { PromotionEntity } from "../promotion.entity";
 
 
 @Injectable()
@@ -11,8 +13,9 @@ export class GetAllPromotionsUseCase {
         private readonly promotionRepository: IPromotionRepositoryContract,
     ) { }
 
-    async executeAsync(): Promise<UseCaseResponseDTO> {
+    async executeAsync(pagination: PromotionPaginationDTO): Promise<UseCaseResponseDTO> {
         try {
+            const promotions: PromotionEntity[] = await this.promotionRepository.getAllAsync(pagination);
 
             return {
                 statusCode: HttpStatus.OK,

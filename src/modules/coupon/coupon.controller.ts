@@ -1,7 +1,10 @@
 import { Response } from 'express';
-import { Controller, Get, Res } from "@nestjs/common";
+import { Controller, Get, Query, Res } from "@nestjs/common";
 import { GetAllCouponsUseCase } from './usecases/get-all-coupons.usecase';
 import { UseCaseResponseDTO } from 'src/shared/bases/usecase-response.dto';
+import { PaginationParserPipe } from 'src/shared/pipes/pagination-parser.pipe.';
+import { CouponEntity } from './coupon.entity';
+import { CouponPaginationDTO } from './dto/pagination-coupon.dto';
 
 @Controller({path: "coupons"})
 export class CouponController {
@@ -11,8 +14,11 @@ export class CouponController {
     ) {}
 
     @Get()
-    public async getAll(@Res() res: Response) {
-        const response: UseCaseResponseDTO = await this.getAllCouponsUseCase.executeAsync();
+    public async getAll(
+        @Res() res: Response,
+        @Query(new PaginationParserPipe(CouponEntity)) pagination: CouponPaginationDTO,
+    ) {
+        const response: UseCaseResponseDTO = await this.getAllCouponsUseCase.executeAsync(pagination);
         return res.status(response.statusCode).json(response);
     };
 
