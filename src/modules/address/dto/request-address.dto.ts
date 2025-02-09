@@ -1,3 +1,4 @@
+import { PartialType } from "@nestjs/mapped-types";
 
 export class CreateAddressRequestDTO {
 
@@ -12,3 +13,5 @@ export class CreateAddressRequestDTO {
 
     // location: LocationEntity;
 };
+
+export class UpdateAddressRequestDTO extends PartialType(CreateAddressRequestDTO) { };

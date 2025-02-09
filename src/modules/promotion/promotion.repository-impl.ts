@@ -1,10 +1,9 @@
 import { PromotionEntity } from "./promotion.entity";
-import { CreatePromotionRequestDTO } from "./dto/create-promotion.dto";
-import { UpdatePromotionRequestDTO } from "./dto/update-promotion.dto";
 import { IPromotionRepositoryContract } from "src/infrastructure/repository_contracts/Ipromotion.repository-contract";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { CreatePromotionRequestDTO, UpdatePromotionRequestDTO } from "./dto/request-promotion.dto";
 
 @Injectable()
 export class PromotionRepositoryImpl implements IPromotionRepositoryContract {

@@ -1,10 +1,9 @@
 import { ProductEntity } from "./product.entity";
-import { CreateProductRequestDTO } from "./dto/create-product.dto";
-import { UpdateProductRequestDTO } from "./dto/update-product.dto";
 import { IProductRepositoryContract } from "src/infrastructure/repository_contracts/Iproduct.repository-contract";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { CreateProductRequestDTO, UpdateProductRequestDTO } from "./dto/request-product.dto";
 
 @Injectable()
 export class ProductRepositoryImpl implements IProductRepositoryContract {

@@ -1,5 +1,4 @@
-import { CreateEstablishmentRequestDTO } from "src/modules/establishment/dto/create-establishment.dto";
-import { UpdateEstablishmentRequestDTO } from "src/modules/establishment/dto/update-establishment.dto";
+import { CreateEstablishmentRequestDTO, UpdateEstablishmentRequestDTO } from "src/modules/establishment/dto/request-establishment.dto";
 import { EstablishmentEntity } from "src/modules/establishment/establishment.entity";
 import { IBaseRepositoryContract } from "src/shared/bases/Ibase.repository-contract";
 

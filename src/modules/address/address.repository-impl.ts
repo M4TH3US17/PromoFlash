@@ -1,11 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { AddressEntity } from "./address.entity";
-import { CreateAddressRequestDTO } from "./dto/create-address.dto";
-import { UpdateAddressRequestDTO } from "./dto/update-address.dto";
 import { IAddressRepositoryContract } from "src/infrastructure/repository_contracts/Iaddress.repository-contract";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { AddressPaginationDTO } from "./dto/pagination-address.dto";
+import { CreateAddressRequestDTO, UpdateAddressRequestDTO } from "./dto/request-address.dto";
 
 @Injectable()
 export class AddressRepositoryImpl implements IAddressRepositoryContract {

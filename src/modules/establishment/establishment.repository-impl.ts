@@ -1,10 +1,9 @@
 import { EstablishmentEntity } from "./establishment.entity";
-import { CreateEstablishmentRequestDTO } from "./dto/create-establishment.dto";
-import { UpdateEstablishmentRequestDTO } from "./dto/update-establishment.dto";
 import { IEstablishmentRepositoryContract } from "src/infrastructure/repository_contracts/Iestablishment.repository-contract";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { CreateEstablishmentRequestDTO, UpdateEstablishmentRequestDTO } from "./dto/request-establishment.dto";
 
 @Injectable()
 export class EstablishmentRepositoryImpl implements IEstablishmentRepositoryContract {

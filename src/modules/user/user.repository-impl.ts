@@ -1,10 +1,9 @@
 import { UserEntity } from "./user.entity";
-import { CreateUserRequestDTO } from "./dto/create-user.dto";
-import { UpdateUserRequestDTO } from "./dto/update-user.dto";
 import { IUserRepositoryContract } from "src/infrastructure/repository_contracts/Iuser.repository-contract";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { CreateUserRequestDTO, UpdateUserRequestDTO } from "./dto/request-user.dto";
 
 @Injectable()
 export class UserRepositoryImpl implements IUserRepositoryContract {

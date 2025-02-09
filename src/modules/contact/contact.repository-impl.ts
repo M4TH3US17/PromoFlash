@@ -1,10 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { ContactEntity } from "./contact.entity";
-import { CreateContactRequestDTO } from "./dto/create-contact.dto";
-import { UpdateContactRequestDTO } from "./dto/update-contact.dto";
 import { IContactRepositoryContract } from "src/infrastructure/repository_contracts/Icontract.repository-contract";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { CreateContactRequestDTO, UpdateContactRequestDTO } from "./dto/request-contact.dto";
 
 @Injectable()
 export class ContactRepositoryImpl implements IContactRepositoryContract {
