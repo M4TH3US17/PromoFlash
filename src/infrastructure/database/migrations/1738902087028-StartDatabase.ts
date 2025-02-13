@@ -21,6 +21,14 @@ export class StartDatabase1738902087028 implements MigrationInterface {
                 END IF;
             END $$;`);
 
+        await queryRunner.query(`
+            DO $$ 
+            BEGIN
+                IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'product_category') THEN
+                    CREATE TYPE product_management.product_category AS ENUM ('DRINKS', 'OTHER'); 
+                END IF;
+            END $$;`);
+                
         console.log(`\n[StartDatabase1738902087028] Criando tabela "addresses"`);
         await queryRunner.query(`
             CREATE TABLE IF NOT EXISTS common.addresses (
@@ -112,7 +120,7 @@ export class StartDatabase1738902087028 implements MigrationInterface {
                 username   VARCHAR(255) NOT NULL,
                 password   VARCHAR(255) NOT NULL,
                 role       VARCHAR(255) CHECK (role IN ('USER', 'ADMIN')) DEFAULT 'USER',
-                status     VARCHAR(255) CHECK (status IN ('1', '0')) DEFAULT '1',
+                status     common.status NOT NULL DEFAULT 'ACTIVE',
                 contact_fk INT
             );`);
 
@@ -131,21 +139,26 @@ export class StartDatabase1738902087028 implements MigrationInterface {
             );`);
 
 
-            /*console.log(`[StartDatabase1738902087028] Criando tabela "establishments_customers"`);
-            await queryRunner.createTable(new Table({
-                name: "establishments_customers",
-                columns: [
-    
-                ],
-            }), true, true);
-    
-            console.log(`[StartDatabase1738902087028] Criando tabela "establishments_products"`);
-            await queryRunner.createTable(new Table({
-                name: "establishments_products",
-                columns: [
-    
-                ],
-            }), true, true);*/
+        console.log(`[StartDatabase1738902087028] Criando tabela "establishments_customers"`);
+        await queryRunner.query(`
+        CREATE TABLE IF NOT EXISTS product_management.establishments_customers (
+            user_fk                   INT NOT NULL,
+            establishment_fk          INT NOT NULL,
+            total_promotions_acquired INT DEFAULT 0,
+            following_since           TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );`);
+ 
+        console.log(`[StartDatabase1738902087028] Criando tabela "establishments_products"`);
+        await queryRunner.query(`
+        CREATE TABLE IF NOT EXISTS product_management.establishments_products (
+            establishment_fk INT                                 NOT NULL,
+            product_fk       INT                                 NOT NULL,
+            price            NUMERIC                             NOT NULL,
+            description      TEXT                                NOT NULL,
+            stars            INT                                 NOT NULL,
+            status           common.status                       NOT NULL DEFAULT 'ACTIVE',
+            category         product_management.product_category NOT NULL DEFAULT 'OTHER'
+        );`);
 
         console.log(`\n[StartDatabase1738902087028] Criando CONSTRAINTS das Primary Keys...`);
         await queryRunner.query(`ALTER TABLE common.addresses ADD CONSTRAINT pk_addresses PRIMARY KEY (id);`);
@@ -158,6 +171,8 @@ export class StartDatabase1738902087028 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE user_management.users ADD CONSTRAINT pk_users PRIMARY KEY (id);`);
         await queryRunner.query(`ALTER TABLE user_management.user_addresses ADD CONSTRAINT pk_user_addresses PRIMARY KEY (user_fk, address_fk);`);
         await queryRunner.query(`ALTER TABLE user_management.user_establishments ADD CONSTRAINT pk_user_establishments PRIMARY KEY (user_fk, establishments_fk);`);
+        await queryRunner.query(`ALTER TABLE product_management.establishments_customers ADD CONSTRAINT pk_establishments_customers PRIMARY KEY (user_fk, establishment_fk);`);
+        await queryRunner.query(`ALTER TABLE product_management.establishments_products ADD CONSTRAINT pk_establishments_products PRIMARY KEY (establishment_fk, product_fk);`);
 
         console.log(`\n[StartDatabase1738902087028] Criando CONSTRAINTS das Foreign Keys...`);
         await queryRunner.query(`ALTER TABLE common.addresses ADD CONSTRAINT fk_establishment FOREIGN KEY (establishment_id) REFERENCES product_management.establishments (id) ON DELETE SET NULL`);
@@ -173,51 +188,51 @@ export class StartDatabase1738902087028 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE user_management.user_addresses ADD CONSTRAINT fk_user_addresses_address FOREIGN KEY (address_fk) REFERENCES common.addresses (id) ON DELETE CASCADE`);
         await queryRunner.query(`ALTER TABLE user_management.user_establishments ADD CONSTRAINT fk_user_establishments_user FOREIGN KEY (user_fk) REFERENCES user_management.users (id) ON DELETE CASCADE`);
         await queryRunner.query(`ALTER TABLE user_management.user_establishments ADD CONSTRAINT fk_user_establishments_establishment FOREIGN KEY (establishments_fk) REFERENCES product_management.establishments (id) ON DELETE CASCADE`);
+        await queryRunner.query(`ALTER TABLE product_management.establishments_customers ADD CONSTRAINT fk_establishments_customers_user FOREIGN KEY (user_fk) REFERENCES user_management.users (id) ON DELETE CASCADE`);
+        await queryRunner.query(`ALTER TABLE product_management.establishments_customers ADD CONSTRAINT fk_establishments_customers_establishment FOREIGN KEY (establishment_fk) REFERENCES product_management.establishments (id) ON DELETE CASCADE`);
+        await queryRunner.query(`ALTER TABLE product_management.establishments_products ADD CONSTRAINT fk_establishments_products_establishment FOREIGN KEY (establishment_fk) REFERENCES product_management.establishments (id) ON DELETE CASCADE`);
+        await queryRunner.query(`ALTER TABLE product_management.establishments_products ADD CONSTRAINT fk_establishments_products_product FOREIGN KEY (product_fk) REFERENCES product_management.products (id) ON DELETE CASCADE`);
+
     };
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        try {
-            console.log(`[StartDatabase1738902087028] Deletando o schemas`);
-            await queryRunner.query(`
+        console.log(`[StartDatabase1738902087028] Deletando o schemas`);
+        await queryRunner.query(`
                 DROP SCHEMA IF EXISTS ${SCHEMA.PROMOTION} CASCADE;
                 DROP SCHEMA IF EXISTS ${SCHEMA.PRODUCT} CASCADE;
                 DROP SCHEMA IF EXISTS ${SCHEMA.USER} CASCADE;
                 DROP SCHEMA IF EXISTS ${SCHEMA.COMMON} CASCADE;
             `);
 
-            console.log(`[StartDatabase1738902087028] Deletando tabela "addresses"`);
-            await queryRunner.dropTable("addresses", true, true, true);
+        console.log(`[StartDatabase1738902087028] Deletando tabela "addresses"`);
+        await queryRunner.dropTable("addresses", true, true, true);
 
-            console.log(`[StartDatabase1738902087028] Deletando tabela "contacts"`);
-            await queryRunner.dropTable("contacts", true, true, true);
+        console.log(`[StartDatabase1738902087028] Deletando tabela "contacts"`);
+        await queryRunner.dropTable("contacts", true, true, true);
 
-            console.log(`[StartDatabase1738902087028] Deletando tabela "coupons"`);
-            await queryRunner.dropTable("coupons", true, true, true);
+        console.log(`[StartDatabase1738902087028] Deletando tabela "coupons"`);
+        await queryRunner.dropTable("coupons", true, true, true);
 
-            console.log(`[StartDatabase1738902087028] Deletando tabela "establishments"`);
-            await queryRunner.dropTable("establishments", true, true, true);
+        console.log(`[StartDatabase1738902087028] Deletando tabela "establishments"`);
+        await queryRunner.dropTable("establishments", true, true, true);
 
-            console.log(`[StartDatabase1738902087028] Deletando tabela "products"`);
-            await queryRunner.dropTable("products", true, true, true);
+        console.log(`[StartDatabase1738902087028] Deletando tabela "products"`);
+        await queryRunner.dropTable("products", true, true, true);
 
-            console.log(`[StartDatabase1738902087028] Deletando tabela "promotion_products"`);
-            await queryRunner.dropTable("promotion_products", true, true, true);
+        console.log(`[StartDatabase1738902087028] Deletando tabela "promotion_products"`);
+        await queryRunner.dropTable("promotion_products", true, true, true);
 
-            console.log(`[StartDatabase1738902087028] Deletando tabela "promotions"`);
-            await queryRunner.dropTable("promotions", true, true, true);
+        console.log(`[StartDatabase1738902087028] Deletando tabela "promotions"`);
+        await queryRunner.dropTable("promotions", true, true, true);
 
-            console.log(`[StartDatabase1738902087028] Deletando tabela "user_establishments"`);
-            await queryRunner.dropTable("user_establishments", true, true, true);
+        console.log(`[StartDatabase1738902087028] Deletando tabela "user_establishments"`);
+        await queryRunner.dropTable("user_establishments", true, true, true);
 
-            console.log(`[StartDatabase1738902087028] Deletando tabela "user_addresses"`);
-            await queryRunner.dropTable("user_addresses", true, true, true);
+        console.log(`[StartDatabase1738902087028] Deletando tabela "user_addresses"`);
+        await queryRunner.dropTable("user_addresses", true, true, true);
 
-            console.log(`[StartDatabase1738902087028] Deletando tabela "users"`);
-            await queryRunner.dropTable("users", true, true, true);
-
-        } catch (error) {
-            console.error('[StartDatabase1738902087028] Erro ao deletar schemas:', error);
-        }
+        console.log(`[StartDatabase1738902087028] Deletando tabela "users"`);
+        await queryRunner.dropTable("users", true, true, true);
     };
 
 };
