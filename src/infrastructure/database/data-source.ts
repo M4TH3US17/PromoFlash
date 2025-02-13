@@ -8,6 +8,8 @@ import { ProductEntity } from "src/modules/product/product.entity";
 import { PromotionEntity } from "src/modules/promotion/promotion.entity";
 import { UserEntity } from "src/modules/user/user.entity";
 import { DataSource } from "typeorm";
+import "dotenv/config";
+import { StartDatabase1738902087028 } from "./migrations/1738902087028-StartDatabase";
 
 export const AppDataSource = new DataSource({
       type: "postgres",
@@ -15,7 +17,7 @@ export const AppDataSource = new DataSource({
       host:      process.env.DB_HOST,
       port:      Number(process.env.DB_PORT) || 5432,
       username:  process.env.DB_USERNAME,
-      password:  process.env.DB_PASSWORD,
+      password:  process.env.DB_PASSWORD.toString(),
       entities: [
           UserEntity,
           ContactEntity,
@@ -30,5 +32,5 @@ export const AppDataSource = new DataSource({
       synchronize: false,
       migrationsRun: true,
       migrationsTableName: "migrations",
-      migrations: [ `${__dirname}/infrastructure/database/migrations/{.ts,*js}` ],
+      migrations: [ StartDatabase1738902087028 ],
   });
