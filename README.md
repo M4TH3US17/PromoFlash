@@ -1,0 +1,7 @@
+## Executar aplicacao:
+npm install
+docker compose up --build
+
+## Executar migrations:
+npm run build
+npx typeorm migration:run -d "dist\infrastructure\database\data-source.js"
