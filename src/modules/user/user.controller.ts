@@ -1,8 +1,8 @@
 import { Response } from 'express';
-import { Controller, Get, Query, Res } from "@nestjs/common";
+import { Controller, Get, Query, Res, UsePipes } from "@nestjs/common";
 import { GetAllUsersUseCase } from './usecases/get-all-users.usecase';
 import { UseCaseResponseDTO } from 'src/shared/bases/usecase-response.dto';
-import { PaginationParserPipe } from 'src/shared/pipes/pagination-parser.pipe.';
+import { PaginationParserPipe } from 'src/shared/pipes/pagination-parser.pipe';
 import { UserEntity } from './user.entity';
 import { UserPaginationDTO } from './dto/pagination-user.dto';
 
@@ -14,9 +14,10 @@ export class UserController {
     ) { }
 
     @Get()
+    @UsePipes(new PaginationParserPipe(UserEntity))
     public async getAll(
         @Res() res: Response,
-        @Query(new PaginationParserPipe(UserEntity)) pagination: UserPaginationDTO,
+        @Query() pagination: UserPaginationDTO,
     ) {
         const response: UseCaseResponseDTO = await this.getAllUsersUseCase.executeAsync(pagination);
         return res.status(response.statusCode).json(response);

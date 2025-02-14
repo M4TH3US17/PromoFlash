@@ -1,8 +1,8 @@
 import { Response } from 'express';
-import { Controller, Get, Query, Res } from "@nestjs/common";
+import { Controller, Get, Query, Res, UsePipes } from "@nestjs/common";
 import { UseCaseResponseDTO } from 'src/shared/bases/usecase-response.dto';
 import { GetAllContactsUseCase } from './usecases/get-all-contacts.usecase';
-import { PaginationParserPipe } from 'src/shared/pipes/pagination-parser.pipe.';
+import { PaginationParserPipe } from 'src/shared/pipes/pagination-parser.pipe';
 import { ContactEntity } from './contact.entity';
 import { ContactPaginationDTO } from './dto/pagination-contact.dto';
 
@@ -14,9 +14,10 @@ export class ContactController {
     ) {}
 
     @Get()
+    @UsePipes(new PaginationParserPipe(ContactEntity))
     public async getAll(
         @Res() res: Response,
-        @Query(new PaginationParserPipe(ContactEntity)) pagination: ContactPaginationDTO,
+        @Query() pagination: ContactPaginationDTO,
     ) {
         const response: UseCaseResponseDTO = await this.getAllContactsUseCase.executeAsync(pagination);
         return res.status(response.statusCode).json(response);

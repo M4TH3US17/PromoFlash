@@ -1,8 +1,8 @@
 import { Response } from 'express';
-import { Controller, Get, Query, Res } from "@nestjs/common";
+import { Controller, Get, Query, Res, UsePipes } from "@nestjs/common";
 import { GetAllProductsUseCase } from './usecases/get-all-products.usecase';
 import { UseCaseResponseDTO } from 'src/shared/bases/usecase-response.dto';
-import { PaginationParserPipe } from 'src/shared/pipes/pagination-parser.pipe.';
+import { PaginationParserPipe } from 'src/shared/pipes/pagination-parser.pipe';
 import { ProductEntity } from './product.entity';
 import { ProductPaginationDTO } from './dto/pagination-product.dto';
 
@@ -14,9 +14,10 @@ export class ProductController {
     ) { }
 
     @Get()
+    @UsePipes(new PaginationParserPipe(ProductEntity))
     public async getAll(
         @Res() res: Response,
-        @Query(new PaginationParserPipe(ProductEntity)) pagination: ProductPaginationDTO,
+        @Query() pagination: ProductPaginationDTO,
     ) {
         const response: UseCaseResponseDTO = await this.getAllProductsUseCase.executeAsync(pagination);
         return res.status(response.statusCode).json(response);
