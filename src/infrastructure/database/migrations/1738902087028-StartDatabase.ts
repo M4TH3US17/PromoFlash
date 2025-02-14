@@ -42,8 +42,7 @@ export class StartDatabase1738902087028 implements MigrationInterface {
                 country            VARCHAR(255) NOT NULL,
                 complement         VARCHAR(255),
                 location_latitude  DECIMAL(10, 8),
-                location_longitude DECIMAL(11, 8),
-                establishment_id   INT           UNIQUE
+                location_longitude DECIMAL(11, 8)
             );`);
 
         console.log(`\n[StartDatabase1738902087028] Criando tabela "contacts"`);
@@ -52,9 +51,7 @@ export class StartDatabase1738902087028 implements MigrationInterface {
                 id               SERIAL,
                 email            VARCHAR(255) NOT NULL,
                 first_contact    VARCHAR(50)  NOT NULL,
-                second_contact   VARCHAR(50),
-                user_id          INT          UNIQUE,
-                establishment_id INT          UNIQUE
+                second_contact   VARCHAR(50)
             );`);
 
         console.log(`\n[StartDatabase1738902087028] Criando tabela "coupons"`);
@@ -75,6 +72,7 @@ export class StartDatabase1738902087028 implements MigrationInterface {
                 cnpj           VARCHAR                             NOT NULL UNIQUE,
                 name           VARCHAR                             NOT NULL,
                 description    VARCHAR                             NOT NULL,
+                stars          INT                                 NOT NULL,
                 status         common.status                       NOT NULL DEFAULT 'ACTIVE',
                 contact_fk     INT                                 UNIQUE,
                 address_fk     INT                                 UNIQUE
@@ -175,9 +173,6 @@ export class StartDatabase1738902087028 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE product_management.establishments_products ADD CONSTRAINT pk_establishments_products PRIMARY KEY (establishment_fk, product_fk);`);
 
         console.log(`\n[StartDatabase1738902087028] Criando CONSTRAINTS das Foreign Keys...`);
-        await queryRunner.query(`ALTER TABLE common.addresses ADD CONSTRAINT fk_establishment FOREIGN KEY (establishment_id) REFERENCES product_management.establishments (id) ON DELETE SET NULL`);
-        await queryRunner.query(`ALTER TABLE common.contacts ADD CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES user_management.users (id) ON DELETE SET NULL`);
-        await queryRunner.query(`ALTER TABLE common.contacts ADD CONSTRAINT fk_establishment FOREIGN KEY (establishment_id) REFERENCES product_management.establishments (id) ON DELETE SET NULL`);
         await queryRunner.query(`ALTER TABLE product_management.establishments ADD CONSTRAINT fk_establishment_contact FOREIGN KEY (contact_fk) REFERENCES common.contacts (id) ON DELETE SET NULL`);
         await queryRunner.query(`ALTER TABLE product_management.establishments ADD CONSTRAINT fk_establishment_address FOREIGN KEY (address_fk) REFERENCES common.addresses (id) ON DELETE SET NULL`);
         await queryRunner.query(`ALTER TABLE promotion_management.promotions ADD CONSTRAINT fk_promotions_establishment FOREIGN KEY (establishment_fk) REFERENCES product_management.establishments (id) ON DELETE CASCADE`);

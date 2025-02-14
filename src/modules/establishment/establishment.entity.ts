@@ -19,6 +19,9 @@ export class EstablishmentEntity extends BaseEntity {
     name: string;
 
     @Column()
+    stars: number;
+
+    @Column()
     description: string;
 
     @Column({ type: "enum", enum: Status, default: Status.ACTIVE })
