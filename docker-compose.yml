@@ -2,25 +2,39 @@ version: '3.8'
 
 services:
   db:
-    # restart: always
     image: postgres:15.4-alpine
     container_name: postgres
     environment:
-      - POSTGRES_DB=promoflash_db
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
+      POSTGRES_DB: promoflash_db
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
     ports:
-      - 5432:5432
+      - "5432:5432"
     # volumes:
-    #   - ./src/infrastructure/database/pgdata:/var/lib/postgresql/data
-#     networks:
-#       - promoflash-network
+    #   - postgres_data:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - promoflash-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: matheusdalvino50@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    restart: always
+    networks:
+      - promoflash-network
 
 #   app:
 #     build:
 #       context: .
 #       dockerfile: Dockerfile
-#     container_name: promoflash
+#     container_name: promoflash_app
 #     environment:
 #       - PORT:${PORT}
 #     env_file:
@@ -28,13 +42,17 @@ services:
 #     ports:
 #       - '3000:3000'
 #     depends_on:
-#       - postgres-container
+#       - db
 #     volumes:
 #       - .:/app
 #       - /app/node_modules
 #     networks:
 #       - promoflash-network
 
-# networks:
-#   promoflash-network:
-#     driver: bridge
+# volumes:
+#   postgres_data:
+#     driver: local
+
+networks:
+  promoflash-network:
+    driver: bridge
