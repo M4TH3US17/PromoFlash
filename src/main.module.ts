@@ -9,8 +9,8 @@ import { EstablishmentModule } from './modules/establishment/establishment.modul
 import { ProductModule } from './modules/product/product.module';
 import { PromotionModule } from './modules/promotion/promotion.module';
 import { UserModule } from './modules/user/user.module';
-import { envValidationSchema } from './shared/validations/env.validation';
 import { AppDataSource } from './infrastructure/database/data-source';
+import { envValidationSchema } from './config/joi.config';
 
 @Module({
   imports: [
