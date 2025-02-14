@@ -3,6 +3,7 @@ import { IUserRepositoryContract } from "src/infrastructure/repository_contracts
 import { UseCaseResponseDTO } from "src/shared/bases/usecase-response.dto";
 import { UserEntity } from "../user.entity";
 import { UserPaginationDTO } from "../dto/pagination-user.dto";
+import { PaginatedList } from "src/shared/types/pagination.types";
 
 
 @Injectable()
@@ -15,7 +16,7 @@ export class GetAllUsersUseCase {
 
     async executeAsync(pagination: UserPaginationDTO): Promise<UseCaseResponseDTO> {
         try {
-            const users: UserEntity[] = await this.usersRepository.getAllAsync(pagination);
+            const users: PaginatedList<UserEntity> = await this.usersRepository.getAllAsync(pagination);
 
             return {
                 statusCode: HttpStatus.OK,

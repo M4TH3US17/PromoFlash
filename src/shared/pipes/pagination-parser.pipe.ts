@@ -1,6 +1,7 @@
 import { ArgumentMetadata, HttpException, HttpStatus, Injectable, PipeTransform } from "@nestjs/common";
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
 import { AppDataSource } from "src/infrastructure/database/data-source";
+import { SORT_DIRECTIONS } from "../types/pagination.types";
 
 @Injectable()
 export class PaginationParserPipe implements PipeTransform {
@@ -15,8 +16,8 @@ export class PaginationParserPipe implements PipeTransform {
         if (value.filterBy && !entityAttributes.includes(value.filterBy))
             throw new HttpException(`Param "filterBy" only accept: ${entityAttributes.toString()}`, HttpStatus.BAD_REQUEST);
 
-        // if (value.sort && !Object.values(SORT_DIRECTIONS).includes(value.sort))
-        //   throw new HttpException(`Param "sort" only accept: ${SORT_DIRECTIONS.toString()}`, HttpStatus.BAD_REQUEST);
+        if (value.sort && !Object.values(SORT_DIRECTIONS).includes(value.sort))
+          throw new HttpException(`Param "sort" only accept: ${SORT_DIRECTIONS.toString()}`, HttpStatus.BAD_REQUEST);
 
         value = {
             ...value,

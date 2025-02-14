@@ -42,7 +42,9 @@ export class StartDatabase1738902087028 implements MigrationInterface {
                 country            VARCHAR(255) NOT NULL,
                 complement         VARCHAR(255),
                 location_latitude  DECIMAL(10, 8),
-                location_longitude DECIMAL(11, 8)
+                location_longitude DECIMAL(11, 8),
+                created_at     TIMESTAMP        DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                updated_at     TIMESTAMP        DEFAULT CURRENT_TIMESTAMP NOT NULL
             );`);
 
         console.log(`\n[StartDatabase1738902087028] Criando tabela "contacts"`);
@@ -51,7 +53,9 @@ export class StartDatabase1738902087028 implements MigrationInterface {
                 id               SERIAL,
                 email            VARCHAR(255) NOT NULL,
                 first_contact    VARCHAR(50)  NOT NULL,
-                second_contact   VARCHAR(50)
+                second_contact   VARCHAR(50),
+                created_at     TIMESTAMP      DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                updated_at     TIMESTAMP      DEFAULT CURRENT_TIMESTAMP NOT NULL
             );`);
 
         console.log(`\n[StartDatabase1738902087028] Criando tabela "coupons"`);

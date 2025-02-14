@@ -3,6 +3,7 @@ import { ICouponRepositoryContract } from "src/infrastructure/repository_contrac
 import { UseCaseResponseDTO } from "src/shared/bases/usecase-response.dto";
 import { CouponPaginationDTO } from "../dto/pagination-coupon.dto";
 import { CouponEntity } from "../coupon.entity";
+import { PaginatedList } from "src/shared/types/pagination.types";
 
 
 @Injectable()
@@ -15,7 +16,7 @@ export class GetAllCouponsUseCase {
 
     async executeAsync(pagination: CouponPaginationDTO): Promise<UseCaseResponseDTO> {
         try {
-            const coupons: CouponEntity[] = await this.couponRepository.getAllAsync(pagination);
+            const coupons: PaginatedList<CouponEntity> = await this.couponRepository.getAllAsync(pagination);
             
             return {
                 statusCode: HttpStatus.OK,

@@ -4,6 +4,7 @@ import { IContactRepositoryContract } from "src/infrastructure/repository_contra
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { CreateContactRequestDTO, UpdateContactRequestDTO } from "./dto/request-contact.dto";
+import { PaginatedList } from "src/shared/types/pagination.types";
 
 @Injectable()
 export class ContactRepositoryImpl implements IContactRepositoryContract {
@@ -13,7 +14,7 @@ export class ContactRepositoryImpl implements IContactRepositoryContract {
         private readonly contactRepository: Repository<ContactEntity>,
     ) {}
 
-    getAllAsync(): Promise<ContactEntity[]> {
+    getAllAsync(): Promise<PaginatedList<ContactEntity>> {
         throw new Error("Method not implemented.");
     };
 

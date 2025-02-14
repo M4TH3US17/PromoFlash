@@ -4,6 +4,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { CreatePromotionRequestDTO, UpdatePromotionRequestDTO } from "./dto/request-promotion.dto";
+import { PaginatedList } from "src/shared/types/pagination.types";
 
 @Injectable()
 export class PromotionRepositoryImpl implements IPromotionRepositoryContract {
@@ -13,7 +14,7 @@ export class PromotionRepositoryImpl implements IPromotionRepositoryContract {
         private readonly promotionRepository: Repository<PromotionEntity>,
     ) {}
     
-    getAllAsync(): Promise<PromotionEntity[]> {
+    getAllAsync(): Promise<PaginatedList<PromotionEntity>> {
         throw new Error("Method not implemented.");
     };
 

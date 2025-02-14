@@ -4,6 +4,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { CreateEstablishmentRequestDTO, UpdateEstablishmentRequestDTO } from "./dto/request-establishment.dto";
+import { PaginatedList } from "src/shared/types/pagination.types";
 
 @Injectable()
 export class EstablishmentRepositoryImpl implements IEstablishmentRepositoryContract {
@@ -13,7 +14,7 @@ export class EstablishmentRepositoryImpl implements IEstablishmentRepositoryCont
         private readonly establishmentRepository: Repository<EstablishmentEntity>,
     ) {}
 
-    getAllAsync(): Promise<EstablishmentEntity[]> {
+    getAllAsync(): Promise<PaginatedList<EstablishmentEntity>> {
         throw new Error("Method not implemented.");
     };
 

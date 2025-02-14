@@ -3,6 +3,7 @@ import { IProductRepositoryContract } from "src/infrastructure/repository_contra
 import { UseCaseResponseDTO } from "src/shared/bases/usecase-response.dto";
 import { ProductEntity } from "../product.entity";
 import { ProductPaginationDTO } from "../dto/pagination-product.dto";
+import { PaginatedList } from "src/shared/types/pagination.types";
 
 
 @Injectable()
@@ -15,7 +16,7 @@ export class GetAllProductsUseCase {
 
     async executeAsync(pagination: ProductPaginationDTO): Promise<UseCaseResponseDTO> {
         try {
-            const products: ProductEntity[] = await this.productRepository.getAllAsync(pagination);
+            const products: PaginatedList<ProductEntity> = await this.productRepository.getAllAsync(pagination);
 
             return {
                 statusCode: HttpStatus.OK,

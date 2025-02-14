@@ -3,6 +3,7 @@ import { IContactRepositoryContract } from "src/infrastructure/repository_contra
 import { UseCaseResponseDTO } from "src/shared/bases/usecase-response.dto";
 import { ContactPaginationDTO } from "../dto/pagination-contact.dto";
 import { ContactEntity } from "../contact.entity";
+import { PaginatedList } from "src/shared/types/pagination.types";
 
 @Injectable()
 export class GetAllContactsUseCase {
@@ -14,7 +15,7 @@ export class GetAllContactsUseCase {
 
     public async executeAsync(pagination: ContactPaginationDTO): Promise<UseCaseResponseDTO> {
         try {
-            const contacts: ContactEntity[] = await this.contactRepository.getAllAsync(pagination);
+            const contacts: PaginatedList<ContactEntity> = await this.contactRepository.getAllAsync(pagination);
 
             return {
                 statusCode: HttpStatus.OK,

@@ -3,6 +3,7 @@ import { IPromotionRepositoryContract } from "src/infrastructure/repository_cont
 import { UseCaseResponseDTO } from "src/shared/bases/usecase-response.dto";
 import { PromotionPaginationDTO } from "../dto/pagination-promotion.dto";
 import { PromotionEntity } from "../promotion.entity";
+import { PaginatedList } from "src/shared/types/pagination.types";
 
 
 @Injectable()
@@ -15,7 +16,7 @@ export class GetAllPromotionsUseCase {
 
     async executeAsync(pagination: PromotionPaginationDTO): Promise<UseCaseResponseDTO> {
         try {
-            const promotions: PromotionEntity[] = await this.promotionRepository.getAllAsync(pagination);
+            const promotions: PaginatedList<PromotionEntity> = await this.promotionRepository.getAllAsync(pagination);
 
             return {
                 statusCode: HttpStatus.OK,

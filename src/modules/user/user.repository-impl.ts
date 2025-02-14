@@ -4,6 +4,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { CreateUserRequestDTO, UpdateUserRequestDTO } from "./dto/request-user.dto";
+import { PaginatedList } from "src/shared/types/pagination.types";
 
 @Injectable()
 export class UserRepositoryImpl implements IUserRepositoryContract {
@@ -13,7 +14,7 @@ export class UserRepositoryImpl implements IUserRepositoryContract {
         private readonly userRepository: Repository<UserEntity>,
     ) {}
 
-    getAllAsync(): Promise<UserEntity[]> {
+    async getAllAsync(): Promise<PaginatedList<UserEntity>> {
         throw new Error("Method not implemented.");
     };
 

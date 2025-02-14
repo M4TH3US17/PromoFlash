@@ -3,6 +3,7 @@ import { IEstablishmentRepositoryContract } from "src/infrastructure/repository_
 import { UseCaseResponseDTO } from "src/shared/bases/usecase-response.dto";
 import { EstablishmentPaginationDTO } from "../dto/pagination-establishment.dto";
 import { EstablishmentEntity } from "../establishment.entity";
+import { PaginatedList } from "src/shared/types/pagination.types";
 
 
 @Injectable()
@@ -15,7 +16,7 @@ export class GetAllEstablishmentsUseCase {
 
     async executeAsync(pagination: EstablishmentPaginationDTO): Promise<UseCaseResponseDTO> {
         try {
-            const establishments: EstablishmentEntity[] = await this.establishmentRepository.getAllAsync(pagination);
+            const establishments: PaginatedList<EstablishmentEntity> = await this.establishmentRepository.getAllAsync(pagination);
 
             return {
                 statusCode: HttpStatus.OK,
