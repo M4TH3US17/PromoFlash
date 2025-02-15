@@ -1,10 +1,9 @@
-import "dotenv/config";
 import { NestFactory } from '@nestjs/core';
 import { MainModule } from './main.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppDataSource } from "./infrastructure/database/data-source";
-import { DocumentBuilder, OpenAPIObject, SwaggerCustomOptions, SwaggerDocumentOptions, SwaggerModule } from "@nestjs/swagger";
-import { join } from "path";
+import { DocumentBuilder, SwaggerCustomOptions, SwaggerModule } from "@nestjs/swagger";
+import "dotenv/config";
 
 async function bootstrap() {
   const app: NestExpressApplication = await NestFactory.create<NestExpressApplication>(MainModule);
@@ -17,12 +16,14 @@ async function bootstrap() {
 
   // Swagger Config
   const swaggerInfos = new DocumentBuilder()
-    .setTitle('Documentação PromoFlash')
-    .setDescription('Documentação da API PromoFlash')
-    .setVersion('1.0')
-    .build()
+  .setTitle('Documentação PromoFlash')
+  .setDescription('Documentação da API PromoFlash')
+  .setVersion('1.0')
+  .setContact('Matheus Washington', 'https://www.linkedin.com/in/matheus-washington-478400207', null)
+  .build();
   const swaggerUiConfig: SwaggerCustomOptions = { customSiteTitle: "PromoFlash Documentation" };
-  SwaggerModule.setup('promoflash-doc', app, () => SwaggerModule.createDocument(app, swaggerInfos, { autoTagControllers: true }), swaggerUiConfig);
+  const docFactory = () => SwaggerModule.createDocument(app, swaggerInfos, { autoTagControllers: true })
+  SwaggerModule.setup('promoflash-doc', app, docFactory, swaggerUiConfig);
 
   await app.listen(APP_PORT);
 };
