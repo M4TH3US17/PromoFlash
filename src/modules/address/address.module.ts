@@ -4,6 +4,10 @@ import { AddressRepositoryImpl } from './address.repository-impl';
 import { GetAllAddressesUseCase } from './usecases/get-all-addresses.usecase';
 import { AddressEntity } from './address.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CreateAddressUseCase } from './usecases/create-address.usecase';
+import { GetAddressByIdUseCase } from './usecases/get-address-by-id.usecase';
+import { UpdateAddressUseCase } from './usecases/update-address.usecase';
+import { SoftDeleteAddressUseCase } from './usecases/soft-delete-address.usecase';
 
 @Module({
   imports: [
@@ -20,6 +24,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
     // usecases
     GetAllAddressesUseCase,
+    GetAddressByIdUseCase,
+    CreateAddressUseCase,
+    UpdateAddressUseCase,
+    SoftDeleteAddressUseCase,
   ],
 })
 export class AddressModule {}

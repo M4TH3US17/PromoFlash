@@ -2,11 +2,10 @@ import { Injectable, Logger } from "@nestjs/common";
 import { AddressEntity } from "./address.entity";
 import { IAddressRepositoryContract } from "src/infrastructure/repository_contracts/Iaddress.repository-contract";
 import { InjectRepository } from "@nestjs/typeorm";
-import { ILike, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { AddressPaginationDTO } from "./dto/pagination-address.dto";
 import { CreateAddressRequestDTO, UpdateAddressRequestDTO } from "./dto/request-address.dto";
-import { IGetListArgs, PaginatedList, TSortDirection } from "src/shared/types/pagination.types";
-import { SCHEMA } from "src/infrastructure/database/enums/schemas";
+import { IGetListArgs, PaginatedList } from "src/shared/types/pagination.types";
 
 @Injectable()
 export class AddressRepositoryImpl implements IAddressRepositoryContract {
