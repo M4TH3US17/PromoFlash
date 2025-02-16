@@ -1,4 +1,3 @@
-import { BaseEntity } from "typeorm";
 
 export type TSortDirection = 'ASC' | 'DESC';
 export const SORT_DIRECTIONS: TSortDirection[] = ['ASC', 'DESC'];

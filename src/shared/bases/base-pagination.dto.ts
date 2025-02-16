@@ -1,21 +1,34 @@
+import { ApiProperty } from "@nestjs/swagger";
+import { SORT_DIRECTIONS, TSortDirection } from "../types/pagination.types";
 import { BaseEntity } from "./base.entity";
 
 export class BasePaginationDTO<Entity extends BaseEntity> {
-    //@ApiProperty({ description: 'Número de página (offset)', required: false, example: 0 })
+
+    /** Número de página (offset)
+     * @example 0 
+     * **/
     offset?: number;
   
-    //@ApiProperty({ description: 'Limite de itens por página', required: false, example: 10 })
+    /** Limite de itens por página
+     * @example 10
+     * **/
     limit?: number;
-  
-    //@ApiProperty({ description: 'Campo para filtrar', required: false })
+
+    /** Campo para filtrar **/
     filterBy?: keyof Entity;
   
-    //@ApiProperty({ description: 'Valor da chave para filtrar', required: false })
+    /** Valor da chave para filtrar **/
     key?: string;
   
-    //@ApiProperty({ description: 'Campo para ordenar', required: false })
+    /** Campo para ordenar **/
     orderBy?: keyof Entity;
   
-    //@ApiProperty({ description: 'Direção da ordenação', enum: ['ASC', 'DESC'], required: false, example: 'ASC' })
-    sort?: 'ASC' | 'DESC';
+    @ApiProperty({
+      description: 'Direção da ordenação',
+      enum: SORT_DIRECTIONS,
+      required: false,
+      example: 'ASC',
+      enumName: "Selecionar",
+    })
+    sort?: TSortDirection;
   };

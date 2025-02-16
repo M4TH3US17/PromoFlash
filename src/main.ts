@@ -16,9 +16,9 @@ async function bootstrap() {
 
   // Swagger Config
   const swaggerInfos = new DocumentBuilder()
+  .setVersion('1.0')
   .setTitle('Documentação PromoFlash')
   .setDescription('Documentação da API PromoFlash')
-  .setVersion('1.0')
   .setContact('Matheus Washington', 'https://www.linkedin.com/in/matheus-washington-478400207', null)
   .build();
   const swaggerUiConfig: SwaggerCustomOptions = { customSiteTitle: "PromoFlash Documentation" };

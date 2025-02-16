@@ -1,7 +1,6 @@
-import { PartialType } from "@nestjs/mapped-types";
+import { PartialType } from "@nestjs/swagger";
 
 export class CreateAddressRequestDTO {
-
     street: string;
     number:  number;
     neighborhood: string;
