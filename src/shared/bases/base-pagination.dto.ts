@@ -28,7 +28,7 @@ export class BasePaginationDTO<Entity extends BaseEntity> {
       enum: SORT_DIRECTIONS,
       required: false,
       example: 'ASC',
-      enumName: "Selecionar",
+      enumName: "SELECT [sort pagination]",
     })
     sort?: TSortDirection;
   };
