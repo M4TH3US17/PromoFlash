@@ -24,10 +24,13 @@ export class GetAllAddressesUseCase {
         const addressesDTO: AddressResponseDTO[] = addresses.data.map((item: AddressEntity) => parseAddressEntityToResponse(item));
 
         this.logger.log(`[GetAllAddressesUseCase] Retornando dados para o frontend...`);
+        const message: string = (addressesDTO.length < 1) ? "Nenhum endereço localizado" : "Segue a listagem de endereços";
+        const data: object = { data: addressesDTO, total: addresses.total };
+        
         return {
             statusCode: HttpStatus.OK,
-            message: "Segue a listagem de endereços",
-            data: { data: addressesDTO, total: addresses.total }
+            message: message,
+            data: data
         };
     };
 
