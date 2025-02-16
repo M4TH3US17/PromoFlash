@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger";
 
 export type TSortDirection = 'ASC' | 'DESC';
 export const SORT_DIRECTIONS: TSortDirection[] = ['ASC', 'DESC'];
@@ -12,6 +13,8 @@ export interface IGetListArgs<Entity> {
 };
 
 export class PaginatedList<T> {
+    @ApiProperty()
     data: T[];
+    @ApiProperty()
     total: number
 };
