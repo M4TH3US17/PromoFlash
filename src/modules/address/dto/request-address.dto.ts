@@ -1,16 +1,8 @@
-import { PartialType } from "@nestjs/swagger";
+import { OmitType, PartialType } from "@nestjs/swagger";
+import { AddressEntity } from "../address.entity";
 
-export class CreateAddressRequestDTO {
-    street: string;
-    number:  number;
-    neighborhood: string;
-    city: string;
-    state: string;
-    cep: string;
-    country: string;
-    complement: string;
-
-    // location: LocationEntity;
+export class CreateAddressRequestDTO extends OmitType(AddressEntity, 
+    ["id", "createdAt", "updatedAt", "location", "establishment", "users"]) {
 };
 
 export class UpdateAddressRequestDTO extends PartialType(CreateAddressRequestDTO) { };
