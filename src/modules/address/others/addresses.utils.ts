@@ -36,7 +36,5 @@ export function parseAddressEntityToResponse(entity: AddressEntity): AddressResp
         number: entity.number,
         complement: entity.complement,
         neighborhood: entity.neighborhood,
-        createdAt: entity.createdAt,
-        updatedAt: entity.updatedAt,
     }
 };

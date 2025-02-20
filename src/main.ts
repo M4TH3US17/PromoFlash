@@ -3,10 +3,11 @@ import { MainModule } from './main.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppDataSource } from "./infrastructure/database/data-source";
 import { DocumentBuilder, SwaggerCustomOptions, SwaggerModule } from "@nestjs/swagger";
-import "dotenv/config";
 import { AddressResponseDTO } from './modules/address/dto/response-address.dto';
-import { PaginatedList } from './shared/types/pagination.types';
 import { UseCaseResponseDTO } from './shared/bases/usecase-response.dto';
+import { CreateAddressRequestDTO } from './modules/address/dto/request-address.dto';
+import { HttpExceptionFilter } from './config/filters/http-exception.filter';
+import "dotenv/config";
 
 async function bootstrap() {
   const app: NestExpressApplication = await NestFactory.create<NestExpressApplication>(MainModule);
@@ -16,6 +17,8 @@ async function bootstrap() {
   AppDataSource.initialize()
     .then(() => console.log(`Conexão com o banco "${DB_NAME}" foi inicializada!`))
     .catch((error) => console.error(`Conexão com o banco "${DB_NAME}" falhou! Erro:`, error));
+
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   // Swagger Config
   const swaggerInfos = new DocumentBuilder()
@@ -27,7 +30,7 @@ async function bootstrap() {
   const swaggerUiConfig: SwaggerCustomOptions = { customSiteTitle: "PromoFlash Documentation" };
   const docFactory = () => SwaggerModule.createDocument(app, swaggerInfos, { 
     autoTagControllers: true,
-    extraModels: [PaginatedList, AddressResponseDTO, UseCaseResponseDTO] 
+    extraModels: [AddressResponseDTO, UseCaseResponseDTO, CreateAddressRequestDTO] 
   })
   SwaggerModule.setup('promoflash-doc', app, docFactory, swaggerUiConfig);
 

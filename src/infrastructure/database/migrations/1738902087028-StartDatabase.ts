@@ -73,14 +73,20 @@ export class StartDatabase1738902087028 implements MigrationInterface {
                 id             SERIAL,
                 created_at     TIMESTAMP                           DEFAULT CURRENT_TIMESTAMP NOT NULL,
                 updated_at     TIMESTAMP                           DEFAULT CURRENT_TIMESTAMP NOT NULL,
-                cnpj           VARCHAR                             NOT NULL UNIQUE,
+                cnpj           VARCHAR                             NOT NULL,
                 name           VARCHAR                             NOT NULL,
                 description    VARCHAR                             NOT NULL,
                 stars          INT                                 NOT NULL,
                 status         common.status                       NOT NULL DEFAULT 'ACTIVE',
+                is_verified    INT                                 DEFAULT 0,
+                main_fk        INT                                 DEFAULT NULL,
                 contact_fk     INT                                 UNIQUE,
                 address_fk     INT                                 UNIQUE
-            );`);
+            );
+
+            COMMENT ON COLUMN product_management.establishments.is_verified 'Status de verificação da filial, conforme determinado pela loja matriz. 1 indica que a filial foi validada pela matriz, enquanto 0 significa que a filial ainda não foi validada.'
+            COMMENT ON COLUMN product_management.establishments.main_fk IS 'ID do estabelecimento matriz. Se preenchido, indica que a entidade atual é uma filial vinculada à loja matriz.';
+            `);
 
         console.log(`\n[StartDatabase1738902087028] Criando tabela "products"`);
         await queryRunner.query(`

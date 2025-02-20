@@ -3,25 +3,28 @@ import { IEstablishmentRepositoryContract } from "src/infrastructure/repository_
 import { UseCaseResponseDTO } from "src/shared/bases/usecase-response.dto";
 import { EstablishmentEntity } from "../establishment.entity";
 import { PaginatedList } from "src/shared/types/pagination.types";
-import { EstablishmentPaginationDTO } from "../dto/pagination-establishment.dto";
+import { FindEstablishmentByCNPJUseCase } from "src/infrastructure/external_services/br_federal_revenue_service/usecases/find-establishment-by-cnpj.usecase";
+import { CreateEstablishmentRequestDTO } from "../dto/request-establishment.dto";
 
 
 @Injectable()
-export class GetAllEstablishmentsUseCase {
+export class CreateEstablishmentsUseCase {
 
     constructor(
         @Inject("ESTABLISHMENT_REPOSITORY")
         private readonly establishmentRepository: IEstablishmentRepositoryContract,
+        private readonly findEstablishmentByCNPJUseCase: FindEstablishmentByCNPJUseCase,
     ) { }
 
-    async executeAsync(pagination: EstablishmentPaginationDTO): Promise<UseCaseResponseDTO> {
+    async executeAsync(request: CreateEstablishmentRequestDTO): Promise<UseCaseResponseDTO> {
         try {
-            const establishments: PaginatedList<EstablishmentEntity> = await this.establishmentRepository.getAllAsync(pagination);
+            const establishment = await this.findEstablishmentByCNPJUseCase.executeAsync(request.cnpj);
+            //const establishments: PaginatedList<EstablishmentEntity> = await this.establishmentRepository.createAsync();
 
             return {
-                statusCode: HttpStatus.OK,
+                statusCode: HttpStatus.CREATED,
                 message: "",
-                data: []
+                data: establishment
             };
         } catch (error) {
             if (error instanceof HttpException) throw error;

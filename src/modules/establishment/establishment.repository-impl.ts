@@ -3,8 +3,8 @@ import { IEstablishmentRepositoryContract } from "src/infrastructure/repository_
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { CreateEstablishmentRequestDTO, UpdateEstablishmentRequestDTO } from "./dto/request-establishment.dto";
 import { PaginatedList } from "src/shared/types/pagination.types";
+import { CreateEstablishmentRequestDTO, UpdateEstablishmentRequestDTO } from "./dto/request-establishment.dto";
 
 @Injectable()
 export class EstablishmentRepositoryImpl implements IEstablishmentRepositoryContract {

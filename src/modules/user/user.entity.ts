@@ -6,6 +6,7 @@ import { AddressEntity } from "../address/address.entity";
 import { Status } from "src/shared/enums/status";
 import { EstablishmentEntity } from "../establishment/establishment.entity";
 import { SCHEMA } from "src/infrastructure/database/enums/schemas";
+import { Exclude } from "class-transformer";
 
 @Entity({ 
     schema: SCHEMA.USER, 
@@ -16,6 +17,7 @@ export class UserEntity extends BaseEntity {
     @Column()
     username: string;
 
+    @Exclude()
     @Column()
     password: string;
 

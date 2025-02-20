@@ -2,9 +2,9 @@ import { BaseEntity } from "src/shared/bases/base.entity";
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { ContactEntity } from "../contact/contact.entity";
 import { AddressEntity } from "../address/address.entity";
-import { Status } from "src/shared/enums/status";
 import { PromotionEntity } from "../promotion/promotion.entity";
 import { SCHEMA } from "src/infrastructure/database/enums/schemas";
+import { EstablishmentAffiliateEntity } from "./others/embbededs/establishment-affiliate.entity";
 
 @Entity({
     schema: SCHEMA.PRODUCT,
@@ -12,7 +12,7 @@ import { SCHEMA } from "src/infrastructure/database/enums/schemas";
 })
 export class EstablishmentEntity extends BaseEntity {
 
-    @Column({ unique: true })
+    @Column()
     cnpj: string;
 
     @Column()
@@ -24,14 +24,14 @@ export class EstablishmentEntity extends BaseEntity {
     @Column()
     description: string;
 
-    @Column({ type: "enum", enum: Status, default: Status.ACTIVE })
-    status: Status;
+    @Column(() => EstablishmentAffiliateEntity)
+    ifAffiliated: EstablishmentAffiliateEntity;
 
     @JoinColumn({
         name: "contact_fk",
         foreignKeyConstraintName: "fk_establishment_contact",
     })
-    @OneToOne(() => ContactEntity, (contact) => contact.establishment, { nullable: false, cascade: true })
+    @OneToOne(() => ContactEntity, (contact) => contact.establishment, { nullable: false, cascade: true }) 
     contact: ContactEntity;
 
     @JoinColumn({
@@ -44,7 +44,6 @@ export class EstablishmentEntity extends BaseEntity {
     @OneToMany(() => PromotionEntity, (promotion) => promotion.establishment)
     promotions: PromotionEntity[]
 
-    
 };
 // @OneToMany(() => EstablishmentProduct, (products) => products.establishment)
 // products: EstablishmentProduct[];

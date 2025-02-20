@@ -11,6 +11,9 @@ import { PromotionModule } from './modules/promotion/promotion.module';
 import { UserModule } from './modules/user/user.module';
 import { AppDataSource } from './infrastructure/database/data-source';
 import { envValidationSchema } from './config/joi.config';
+import { ReceitaFederalModule } from './infrastructure/external_services/br_federal_revenue_service/receita-federal.module';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from './config/filters/http-exception.filter';
 
 @Module({
   imports: [
@@ -22,6 +25,10 @@ import { envValidationSchema } from './config/joi.config';
 
     TypeOrmModule.forRoot(AppDataSource.options),
 
+    // External Services
+    ReceitaFederalModule,
+
+    // Domains
     AddressModule,
     ContactModule,
     CouponModule,
@@ -30,5 +37,11 @@ import { envValidationSchema } from './config/joi.config';
     PromotionModule,
     UserModule,
   ],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+  ]
 })
 export class MainModule { }
