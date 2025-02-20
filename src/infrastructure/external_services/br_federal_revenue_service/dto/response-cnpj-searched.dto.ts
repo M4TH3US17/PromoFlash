@@ -5,6 +5,10 @@ export class EstablishmentDTO {
     nome: string;
     porte: string;
     natureza_juridica: string;
+    cnae_fiscal_descricao: string;
+    motivo_situacao_cadastral: string;
+    razao_social: string;
+    descricao_identificador_matriz_filial: string;
   
     atividade_principal: { code: string; text: string }[];
     atividades_secundarias: { code: string; text: string }[];
@@ -24,6 +28,7 @@ export class EstablishmentDTO {
     fantasia: string;
     complemento: string;
     efr: string;
+    descricao_situacao_cadastral: string;
     motivo_situacao: string;
     situacao_especial: string;
     data_situacao_especial: string;

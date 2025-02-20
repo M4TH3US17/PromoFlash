@@ -9,4 +9,5 @@ export interface IEstablishmentRepositoryContract
         EstablishmentEntity
     > {
         
+        isMainStoreAsync(cnpj: string, main_fk: number): Promise<boolean>;
 };

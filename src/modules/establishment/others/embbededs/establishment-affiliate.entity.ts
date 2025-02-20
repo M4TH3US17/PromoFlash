@@ -8,7 +8,7 @@ export class EstablishmentAffiliateEntity {
         default: null,
         comment: "ID do estabelecimento matriz. Se preenchido, indica que a entidade atual é uma filial vinculada à loja matriz.", 
     })
-    main_fk: number;
+    main_fk: number = null;
     
     @Column({ 
         name: "is_verified",

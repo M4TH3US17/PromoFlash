@@ -14,23 +14,27 @@ export class EstablishmentRepositoryImpl implements IEstablishmentRepositoryCont
         private readonly establishmentRepository: Repository<EstablishmentEntity>,
     ) {}
 
-    getAllAsync(): Promise<PaginatedList<EstablishmentEntity>> {
+    async getAllAsync(): Promise<PaginatedList<EstablishmentEntity>> {
         throw new Error("Method not implemented.");
     };
 
-    getByIdAsync(id: number): Promise<EstablishmentEntity> {
+    async getByIdAsync(id: number): Promise<EstablishmentEntity> {
         throw new Error("Method not implemented.");
     };
 
-    createAsync(entityToCreate: CreateEstablishmentRequestDTO): Promise<EstablishmentEntity> {
+    async createAsync(entityToCreate: CreateEstablishmentRequestDTO): Promise<EstablishmentEntity> {
         throw new Error("Method not implemented.");
     };
 
-    updateAsync(id: number, entityToUpdate: UpdateEstablishmentRequestDTO): Promise<EstablishmentEntity> {
+    async updateAsync(id: number, entityToUpdate: UpdateEstablishmentRequestDTO): Promise<EstablishmentEntity> {
         throw new Error("Method not implemented.");
     };
 
-    deleteAsync(id: number): Promise<void> {
+    async deleteAsync(id: number): Promise<void> {
+        throw new Error("Method not implemented.");
+    };
+
+    async isMainStoreAsync(cnpj: string, main_fk: number): Promise<boolean> {
         throw new Error("Method not implemented.");
     };
 
