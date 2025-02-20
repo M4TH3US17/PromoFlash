@@ -20,17 +20,17 @@ export class CreateEstablishmentsUseCase {
     async executeAsync(request: CreateEstablishmentRequestDTO): Promise<UseCaseResponseDTO> {
         try {
             const cnpjFormatted: string = request.cnpj;
-            const establishment: EstablishmentDTO = await this.findEstablishmentByCNPJUseCase.executeAsync(cnpjFormatted);
+            const brazilianFederalRevenue: EstablishmentDTO = await this.findEstablishmentByCNPJUseCase.executeAsync(cnpjFormatted);
 
-            if(establishment.descricao_situacao_cadastral !== "ATIVA") 
+            if(brazilianFederalRevenue.descricao_situacao_cadastral !== "ATIVA") 
                 throw new HttpException(`O CNPJ informado não está ativo na Receita Federal e não pode ser cadastrado.`, HttpStatus.BAD_REQUEST);
             
-            if (!establishment.razao_social) 
+            if (!brazilianFederalRevenue.razao_social) 
                 throw new HttpException("O CNPJ informado não é válido ou não está registrado na Receita Federal.", HttpStatus.BAD_REQUEST);
 
-            if((establishment.descricao_identificador_matriz_filial === "FILIAL") || request.main_fk) {
+            if((brazilianFederalRevenue.descricao_identificador_matriz_filial === "FILIAL") || request.main_fk) {
                 // verificar se ja existe um cnpj cadastrado
-                // enviar um SMS de verificacao para os contatos em `establishment`
+                // enviar um SMS de verificacao para os contatos em `brazilianFederalRevenue`
                 console.log("é filial")    
             };
 
@@ -46,7 +46,7 @@ export class CreateEstablishmentsUseCase {
             return {
                 statusCode: HttpStatus.CREATED,
                 message: "",
-                data: establishment
+                data: brazilianFederalRevenue
             };
         } catch (error) {
             if (error instanceof HttpException) throw error;
