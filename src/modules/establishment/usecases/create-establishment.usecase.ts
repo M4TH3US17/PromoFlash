@@ -1,15 +1,15 @@
-import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
 import { IEstablishmentRepositoryContract } from "src/infrastructure/repository_contracts/Iestablishment.repository-contract";
 import { UseCaseResponseDTO } from "src/shared/bases/usecase-response.dto";
-import { EstablishmentEntity } from "../establishment.entity";
-import { PaginatedList } from "src/shared/types/pagination.types";
 import { FindEstablishmentByCNPJUseCase } from "src/infrastructure/external_services/br_federal_revenue_service/usecases/find-establishment-by-cnpj.usecase";
 import { CreateEstablishmentRequestDTO } from "../dto/request-establishment.dto";
 import { EstablishmentDTO } from "src/infrastructure/external_services/br_federal_revenue_service/dto/response-cnpj-searched.dto";
-
+import { EstablishmentEntity } from "../establishment.entity";
+import { EstablishmentType } from "../others/enums/establishment-type.enum";
 
 @Injectable()
 export class CreateEstablishmentsUseCase {
+    private readonly logger: Logger = new Logger(CreateEstablishmentsUseCase.name);
 
     constructor(
         @Inject("ESTABLISHMENT_REPOSITORY")
@@ -19,29 +19,34 @@ export class CreateEstablishmentsUseCase {
 
     async executeAsync(request: CreateEstablishmentRequestDTO): Promise<UseCaseResponseDTO> {
         try {
-            const cnpjFormatted: string = request.cnpj;
-            const brazilianFederalRevenue: EstablishmentDTO = await this.findEstablishmentByCNPJUseCase.executeAsync(cnpjFormatted);
+            this.logger.log(`Iniciando cadastro de um estabelecimento de CNPJ=${request.cnpj} e nome=${request.name}`);
+            const brazilianFederalRevenue: EstablishmentDTO = await this.findEstablishmentByCNPJUseCase.executeAsync(request.cnpj); // busca na cnpj na receita federal
+            const establishment: EstablishmentEntity = await this.establishmentRepository.getByCNPJAsync(request.cnpj);
 
-            if(brazilianFederalRevenue.descricao_situacao_cadastral !== "ATIVA") 
-                throw new HttpException(`O CNPJ informado não está ativo na Receita Federal e não pode ser cadastrado.`, HttpStatus.BAD_REQUEST);
-            
-            if (!brazilianFederalRevenue.razao_social) 
-                throw new HttpException("O CNPJ informado não é válido ou não está registrado na Receita Federal.", HttpStatus.BAD_REQUEST);
+            if (establishment)
+                throw new HttpException('Já há um estabelecimento cadastrado com este CNPJ.', HttpStatus.CONFLICT);
 
-            if((brazilianFederalRevenue.descricao_identificador_matriz_filial === "FILIAL") || request.main_fk) {
-                // verificar se ja existe um cnpj cadastrado
-                // enviar um SMS de verificacao para os contatos em `brazilianFederalRevenue`
-                console.log("é filial")    
+            if (
+                (brazilianFederalRevenue.descricao_identificador_matriz_filial === "FILIAL") ||
+                (request.establishmentType === EstablishmentType.BRANCH)
+            ) {
+                this.logger.log(`Estabelecimento informado é uma filial`);
+                // enviar um SMS de verificacao para o contato do dono do CNPJ
+                // depois, enviar um SMS ou email para o contato da loja matriz para verificar se o CNPJ realmente é valido
+
+                return {
+                    statusCode: HttpStatus.CREATED,
+                    message: "",
+                    data: brazilianFederalRevenue
+                };
             };
 
-            /* verificar se ja existe na base de dados um cnpj de main_fk igual a null. Se sim, disparar erro informando que
-               já há uma matriz cadastrada
-            */
-            const isMainStore: boolean = await this.establishmentRepository.isMainStoreAsync(cnpjFormatted, request.main_fk);
+            this.logger.log(`Estabelecimento informado é uma loja matriz`);
+            // Problemas ao persistir uma nova matriz:
+            // - Existem matrizes regionais (como lidar com várias lojas matriz e suas filiais ao mesmo tempo?)
+            // - Algumas filiais usam o mesmo cnpj da matriz (quem é quem? quem é filial/matriz?)
 
-            console.log("é matriz");
-            
-            //const establishments: PaginatedList<EstablishmentEntity> = await this.establishmentRepository.createAsync();
+            //const establishments: EstablishmentEntity = await this.establishmentRepository.createAsync();
 
             return {
                 statusCode: HttpStatus.CREATED,

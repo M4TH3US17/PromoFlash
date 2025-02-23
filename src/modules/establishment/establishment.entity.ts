@@ -4,7 +4,9 @@ import { ContactEntity } from "../contact/contact.entity";
 import { AddressEntity } from "../address/address.entity";
 import { PromotionEntity } from "../promotion/promotion.entity";
 import { SCHEMA } from "src/infrastructure/database/enums/schemas";
-import { EstablishmentAffiliateEntity } from "./others/embbededs/establishment-affiliate.entity";
+import { EstablishmentValidationsEntity } from "./others";
+import { EstablishmentType, EstablishmentTypeValues } from "./others/enums/establishment-type.enum";
+import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
 
 @Entity({
     schema: SCHEMA.PRODUCT,
@@ -18,20 +20,32 @@ export class EstablishmentEntity extends BaseEntity {
     @Column()
     name: string;
 
+    @Column({ name: "business_name", comment: "nome fantasia da empresa" })
+    businessName: string;
+
     @Column()
     stars: number;
 
     @Column()
     description: string;
+    
+    @ApiHideProperty()
+    @Column(() => EstablishmentValidationsEntity)
+    validations: EstablishmentValidationsEntity;
 
-    @Column(() => EstablishmentAffiliateEntity)
-    ifAffiliated: EstablishmentAffiliateEntity;
+    @Column({
+        type: "enum",
+        enum: Object.values(EstablishmentType),
+        default: EstablishmentType.HEADQUARTERS,
+        comment: "Tipo de estabelecimento, indicando se é a matriz, uma sub-matriz, filial ou uma franquia.",
+    })
+    establishmentType: EstablishmentTypeValues;
 
     @JoinColumn({
         name: "contact_fk",
         foreignKeyConstraintName: "fk_establishment_contact",
     })
-    @OneToOne(() => ContactEntity, (contact) => contact.establishment, { nullable: false, cascade: true }) 
+    @OneToOne(() => ContactEntity, (contact) => contact.establishment, { nullable: false, cascade: true })
     contact: ContactEntity;
 
     @JoinColumn({

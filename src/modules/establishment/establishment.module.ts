@@ -7,13 +7,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ReceitaFederalModule } from 'src/infrastructure/external_services/br_federal_revenue_service/receita-federal.module';
 import { FindEstablishmentByCNPJUseCase } from 'src/infrastructure/external_services/br_federal_revenue_service/usecases/find-establishment-by-cnpj.usecase';
 import { CreateEstablishmentsUseCase } from './usecases/create-establishment.usecase';
-import { EstablishmentAffiliateEntity } from './others/embbededs/establishment-affiliate.entity';
 import { ContactEntity } from '../contact/contact.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([ 
-      EstablishmentAffiliateEntity,
       ContactEntity,
       EstablishmentEntity, 
     ]),

@@ -12,6 +12,9 @@ export class FindEstablishmentByCNPJUseCase {
             if (response.status !== 200)
                 throw new HttpException(`Falha ao consultar o CNPJ ${cnpj}.`, HttpStatus.INTERNAL_SERVER_ERROR);
 
+            if(response.data.descricao_situacao_cadastral !== "ATIVA") 
+                throw new HttpException(`CNPJ informado não está ativo na Receita Federal.`, HttpStatus.BAD_REQUEST);
+
             return Object.assign(new EstablishmentDTO(), response.data);
 
         } catch (error) {

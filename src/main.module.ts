@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { AddressModule } from './modules/address/address.module';
@@ -23,7 +22,7 @@ import { HttpExceptionFilter } from './config/filters/http-exception.filter';
       validationSchema: envValidationSchema,
     }),
 
-    TypeOrmModule.forRoot(AppDataSource.options),
+    TypeOrmModule.forRoot(AppDataSource.options), 
 
     // External Services
     ReceitaFederalModule,

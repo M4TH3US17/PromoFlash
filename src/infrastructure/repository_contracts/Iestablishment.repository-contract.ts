@@ -8,6 +8,8 @@ export interface IEstablishmentRepositoryContract
         CreateEstablishmentRequestDTO,
         EstablishmentEntity
     > {
-        
-        isMainStoreAsync(cnpj: string, main_fk: number): Promise<boolean>;
+
+    getByCNPJAsync(cnpj: string): Promise<EstablishmentEntity>;
+   // isAffiliatedToMainStoreAsync(cnpjAffiliated: string, cnpjMainStore: string): Promise<boolean>;
+
 };

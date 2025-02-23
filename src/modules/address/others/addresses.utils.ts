@@ -3,7 +3,6 @@ import { AddressEntity } from "../address.entity";
 import { CreateAddressRequestDTO } from "../dto/request-address.dto";
 import { AddressResponseDTO } from "../dto/response-address.dto";
 
-
 export function parseAddressRequestToEntity(request: CreateAddressRequestDTO): AddressEntity {
     const location: LocationEntity = new LocationEntity();
 
@@ -22,6 +21,7 @@ export function parseAddressRequestToEntity(request: CreateAddressRequestDTO): A
         location: location,
         createdAt: new Date(),
         updatedAt: new Date(),
+        deletedAt: null,
     }
 };
 
@@ -36,5 +36,6 @@ export function parseAddressEntityToResponse(entity: AddressEntity): AddressResp
         number: entity.number,
         complement: entity.complement,
         neighborhood: entity.neighborhood,
+
     }
-};
+}; 

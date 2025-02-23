@@ -2,11 +2,9 @@ import { NestFactory } from '@nestjs/core';
 import { MainModule } from './main.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppDataSource } from "./infrastructure/database/data-source";
-import { DocumentBuilder, SwaggerCustomOptions, SwaggerModule } from "@nestjs/swagger";
-import { AddressResponseDTO } from './modules/address/dto/response-address.dto';
-import { UseCaseResponseDTO } from './shared/bases/usecase-response.dto';
-import { CreateAddressRequestDTO } from './modules/address/dto/request-address.dto';
+import { SwaggerModule } from "@nestjs/swagger";
 import { HttpExceptionFilter } from './config/filters/http-exception.filter';
+import { createSwaggerConfig } from './config/swagger.config';
 import "dotenv/config";
 
 async function bootstrap() {
@@ -21,17 +19,7 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
 
   // Swagger Config
-  const swaggerInfos = new DocumentBuilder()
-  .setVersion('1.0')
-  .setTitle('Documentação PromoFlash')
-  .setDescription('Documentação da API PromoFlash')
-  .setContact('Matheus Washington', 'https://www.linkedin.com/in/matheus-washington-478400207', null)
-  .build();
-  const swaggerUiConfig: SwaggerCustomOptions = { customSiteTitle: "PromoFlash Documentation" };
-  const docFactory = () => SwaggerModule.createDocument(app, swaggerInfos, { 
-    autoTagControllers: true,
-    extraModels: [AddressResponseDTO, UseCaseResponseDTO, CreateAddressRequestDTO] 
-  })
+  const { docFactory, swaggerUiConfig } = createSwaggerConfig(app);
   SwaggerModule.setup('promoflash-doc', app, docFactory, swaggerUiConfig);
 
   await app.listen(APP_PORT);
