@@ -5,13 +5,11 @@ services:
     image: postgres:15.4-alpine
     container_name: postgres
     environment:
-      POSTGRES_DB: promoflash_db
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "5432:5432"
-    # volumes:
-    #   - postgres_data:/var/lib/postgresql/data
+      - "${DB_PORT}:${DB_PORT}"
     restart: always
     networks:
       - promoflash-network
@@ -20,8 +18,8 @@ services:
     image: dpage/pgadmin4
     container_name: pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: matheusdalvino50@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     ports:
       - "5050:80"
     depends_on:
@@ -48,10 +46,6 @@ services:
 #       - /app/node_modules
 #     networks:
 #       - promoflash-network
-
-# volumes:
-#   postgres_data:
-#     driver: local
 
 networks:
   promoflash-network:

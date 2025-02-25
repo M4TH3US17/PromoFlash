@@ -27,7 +27,7 @@ export const AppDataSource = new DataSource({
           ProductEntity,
           EstablishmentEntity,
           EstablishmentCustomers,
-          EstablishmentProduct,
+          EstablishmentProduct, 
       ],
       //logging: false,
       synchronize: false,

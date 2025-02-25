@@ -84,8 +84,8 @@ export class StartDatabase1738902087028 implements MigrationInterface {
                 address_fk     INT                                 UNIQUE
             );
 
-            COMMENT ON COLUMN product_management.establishments.is_verified 'Status de verificação da filial, conforme determinado pela loja matriz. 1 indica que a filial foi validada pela matriz, enquanto 0 significa que a filial ainda não foi validada.'
-            COMMENT ON COLUMN product_management.establishments.main_fk IS 'ID do estabelecimento matriz. Se preenchido, indica que a entidade atual é uma filial vinculada à loja matriz.';
+            --COMMENT ON COLUMN product_management.establishments.is_verified Status de verificação da filial, conforme determinado pela loja matriz. 1 indica que a filial foi validada pela matriz, enquanto 0 significa que a filial ainda não foi validada.
+           -- COMMENT ON COLUMN product_management.establishments.main_fk IS "ID do estabelecimento matriz. Se preenchido, indica que a entidade atual é uma filial vinculada à loja matriz.";
             `);
 
         console.log(`\n[StartDatabase1738902087028] Criando tabela "products"`);
