@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToMany } from "typeorm";
 import { EstablishmentProductPK } from "./pk/establishments_products_pk.entity";
-import { ProductCategory } from "../product/enums/product.enums";
+import { ProductCategory } from "../product/others/enums/product.enums";
 import { Status } from "src/shared/enums/status";
 import { PromotionEntity } from "../promotion/promotion.entity";
 import { SCHEMA } from "src/infrastructure/database/enums/schemas";

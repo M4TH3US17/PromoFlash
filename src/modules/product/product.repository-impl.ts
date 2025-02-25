@@ -3,8 +3,8 @@ import { IProductRepositoryContract } from "src/infrastructure/repository_contra
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { CreateProductRequestDTO, UpdateProductRequestDTO } from "./dto/request-product.dto";
 import { PaginatedList } from "src/shared/types/pagination.types";
+import { CreateProductRequestDTO, UpdateProductRequestDTO } from "./others/dto/request-product.dto";
 
 @Injectable()
 export class ProductRepositoryImpl implements IProductRepositoryContract {

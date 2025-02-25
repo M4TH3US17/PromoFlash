@@ -3,8 +3,8 @@ import { IPromotionRepositoryContract } from "src/infrastructure/repository_cont
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { CreatePromotionRequestDTO, UpdatePromotionRequestDTO } from "./dto/request-promotion.dto";
 import { PaginatedList } from "src/shared/types/pagination.types";
+import { CreatePromotionRequestDTO, UpdatePromotionRequestDTO } from "./others/dto/request-promotion.dto";
 
 @Injectable()
 export class PromotionRepositoryImpl implements IPromotionRepositoryContract {

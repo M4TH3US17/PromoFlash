@@ -1,11 +1,11 @@
 import { HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
 import { IAddressRepositoryContract } from "src/infrastructure/repository_contracts/Iaddress.repository-contract";
 import { UseCaseResponseDTO } from "src/shared/bases/usecase-response.dto";
-import { AddressPaginationDTO } from "../dto/pagination-address.dto";
 import { AddressEntity } from "../address.entity";
 import { PaginatedList } from "src/shared/types/pagination.types";
 import { parseAddressEntityToResponse } from "../others/addresses.utils";
-import { AddressResponseDTO } from "../dto/response-address.dto";
+import { AddressPaginationDTO } from "../others/dto/pagination-address.dto";
+import { AddressResponseDTO } from "../others/dto/response-address.dto";
 
 @Injectable()
 export class GetAllAddressesUseCase {

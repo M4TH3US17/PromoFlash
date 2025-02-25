@@ -3,10 +3,10 @@ import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { ContactEntity } from "../contact/contact.entity";
 import { AddressEntity } from "../address/address.entity";
 import { PromotionEntity } from "../promotion/promotion.entity";
-import { SCHEMA } from "src/infrastructure/database/enums/schemas";
+import { SCHEMA } from "@infrastructure/database/enums/schemas";
 import { EstablishmentValidationsEntity } from "./others";
 import { EstablishmentType, EstablishmentTypeValues } from "./others/enums/establishment-type.enum";
-import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
+import { ApiHideProperty } from "@nestjs/swagger";
 
 @Entity({
     schema: SCHEMA.PRODUCT,

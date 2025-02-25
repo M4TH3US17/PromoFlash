@@ -4,7 +4,7 @@ import { GetAllUsersUseCase } from './usecases/get-all-users.usecase';
 import { UseCaseResponseDTO } from 'src/shared/bases/usecase-response.dto';
 import { PaginationParserPipe } from 'src/shared/pipes/pagination-parser.pipe';
 import { UserEntity } from './user.entity';
-import { UserPaginationDTO } from './dto/pagination-user.dto';
+import { UserPaginationDTO } from './others/dto/pagination-user.dto';
 
 @Controller({path: "users"})
 export class UserController {

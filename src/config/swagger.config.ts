@@ -1,6 +1,6 @@
+import { CreateAddressRequestDTO } from '@modules/address/others/dto/request-address.dto';
+import { AddressResponseDTO } from '@modules/address/others/dto/response-address.dto';
 import { DocumentBuilder, SwaggerCustomOptions, SwaggerModule } from '@nestjs/swagger';
-import { CreateAddressRequestDTO } from 'src/modules/address/dto/request-address.dto';
-import { AddressResponseDTO } from 'src/modules/address/dto/response-address.dto';
 import { UseCaseResponseDTO } from 'src/shared/bases/usecase-response.dto';
 
 export const createSwaggerConfig = (app) => {

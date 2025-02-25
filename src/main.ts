@@ -1,10 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { MainModule } from './main.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { AppDataSource } from "./infrastructure/database/data-source";
+import { AppDataSource } from "@infrastructure/database/data-source";
 import { SwaggerModule } from "@nestjs/swagger";
-import { HttpExceptionFilter } from './config/filters/http-exception.filter';
-import { createSwaggerConfig } from './config/swagger.config';
+import { HttpExceptionFilter } from '@config/filters/http-exception.filter';
+import { createSwaggerConfig } from '@config/swagger.config';
 import "dotenv/config";
 
 async function bootstrap() {

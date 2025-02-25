@@ -4,7 +4,7 @@ import { UseCaseResponseDTO } from 'src/shared/bases/usecase-response.dto';
 import { GetAllContactsUseCase } from './usecases/get-all-contacts.usecase';
 import { PaginationParserPipe } from 'src/shared/pipes/pagination-parser.pipe';
 import { ContactEntity } from './contact.entity';
-import { ContactPaginationDTO } from './dto/pagination-contact.dto';
+import { ContactPaginationDTO } from './others/dto/pagination-contact.dto';
 
 @Controller({path: "contacts"})
 export class ContactController {

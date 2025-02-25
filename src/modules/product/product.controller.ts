@@ -4,7 +4,7 @@ import { GetAllProductsUseCase } from './usecases/get-all-products.usecase';
 import { UseCaseResponseDTO } from 'src/shared/bases/usecase-response.dto';
 import { PaginationParserPipe } from 'src/shared/pipes/pagination-parser.pipe';
 import { ProductEntity } from './product.entity';
-import { ProductPaginationDTO } from './dto/pagination-product.dto';
+import { ProductPaginationDTO } from './others/dto/pagination-product.dto';
 
 @Controller({path: "products"})
 export class ProductController {

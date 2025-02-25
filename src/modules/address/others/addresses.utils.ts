@@ -1,7 +1,7 @@
 import { LocationEntity } from "src/modules/location/location.entity";
 import { AddressEntity } from "../address.entity";
-import { CreateAddressRequestDTO } from "../dto/request-address.dto";
-import { AddressResponseDTO } from "../dto/response-address.dto";
+import { AddressResponseDTO } from "./dto/response-address.dto";
+import { CreateAddressRequestDTO } from "./dto/request-address.dto";
 
 export function parseAddressRequestToEntity(request: CreateAddressRequestDTO): AddressEntity {
     const location: LocationEntity = new LocationEntity();

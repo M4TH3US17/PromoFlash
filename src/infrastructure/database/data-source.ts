@@ -29,9 +29,9 @@ export const AppDataSource = new DataSource({
           EstablishmentCustomers,
           EstablishmentProduct, 
       ],
-      //logging: false,
-      synchronize: false,
-      migrationsRun: true,
+      logging: false,
+      synchronize: true,
+     /* migrationsRun: true,
       migrationsTableName: "migrations",
-      migrations: [ StartDatabase1738902087028 ],
+      migrations: [ StartDatabase1738902087028 ],*/
   });

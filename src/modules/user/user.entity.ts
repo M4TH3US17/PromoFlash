@@ -1,6 +1,6 @@
 import { BaseEntity } from "src/shared/bases/base.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
-import { UserRole } from "./enums/user.enums";
+import { UserRole } from "./others/enums/user.enums";
 import { ContactEntity } from "../contact/contact.entity";
 import { AddressEntity } from "../address/address.entity";
 import { Status } from "src/shared/enums/status";

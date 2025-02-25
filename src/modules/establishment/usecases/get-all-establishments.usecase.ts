@@ -3,8 +3,7 @@ import { IEstablishmentRepositoryContract } from "src/infrastructure/repository_
 import { UseCaseResponseDTO } from "src/shared/bases/usecase-response.dto";
 import { EstablishmentEntity } from "../establishment.entity";
 import { PaginatedList } from "src/shared/types/pagination.types";
-import { EstablishmentPaginationDTO } from "../dto/pagination-establishment.dto";
-
+import { EstablishmentPaginationDTO } from "../others/dto/pagination-establishment.dto";
 
 @Injectable()
 export class GetAllEstablishmentsUseCase {
@@ -25,7 +24,7 @@ export class GetAllEstablishmentsUseCase {
             };
         } catch (error) {
             if (error instanceof HttpException) throw error;
-            throw new HttpException("Desculpe, houve um erro interno no servidor. Por favor, catatar o suporte.", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException("Desculpe, houve um erro interno no servidor. Por favor, contatar o suporte.", HttpStatus.INTERNAL_SERVER_ERROR);
         };
     };
 

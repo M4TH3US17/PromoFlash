@@ -1,10 +1,9 @@
 import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { IPromotionRepositoryContract } from "src/infrastructure/repository_contracts/Ipromotion.repository-contract";
 import { UseCaseResponseDTO } from "src/shared/bases/usecase-response.dto";
-import { PromotionPaginationDTO } from "../dto/pagination-promotion.dto";
 import { PromotionEntity } from "../promotion.entity";
 import { PaginatedList } from "src/shared/types/pagination.types";
-
+import { PromotionPaginationDTO } from "../others/dto/pagination-promotion.dto";
 
 @Injectable()
 export class GetAllPromotionsUseCase {

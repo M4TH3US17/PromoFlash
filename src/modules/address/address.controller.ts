@@ -6,19 +6,19 @@ import {
 import { UseCaseResponseDTO } from "src/shared/bases/usecase-response.dto";
 import { PaginationParserPipe } from 'src/shared/pipes/pagination-parser.pipe';
 import { AddressEntity } from './address.entity';
-import { AddressPaginationDTO } from './dto/pagination-address.dto';
 import { GetAllAddressesUseCase } from "./usecases/get-all-addresses.usecase";
 import { CreateAddressUseCase } from './usecases/create-address.usecase';
 import { GetAddressByIdUseCase } from './usecases/get-address-by-id.usecase';
 import { UpdateAddressUseCase } from './usecases/update-address.usecase';
-import { CreateAddressRequestDTO, UpdateAddressRequestDTO } from './dto/request-address.dto';
 import { SoftDeleteAddressUseCase } from './usecases/soft-delete-address.usecase';
 import {
     ApiBody, ApiConflictResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOperation
 } from '@nestjs/swagger';
 import { processError } from 'src/shared/utils/global.utils';
-import { AddressResponseDTO } from './dto/response-address.dto';
 import { ApiResponse, EndpointType } from 'src/shared/decorators/swagger-pagineted-response.decorator';
+import { AddressResponseDTO } from './others/dto/response-address.dto';
+import { AddressPaginationDTO } from './others/dto/pagination-address.dto';
+import { CreateAddressRequestDTO, UpdateAddressRequestDTO } from './others/dto/request-address.dto';
 
 @Controller({ path: "addresses" })
 export class AddressController {

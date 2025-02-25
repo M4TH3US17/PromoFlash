@@ -2,10 +2,10 @@ import { HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/c
 import { IEstablishmentRepositoryContract } from "src/infrastructure/repository_contracts/Iestablishment.repository-contract";
 import { UseCaseResponseDTO } from "src/shared/bases/usecase-response.dto";
 import { FindEstablishmentByCNPJUseCase } from "src/infrastructure/external_services/br_federal_revenue_service/usecases/find-establishment-by-cnpj.usecase";
-import { CreateEstablishmentRequestDTO } from "../dto/request-establishment.dto";
 import { EstablishmentDTO } from "src/infrastructure/external_services/br_federal_revenue_service/dto/response-cnpj-searched.dto";
 import { EstablishmentEntity } from "../establishment.entity";
 import { EstablishmentType } from "../others/enums/establishment-type.enum";
+import { CreateEstablishmentRequestDTO } from "../others/dto/request-establishment.dto";
 
 @Injectable()
 export class CreateEstablishmentsUseCase {
@@ -26,10 +26,8 @@ export class CreateEstablishmentsUseCase {
             if (establishment)
                 throw new HttpException('Já há um estabelecimento cadastrado com este CNPJ.', HttpStatus.CONFLICT);
 
-            if (
-                (brazilianFederalRevenue.descricao_identificador_matriz_filial === "FILIAL") ||
-                (request.establishmentType === EstablishmentType.BRANCH)
-            ) {
+            if ((brazilianFederalRevenue.descricao_identificador_matriz_filial === "FILIAL") ||
+                (request.establishmentType === EstablishmentType.BRANCH)) {
                 this.logger.log(`Estabelecimento informado é uma filial`);
                 // enviar um SMS de verificacao para o contato do dono do CNPJ
                 // depois, enviar um SMS ou email para o contato da loja matriz para verificar se o CNPJ realmente é valido

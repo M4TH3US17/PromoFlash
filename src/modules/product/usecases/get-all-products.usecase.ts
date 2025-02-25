@@ -2,8 +2,8 @@ import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { IProductRepositoryContract } from "src/infrastructure/repository_contracts/Iproduct.repository-contract";
 import { UseCaseResponseDTO } from "src/shared/bases/usecase-response.dto";
 import { ProductEntity } from "../product.entity";
-import { ProductPaginationDTO } from "../dto/pagination-product.dto";
 import { PaginatedList } from "src/shared/types/pagination.types";
+import { ProductPaginationDTO } from "../others/dto/pagination-product.dto";
 
 
 @Injectable()

@@ -3,9 +3,9 @@ import { AddressEntity } from "./address.entity";
 import { IAddressRepositoryContract } from "src/infrastructure/repository_contracts/Iaddress.repository-contract";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { AddressPaginationDTO } from "./dto/pagination-address.dto";
-import { CreateAddressRequestDTO, UpdateAddressRequestDTO } from "./dto/request-address.dto";
 import { IGetListArgs, PaginatedList } from "src/shared/types/pagination.types";
+import { AddressPaginationDTO } from "./others/dto/pagination-address.dto";
+import { CreateAddressRequestDTO, UpdateAddressRequestDTO } from "./others/dto/request-address.dto";
 
 @Injectable()
 export class AddressRepositoryImpl implements IAddressRepositoryContract {

@@ -1,9 +1,9 @@
 import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { IContactRepositoryContract } from "src/infrastructure/repository_contracts/Icontract.repository-contract";
 import { UseCaseResponseDTO } from "src/shared/bases/usecase-response.dto";
-import { ContactPaginationDTO } from "../dto/pagination-contact.dto";
 import { ContactEntity } from "../contact.entity";
 import { PaginatedList } from "src/shared/types/pagination.types";
+import { ContactPaginationDTO } from "../others/dto/pagination-contact.dto";
 
 @Injectable()
 export class GetAllContactsUseCase {

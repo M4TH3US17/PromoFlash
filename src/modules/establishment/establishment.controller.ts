@@ -5,13 +5,13 @@ import { UseCaseResponseDTO } from 'src/shared/bases/usecase-response.dto';
 import { PaginationParserPipe } from 'src/shared/pipes/pagination-parser.pipe';
 import { EstablishmentEntity } from './establishment.entity';
 import { CreateEstablishmentsUseCase } from './usecases/create-establishment.usecase';
-import { EstablishmentPaginationDTO } from './dto/pagination-establishment.dto';
-import { CreateEstablishmentRequestDTO } from './dto/request-establishment.dto';
 import { ApiBody, ApiConflictResponse, ApiInternalServerErrorResponse, ApiOperation, ApiProduces } from '@nestjs/swagger';
 import { HttpExceptionFilter } from 'src/config/filters/http-exception.filter';
 import { ApiResponse, EndpointType } from 'src/shared/decorators/swagger-pagineted-response.decorator';
-import { EstablishmentResponseDTO } from './dto/response-establishment.dto';
 import { processError } from 'src/shared/utils/global.utils';
+import { EstablishmentResponseDTO } from './others/dto/response-establishment.dto';
+import { EstablishmentPaginationDTO } from './others/dto/pagination-establishment.dto';
+import { CreateEstablishmentRequestDTO } from './others/dto/request-establishment.dto';
 
 @UseFilters(HttpExceptionFilter)
 @Controller({ path: "establishments" })

@@ -3,8 +3,8 @@ import { ContactEntity } from "./contact.entity";
 import { IContactRepositoryContract } from "src/infrastructure/repository_contracts/Icontract.repository-contract";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { CreateContactRequestDTO, UpdateContactRequestDTO } from "./dto/request-contact.dto";
 import { PaginatedList } from "src/shared/types/pagination.types";
+import { CreateContactRequestDTO, UpdateContactRequestDTO } from "./others/dto/request-contact.dto";
 
 @Injectable()
 export class ContactRepositoryImpl implements IContactRepositoryContract {

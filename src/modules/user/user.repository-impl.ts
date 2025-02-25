@@ -3,8 +3,8 @@ import { IUserRepositoryContract } from "src/infrastructure/repository_contracts
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { CreateUserRequestDTO, UpdateUserRequestDTO } from "./dto/request-user.dto";
 import { PaginatedList } from "src/shared/types/pagination.types";
+import { CreateUserRequestDTO, UpdateUserRequestDTO } from "./others/dto/request-user.dto";
 
 @Injectable()
 export class UserRepositoryImpl implements IUserRepositoryContract {

@@ -4,7 +4,7 @@ import { GetAllPromotionsUseCase } from './usecases/get-all-promotions.usecase';
 import { UseCaseResponseDTO } from 'src/shared/bases/usecase-response.dto';
 import { PaginationParserPipe } from 'src/shared/pipes/pagination-parser.pipe';
 import { PromotionEntity } from './promotion.entity';
-import { PromotionPaginationDTO } from './dto/pagination-promotion.dto';
+import { PromotionPaginationDTO } from './others/dto/pagination-promotion.dto';
 
 @Controller({path: "promotions"})
 export class PromotionController {
