@@ -1,7 +1,7 @@
 import { ChildEntity, Column } from "typeorm";
 import { ContactVerificationEntity } from "../contact-verification.entity";
 
-@ChildEntity()
+@ChildEntity("phone")
 export class PhoneMethod extends ContactVerificationEntity {
 
     @Column({ name: "country_code", length: 3 })

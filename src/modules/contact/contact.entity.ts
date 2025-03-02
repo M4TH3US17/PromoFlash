@@ -22,7 +22,7 @@ export class ContactEntity extends BaseEntity {
         foreignKeyConstraintName: "fk_contact_email_veri",
         referencedColumnName: "id"
     })
-    @OneToOne(() => ContactVerificationEntity, (contactVerification) => contactVerification.emailContact, { cascade: true })
+    @OneToOne(() => ContactVerificationEntity, { cascade: true })
     emailContact?: ContactVerificationEntity;
     
     @JoinColumn({
@@ -30,7 +30,7 @@ export class ContactEntity extends BaseEntity {
         foreignKeyConstraintName: "fk_contact_phone_1_veri",
         referencedColumnName: "id"
     })
-    @OneToOne(() => ContactVerificationEntity, (contactVerification) => contactVerification.firstContact, { cascade: true })
+    @OneToOne(() => ContactVerificationEntity, { cascade: true })
     firstContact: ContactVerificationEntity;
     
     @JoinColumn({
@@ -38,7 +38,7 @@ export class ContactEntity extends BaseEntity {
         foreignKeyConstraintName: "fk_contact_phone_2_veri",
         referencedColumnName: "id"
     })
-    @OneToOne(() => ContactVerificationEntity, (contactVerification) => contactVerification.secondContact, { cascade: true })
+    @OneToOne(() => ContactVerificationEntity, { cascade: true })
     secondContact?: ContactVerificationEntity;
     
 };
