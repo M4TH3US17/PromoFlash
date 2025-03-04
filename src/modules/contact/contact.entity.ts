@@ -3,7 +3,7 @@ import { Entity, JoinColumn, OneToOne } from "typeorm";
 import { UserEntity } from "../user/user.entity";
 import { EstablishmentEntity } from "../establishment/establishment.entity";
 import { SCHEMA } from "src/infrastructure/database/enums/schemas";
-import { ContactVerificationEntity } from "../contact_verification/contact-verification.entity";
+import { ContactVerificationEntity } from "@modules/contact_verification/contact-verification.entity";
 
 @Entity({ 
     schema: SCHEMA.COMMON,

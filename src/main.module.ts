@@ -13,6 +13,7 @@ import { envValidationSchema } from './config/joi.config';
 import { ReceitaFederalModule } from './infrastructure/external_services/br_federal_revenue_service/receita-federal.module';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './config/filters/http-exception.filter';
+import { ContactVerificationModule } from '@modules/contact_verification/contact-verification.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { HttpExceptionFilter } from './config/filters/http-exception.filter';
     // Domains
     AddressModule,
     ContactModule,
+    ContactVerificationModule,
     CouponModule,
     EstablishmentModule,
     ProductModule,

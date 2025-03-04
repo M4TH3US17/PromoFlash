@@ -8,10 +8,11 @@ import { ProductEntity } from "src/modules/product/product.entity";
 import { PromotionEntity } from "src/modules/promotion/promotion.entity";
 import { UserEntity } from "src/modules/user/user.entity";
 import { DataSource } from "typeorm";
-import "dotenv/config";
 import { StartDatabase1738902087028 } from "./migrations/1738902087028-StartDatabase";
+import { ContactVerificationEntity } from "@modules/contact_verification/contact-verification.entity";
+import "dotenv/config";
 
-export const AppDataSource = new DataSource({
+export const AppDataSource = new DataSource({ 
       type: "postgres",
       database:  process.env.DB_NAME,
       host:      process.env.DB_HOST,
@@ -21,6 +22,7 @@ export const AppDataSource = new DataSource({
       entities: [
           UserEntity,
           ContactEntity,
+          ContactVerificationEntity,
           AddressEntity,
           CouponEntity,
           PromotionEntity,
@@ -29,9 +31,9 @@ export const AppDataSource = new DataSource({
           EstablishmentCustomers,
           EstablishmentProduct, 
       ],
-      logging: false,
-      synchronize: true,
-     /* migrationsRun: true,
+      logging: true,
+      synchronize: false,
+      migrationsRun: true,
       migrationsTableName: "migrations",
-      migrations: [ StartDatabase1738902087028 ],*/
-  });
+      migrations: [ StartDatabase1738902087028 ],
+}); 

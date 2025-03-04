@@ -5,11 +5,11 @@ services:
     image: postgres:15.4-alpine
     container_name: postgres
     environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: promoflash_db
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
     ports:
-      - "${DB_PORT}:${DB_PORT}"
+      - "5432:5432"
     restart: always
     networks:
       - promoflash-network
@@ -18,8 +18,8 @@ services:
     image: dpage/pgadmin4
     container_name: pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_DEFAULT_EMAIL: matheusdalvino50@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "5050:80"
     depends_on:
