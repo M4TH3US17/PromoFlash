@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { AddressModule } from './modules/address/address.module';
-import { ContactModule } from './modules/contact/contact.module';
 import { CouponModule } from './modules/coupon/coupon.module';
 import { EstablishmentModule } from './modules/establishment/establishment.module';
 import { ProductModule } from './modules/product/product.module';
@@ -14,6 +13,8 @@ import { ReceitaFederalModule } from './infrastructure/external_services/br_fede
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './config/filters/http-exception.filter';
 import { ContactVerificationModule } from '@modules/contact_verification/contact-verification.module';
+import { CNPJServiceModule } from '@infrastructure/external_services/cnpj_service/cnpj-service.module';
+import { TwilioModule } from '@infrastructure/external_services/twilio/twilio.module';
 
 @Module({
   imports: [
@@ -26,11 +27,12 @@ import { ContactVerificationModule } from '@modules/contact_verification/contact
     TypeOrmModule.forRoot(AppDataSource.options), 
 
     // External Services
-    ReceitaFederalModule,
+    ReceitaFederalModule, // depreciado
+    CNPJServiceModule,
+    TwilioModule,
 
     // Domains
     AddressModule,
-    ContactModule,
     ContactVerificationModule,
     CouponModule,
     EstablishmentModule,

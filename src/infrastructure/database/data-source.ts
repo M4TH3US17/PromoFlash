@@ -1,5 +1,4 @@
 import { AddressEntity } from "src/modules/address/address.entity";
-import { ContactEntity } from "src/modules/contact/contact.entity";
 import { CouponEntity } from "src/modules/coupon/coupon.entity";
 import { EstablishmentEntity } from "src/modules/establishment/establishment.entity";
 import { EstablishmentCustomers } from "src/modules/establishment_customers/establishment_customers.entity";
@@ -21,7 +20,6 @@ export const AppDataSource = new DataSource({
       password:  process.env.DB_PASSWORD.toString(),
       entities: [
           UserEntity,
-          ContactEntity,
           ContactVerificationEntity,
           AddressEntity,
           CouponEntity,

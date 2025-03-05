@@ -6,6 +6,9 @@ import { EstablishmentDTO } from "src/infrastructure/external_services/br_federa
 import { EstablishmentEntity } from "../establishment.entity";
 import { EstablishmentType } from "../others/enums/establishment-type.enum";
 import { CreateEstablishmentRequestDTO } from "../others/dto/request-establishment.dto";
+import { TwilioSMSService } from "@infrastructure/external_services/twilio/sms/sms.service";
+import { PhoneMethod } from "@modules/contact_verification/contact_methods";
+import { formatPhoneNumberToSendSMS } from "@infrastructure/external_services/twilio/sms/sms.utils";
 
 @Injectable()
 export class CreateEstablishmentsUseCase {
@@ -14,13 +17,23 @@ export class CreateEstablishmentsUseCase {
     constructor(
         @Inject("ESTABLISHMENT_REPOSITORY")
         private readonly establishmentRepository: IEstablishmentRepositoryContract,
+
+        // External Services
         private readonly findEstablishmentByCNPJUseCase: FindEstablishmentByCNPJUseCase,
+        private readonly SMSService: TwilioSMSService,
     ) { }
 
     async executeAsync(request: CreateEstablishmentRequestDTO): Promise<UseCaseResponseDTO> {
         try {
             this.logger.log(`Iniciando cadastro de um estabelecimento de CNPJ=${request.cnpj} e nome=${request.name}`);
-            const brazilianFederalRevenue: EstablishmentDTO = await this.findEstablishmentByCNPJUseCase.executeAsync(request.cnpj); // busca na cnpj na receita federal
+
+            const { ddd, countryCode, number } = request.firstPhone;
+            let firstContactFormatted: string = formatPhoneNumberToSendSMS(`${countryCode} (${ddd}) ${number}`);
+            console.log(firstContactFormatted)
+
+            await this.SMSService.sendSMS(firstContactFormatted, "oiiiiiiiiiiiiiiiiiiiiii");
+
+           /* const brazilianFederalRevenue: EstablishmentDTO = await this.findEstablishmentByCNPJUseCase.executeAsync(request.cnpj); // busca na cnpj na receita federal
             const establishment: EstablishmentEntity = await this.establishmentRepository.getByCNPJAsync(request.cnpj);
 
             if (establishment)
@@ -44,12 +57,12 @@ export class CreateEstablishmentsUseCase {
             // - Existem matrizes regionais (como lidar com várias lojas matriz e suas filiais ao mesmo tempo?)
             // - Algumas filiais usam o mesmo cnpj da matriz (quem é quem? quem é filial/matriz?)
 
-            //const establishments: EstablishmentEntity = await this.establishmentRepository.createAsync();
+            //const establishments: EstablishmentEntity = await this.establishmentRepository.createAsync();*/
 
             return {
                 statusCode: HttpStatus.CREATED,
                 message: "",
-                data: brazilianFederalRevenue
+                data: null
             };
         } catch (error) {
             if (error instanceof HttpException) throw error;

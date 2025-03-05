@@ -1,12 +1,12 @@
 import { BaseEntity } from "src/shared/bases/base.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
 import { UserRole } from "./others/enums/user.enums";
-import { ContactEntity } from "../contact/contact.entity";
 import { AddressEntity } from "../address/address.entity";
 import { Status } from "src/shared/enums/status";
 import { EstablishmentEntity } from "../establishment/establishment.entity";
 import { SCHEMA } from "src/infrastructure/database/enums/schemas";
 import { Exclude } from "class-transformer";
+import { ContactVerificationEntity } from "@modules/contact_verification/contact-verification.entity";
 
 @Entity({ 
     schema: SCHEMA.USER, 
@@ -24,8 +24,8 @@ export class UserEntity extends BaseEntity {
     @Column({ type: "enum", enum: UserRole, default: UserRole.USER })
     role: UserRole;
 
-    @Column({ type: "enum", enum: Status, default: Status.ACTIVE })
-    status: Status;
+   // @Column({ type: "enum", enum: Status, default: Status.ACTIVE })
+   // status: Status;
     
     @JoinTable({
         schema: SCHEMA.USER,
@@ -38,10 +38,17 @@ export class UserEntity extends BaseEntity {
 
     @JoinColumn({ 
         name: "contact_fk",
-        foreignKeyConstraintName: "fk_user_contact"
+        foreignKeyConstraintName: "fk_user_contact1"
     })
-    @OneToOne(() => ContactEntity, (contact) => contact.user)
-    contact: ContactEntity;
+    @OneToOne(() => ContactVerificationEntity, (contact) => contact.userPhone)
+    phone: ContactVerificationEntity;
+
+    @JoinColumn({ 
+        name: "contact_fk",
+        foreignKeyConstraintName: "fk_user_contact2"
+    })
+    @OneToOne(() => ContactVerificationEntity, (contact) => contact.userEmail)
+    email: ContactVerificationEntity;
 
     @JoinTable({
         schema: SCHEMA.USER,

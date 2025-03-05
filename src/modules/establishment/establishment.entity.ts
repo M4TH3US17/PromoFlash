@@ -1,12 +1,12 @@
 import { BaseEntity } from "src/shared/bases/base.entity";
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
-import { ContactEntity } from "../contact/contact.entity";
 import { AddressEntity } from "../address/address.entity";
 import { PromotionEntity } from "../promotion/promotion.entity";
 import { SCHEMA } from "@infrastructure/database/enums/schemas";
 import { EstablishmentValidationsEntity } from "./others";
 import { EstablishmentType, EstablishmentTypeValues } from "./others/enums/establishment-type.enum";
 import { ApiHideProperty } from "@nestjs/swagger";
+import { ContactVerificationEntity } from "@modules/contact_verification/contact-verification.entity";
 
 @Entity({
     schema: SCHEMA.PRODUCT,
@@ -41,22 +41,41 @@ export class EstablishmentEntity extends BaseEntity {
     })
     establishmentType: EstablishmentTypeValues;
 
-    @JoinColumn({
-        name: "contact_fk",
-        foreignKeyConstraintName: "fk_establishment_contact",
-    })
-    @OneToOne(() => ContactEntity, (contact) => contact.establishment, { nullable: false, cascade: true })
-    contact: ContactEntity;
-
+    
     @JoinColumn({
         name: "address_fk",
         foreignKeyConstraintName: "fk_establishment_address",
     })
     @OneToOne(() => AddressEntity, (address) => address.establishment, { nullable: false, cascade: true })
     address: AddressEntity;
-
+    
     @OneToMany(() => PromotionEntity, (promotion) => promotion.establishment)
     promotions: PromotionEntity[]
+    
+    // Meios de contato
+    @JoinColumn({
+        name: "first_phone_fk",
+        referencedColumnName: "id",
+        foreignKeyConstraintName: "fk_establi_contact1",
+    })
+    @OneToOne(() => ContactVerificationEntity, { cascade: true })
+    firstPhone: ContactVerificationEntity;
+    
+    @JoinColumn({
+        name: "second_phone_fk",
+        referencedColumnName: "id",
+        foreignKeyConstraintName: "fk_establi_contact2",
+    })
+    @OneToOne(() => ContactVerificationEntity, { cascade: true })
+    secondPhone: ContactVerificationEntity;
+    
+    @JoinColumn({
+        name: "email_fk",
+        referencedColumnName: "id",
+        foreignKeyConstraintName: "fk_establi_contact3",
+    })
+    @OneToOne(() => ContactVerificationEntity, { cascade: true })
+    email: ContactVerificationEntity;
 
 };
 // @OneToMany(() => EstablishmentProduct, (products) => products.establishment)
@@ -66,5 +85,5 @@ export class EstablishmentEntity extends BaseEntity {
 // _items: EstablishmentProduct[];
 
 // get products(): ProductEntity[] {
-//     return this._items.map((item: EstablishmentProduct) => item.product);
-// };
+    //     return this._items.map((item: EstablishmentProduct) => item.product);
+    // };

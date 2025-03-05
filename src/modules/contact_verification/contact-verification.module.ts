@@ -7,12 +7,10 @@ import {
     EmailMethod, 
     PhoneMethod 
 } from "./contact_methods";
-import { ContactEntity } from "@modules/contact/contact.entity";
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([
-            ContactEntity,
             ContactVerificationEntity,
             EmailMethod, 
             PhoneMethod, 

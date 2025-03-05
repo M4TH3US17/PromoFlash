@@ -7,15 +7,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ReceitaFederalModule } from 'src/infrastructure/external_services/br_federal_revenue_service/receita-federal.module';
 import { FindEstablishmentByCNPJUseCase } from 'src/infrastructure/external_services/br_federal_revenue_service/usecases/find-establishment-by-cnpj.usecase';
 import { CreateEstablishmentsUseCase } from './usecases/create-establishment.usecase';
-import { ContactEntity } from '../contact/contact.entity';
+import { TwilioSMSService } from '@infrastructure/external_services/twilio/sms/sms.service';
+import { TwilioModule } from '@infrastructure/external_services/twilio/twilio.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([ 
-      ContactEntity,
       EstablishmentEntity, 
     ]),
-    ReceitaFederalModule,
+
+    ReceitaFederalModule, // depreciado
+    TwilioModule, 
+
   ],
   controllers: [ EstablishmentController ],
   providers: [
@@ -25,7 +28,8 @@ import { ContactEntity } from '../contact/contact.entity';
     },
 
     // external_services
-    FindEstablishmentByCNPJUseCase,
+    FindEstablishmentByCNPJUseCase, // depreciado
+    TwilioSMSService,
 
     // usecases
     GetAllEstablishmentsUseCase,
