@@ -11,7 +11,7 @@ export class TwilioSMSService {
             const authToken: string = process.env.TWILIO_AUTH_TOKEN;
             const from: string = process.env.TWILIO_PHONE_NUMBER;
 
-            const client: twilio.Twilio = twilio(accountSid, authToken);
+            /*const client: twilio.Twilio = twilio(accountSid, authToken);
 
             const response = await client.messages.create({
                 to,
@@ -21,7 +21,7 @@ export class TwilioSMSService {
 
             if(response.errorCode || response.errorMessage) {
                 console.log("error twilio (code: " + response.errorCode + "): " + response.errorMessage)
-            }
+            }*/
 
             // response.numSegments 
             // O número de segmentos usados para enviar a mensagem. SMS longos são divididos em vários segmentos. Utilidade: Útil para calcular custos, já que cada segmento pode ser cobrado separadamente
@@ -38,7 +38,7 @@ export class TwilioSMSService {
             // response.uri
             // O URI da mensagem, que pode ser usado para acessar detalhes da mensagem diretamente na API. Útil para consultar ou atualizar a mensagem posteriormente.
 
-            console.log(`SMS enviado para ${to}`, response);
+            //console.log(`SMS enviado para ${to}`, response);
         } catch (error) {
             console.error('Erro ao enviar SMS:', error);
             throw error;

@@ -21,7 +21,7 @@ export class CreatePhoneContactDTO extends PickType(
 ) {
     getFullPhoneNumber(): string {
         return `${this.countryCode} (${this.ddd}) ${this.number}`
-    }
+    };
 };
 
 export class CreateEmailContactDTO extends PickType(

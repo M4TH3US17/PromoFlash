@@ -8,6 +8,7 @@ import { TwilioSMSService } from "@infrastructure/external_services/twilio/sms/s
 import { formatPhoneNumberToSendSMS } from "@infrastructure/external_services/twilio/sms/sms.utils";
 import { BrazilFederalRevenueService } from "@infrastructure/external_services/cnpj_service/brazil_federal_revenue/brazil-federal-revenue.service";
 import { EstablishmentDTO } from "@infrastructure/external_services/cnpj_service/brazil_federal_revenue/dto/response-cnpj-searched.dto";
+import { generateRandomCode } from "@modules/contact_verification/others";
 
 @Injectable()
 export class CreateEstablishmentsUseCase {
@@ -26,31 +27,30 @@ export class CreateEstablishmentsUseCase {
         try {
             this.logger.log(`Iniciando cadastro de um estabelecimento de CNPJ=${request.cnpj} e nome=${request.name}`);
 
-            //const { ddd, countryCode, number } = request.firstPhone;
-            //let firstContactFormatted: string = formatPhoneNumberToSendSMS(`${countryCode} (${ddd}) ${number}`);
-            //console.log(firstContactFormatted)
-
-            //await this.SMSService.sendSMS(firstContactFormatted, "oiiiiiiiiiiiiiiiiiiiiii");
-
             const brazilianFederalRevenue: EstablishmentDTO = await this.brazilFederalRevenueService.findEstablishmentByCNPJ(request.cnpj);
             //const establishment: EstablishmentEntity = await this.establishmentRepository.getByCNPJAsync(request.cnpj);
-            console.log(brazilianFederalRevenue)
+            
+            //if (establishment)
+            //    throw new HttpException('Já há um estabelecimento cadastrado com este CNPJ.', HttpStatus.CONFLICT);
 
-            /*if (establishment)
-                throw new HttpException('Já há um estabelecimento cadastrado com este CNPJ.', HttpStatus.CONFLICT);
+            const formattedPhone: string = formatPhoneNumberToSendSMS(request.firstPhone.getFullPhoneNumber());
 
-            if ((brazilianFederalRevenue.descricao_identificador_matriz_filial === "FILIAL") ||
-                (request.establishmentType === EstablishmentType.BRANCH)) {
+            const verificationCode1: number = generateRandomCode();
+            const verificationCode2: number = generateRandomCode();
+            
+            await this.SMSService.sendSMS(formattedPhone, `Teste 1: ${verificationCode1}`); // Enviar um SMS de verificacao para o contato informado
+           // await this.SMSService.sendSMS(firstContactFormatted, `Teste 2: ${verificationCode2}`); // Enviar um SMS para o contato da loja matriz para verificar se o estabelecimento realmente é valido/filial
+
+            const isBranchOrFranchise: boolean = (brazilianFederalRevenue.descricao_identificador_matriz_filial === "FILIAL") || (request.establishmentType === EstablishmentType.BRANCH);
+            if (isBranchOrFranchise) {
                 this.logger.log(`Estabelecimento informado é uma filial`);
-                // enviar um SMS de verificacao para o contato do dono do CNPJ
-                // depois, enviar um SMS ou email para o contato da loja matriz para verificar se o CNPJ realmente é valido
 
                 return {
                     statusCode: HttpStatus.CREATED,
-                    message: "",
+                    message: "Estabelecimento filiado/franqueado cadastrado com sucesso!",
                     data: brazilianFederalRevenue
                 };
-            };*/
+            };
 
             this.logger.log(`Estabelecimento informado é uma loja matriz`);
             // Problemas ao persistir uma nova matriz:
@@ -61,7 +61,7 @@ export class CreateEstablishmentsUseCase {
 
             return {
                 statusCode: HttpStatus.CREATED,
-                message: "",
+                message: "Estabelecimento matriz cadastrado com sucesso!",
                 data: brazilianFederalRevenue
             };
         } catch (error) {
