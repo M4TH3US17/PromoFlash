@@ -9,7 +9,6 @@ import { PromotionModule } from './modules/promotion/promotion.module';
 import { UserModule } from './modules/user/user.module';
 import { AppDataSource } from './infrastructure/database/data-source';
 import { envValidationSchema } from './config/joi.config';
-import { ReceitaFederalModule } from './infrastructure/external_services/br_federal_revenue_service/receita-federal.module';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './config/filters/http-exception.filter';
 import { ContactVerificationModule } from '@modules/contact_verification/contact-verification.module';
@@ -27,7 +26,6 @@ import { TwilioModule } from '@infrastructure/external_services/twilio/twilio.mo
     TypeOrmModule.forRoot(AppDataSource.options), 
 
     // External Services
-    ReceitaFederalModule, // depreciado
     CNPJServiceModule,
     TwilioModule,
 

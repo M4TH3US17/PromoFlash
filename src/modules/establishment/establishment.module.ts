@@ -4,11 +4,11 @@ import { EstablishmentRepositoryImpl } from './establishment.repository-impl';
 import { GetAllEstablishmentsUseCase } from './usecases/get-all-establishments.usecase';
 import { EstablishmentEntity } from './establishment.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ReceitaFederalModule } from 'src/infrastructure/external_services/br_federal_revenue_service/receita-federal.module';
-import { FindEstablishmentByCNPJUseCase } from 'src/infrastructure/external_services/br_federal_revenue_service/usecases/find-establishment-by-cnpj.usecase';
 import { CreateEstablishmentsUseCase } from './usecases/create-establishment.usecase';
 import { TwilioSMSService } from '@infrastructure/external_services/twilio/sms/sms.service';
 import { TwilioModule } from '@infrastructure/external_services/twilio/twilio.module';
+import { CNPJServiceModule } from '@infrastructure/external_services/cnpj_service/cnpj-service.module';
+import { BrazilFederalRevenueService } from '@infrastructure/external_services/cnpj_service/brazil_federal_revenue/brazil-federal-revenue.service';
 
 @Module({
   imports: [
@@ -16,7 +16,7 @@ import { TwilioModule } from '@infrastructure/external_services/twilio/twilio.mo
       EstablishmentEntity, 
     ]),
 
-    ReceitaFederalModule, // depreciado
+    CNPJServiceModule,
     TwilioModule, 
 
   ],
@@ -28,7 +28,7 @@ import { TwilioModule } from '@infrastructure/external_services/twilio/twilio.mo
     },
 
     // external_services
-    FindEstablishmentByCNPJUseCase, // depreciado
+    BrazilFederalRevenueService,
     TwilioSMSService,
 
     // usecases

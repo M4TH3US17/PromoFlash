@@ -1,14 +1,13 @@
 import { HttpException, HttpStatus, Inject, Injectable, Logger } from "@nestjs/common";
 import { IEstablishmentRepositoryContract } from "src/infrastructure/repository_contracts/Iestablishment.repository-contract";
 import { UseCaseResponseDTO } from "src/shared/bases/usecase-response.dto";
-import { FindEstablishmentByCNPJUseCase } from "src/infrastructure/external_services/br_federal_revenue_service/usecases/find-establishment-by-cnpj.usecase";
-import { EstablishmentDTO } from "src/infrastructure/external_services/br_federal_revenue_service/dto/response-cnpj-searched.dto";
 import { EstablishmentEntity } from "../establishment.entity";
 import { EstablishmentType } from "../others/enums/establishment-type.enum";
 import { CreateEstablishmentRequestDTO } from "../others/dto/request-establishment.dto";
 import { TwilioSMSService } from "@infrastructure/external_services/twilio/sms/sms.service";
-import { PhoneMethod } from "@modules/contact_verification/contact_methods";
 import { formatPhoneNumberToSendSMS } from "@infrastructure/external_services/twilio/sms/sms.utils";
+import { BrazilFederalRevenueService } from "@infrastructure/external_services/cnpj_service/brazil_federal_revenue/brazil-federal-revenue.service";
+import { EstablishmentDTO } from "@infrastructure/external_services/cnpj_service/brazil_federal_revenue/dto/response-cnpj-searched.dto";
 
 @Injectable()
 export class CreateEstablishmentsUseCase {
@@ -19,7 +18,7 @@ export class CreateEstablishmentsUseCase {
         private readonly establishmentRepository: IEstablishmentRepositoryContract,
 
         // External Services
-        private readonly findEstablishmentByCNPJUseCase: FindEstablishmentByCNPJUseCase,
+        private readonly brazilFederalRevenueService: BrazilFederalRevenueService,
         private readonly SMSService: TwilioSMSService,
     ) { }
 
@@ -27,16 +26,17 @@ export class CreateEstablishmentsUseCase {
         try {
             this.logger.log(`Iniciando cadastro de um estabelecimento de CNPJ=${request.cnpj} e nome=${request.name}`);
 
-            const { ddd, countryCode, number } = request.firstPhone;
-            let firstContactFormatted: string = formatPhoneNumberToSendSMS(`${countryCode} (${ddd}) ${number}`);
-            console.log(firstContactFormatted)
+            //const { ddd, countryCode, number } = request.firstPhone;
+            //let firstContactFormatted: string = formatPhoneNumberToSendSMS(`${countryCode} (${ddd}) ${number}`);
+            //console.log(firstContactFormatted)
 
-            await this.SMSService.sendSMS(firstContactFormatted, "oiiiiiiiiiiiiiiiiiiiiii");
+            //await this.SMSService.sendSMS(firstContactFormatted, "oiiiiiiiiiiiiiiiiiiiiii");
 
-           /* const brazilianFederalRevenue: EstablishmentDTO = await this.findEstablishmentByCNPJUseCase.executeAsync(request.cnpj); // busca na cnpj na receita federal
-            const establishment: EstablishmentEntity = await this.establishmentRepository.getByCNPJAsync(request.cnpj);
+            const brazilianFederalRevenue: EstablishmentDTO = await this.brazilFederalRevenueService.findEstablishmentByCNPJ(request.cnpj);
+            //const establishment: EstablishmentEntity = await this.establishmentRepository.getByCNPJAsync(request.cnpj);
+            console.log(brazilianFederalRevenue)
 
-            if (establishment)
+            /*if (establishment)
                 throw new HttpException('Já há um estabelecimento cadastrado com este CNPJ.', HttpStatus.CONFLICT);
 
             if ((brazilianFederalRevenue.descricao_identificador_matriz_filial === "FILIAL") ||
@@ -50,19 +50,19 @@ export class CreateEstablishmentsUseCase {
                     message: "",
                     data: brazilianFederalRevenue
                 };
-            };
+            };*/
 
             this.logger.log(`Estabelecimento informado é uma loja matriz`);
             // Problemas ao persistir uma nova matriz:
             // - Existem matrizes regionais (como lidar com várias lojas matriz e suas filiais ao mesmo tempo?)
             // - Algumas filiais usam o mesmo cnpj da matriz (quem é quem? quem é filial/matriz?)
 
-            //const establishments: EstablishmentEntity = await this.establishmentRepository.createAsync();*/
+            //const establishments: EstablishmentEntity = await this.establishmentRepository.createAsync();
 
             return {
                 statusCode: HttpStatus.CREATED,
                 message: "",
-                data: null
+                data: brazilianFederalRevenue
             };
         } catch (error) {
             if (error instanceof HttpException) throw error;

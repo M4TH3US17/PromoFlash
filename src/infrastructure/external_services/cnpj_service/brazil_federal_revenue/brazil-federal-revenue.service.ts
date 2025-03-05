@@ -3,7 +3,7 @@ import { EstablishmentDTO } from "./dto/response-cnpj-searched.dto";
 import axios from "axios";
 
 @Injectable()
-export class BrazilFederalRevenue {
+export class BrazilFederalRevenueService {
 
     public async findEstablishmentByCNPJ(cnpj: string): Promise<EstablishmentDTO> {
         try {
@@ -14,7 +14,7 @@ export class BrazilFederalRevenue {
 
             if(response.data.descricao_situacao_cadastral !== "ATIVA") 
                 throw new HttpException(`CNPJ informado não está ativo na Receita Federal.`, HttpStatus.BAD_REQUEST);
-
+            
             return Object.assign(new EstablishmentDTO(), response.data);
 
         } catch (error) {
