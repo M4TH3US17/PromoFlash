@@ -1,27 +1,19 @@
-import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { AddressResponseDTO } from '@modules/address/others/dto/response-address.dto';
-import { EstablishmentEntity } from '@modules/establishment/establishment.entity';
-import { PromotionResponseDTO } from '@modules/promotion/others/dto/response-promotion.dto';
-import { ResponseEmailContactDTO, ResponsePhoneContactDTO } from '@modules/contact_verification/others/dto/response-contact-verification.dto';
+import { ResponseAddressDTO } from "@modules/address/others/dto/response-address.dto";
+import { ResponsePhoneDTO } from "@modules/contact_verification/others/dto/response-phone.dto";
+import { ResponseEmailDTO } from "@modules/contact_verification/others/dto/response-email.dto";
+import { ResponsePromotionDTO } from "@modules/promotion/others/dto/response-promotion.dto";
+import { EstablishmentType } from "../enums/establishment-type.enum";
 
-export class EstablishmentResponseDTO
-    extends OmitType(EstablishmentEntity, ["updatedAt", "createdAt", "deletedAt", "address", "promotions", "firstPhone", "secondPhone", "email"]) {
-
-    //@ApiProperty({ type: ContactResponseDTO })
-    //contact: ContactResponseDTO;
-
-    @ApiProperty({ type: AddressResponseDTO })
-    address: AddressResponseDTO;
-
-    @ApiProperty({ type: [PromotionResponseDTO] })
-    promotions: PromotionResponseDTO[];
-
-    @ApiProperty({ type: ResponsePhoneContactDTO })
-    firstPhone: ResponsePhoneContactDTO;
-
-    @ApiProperty({ type: ResponsePhoneContactDTO })
-    secondPhone: ResponsePhoneContactDTO;
-
-    @ApiProperty({ type: ResponseEmailContactDTO })
-    email: ResponseEmailContactDTO;
+export class ResponseEstablishmentDTO {
+    id: number;
+    cnpj: string;
+    name: string;
+    businessName: string;
+    stars: number;
+    description: string;
+    establishmentType: EstablishmentType;
+    address: ResponseAddressDTO;
+    promotions: ResponsePromotionDTO[]
+    phones: ResponsePhoneDTO[]
+    emails: ResponseEmailDTO[]
 };

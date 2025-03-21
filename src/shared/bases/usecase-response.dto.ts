@@ -5,3 +5,9 @@ export class UseCaseResponseDTO {
     message: string;
     data: any
 };
+
+export class APIResponseDTO {
+    statusCode: HttpStatus;
+    message: string;
+    data: any
+};

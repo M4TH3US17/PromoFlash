@@ -1,25 +1,24 @@
 import { Module } from '@nestjs/common';
 import { UserController } from './user.controller';
-import { UserRepositoryImpl } from './user.repository-impl';
-import { GetAllUsersUseCase } from './usecases/get-all-users.usecase';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './user.entity';
+import { UserService } from './user.service';
+import { AddressEntity } from '@modules/address/address.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ UserEntity ]),
+    TypeOrmModule.forFeature([ 
+      UserEntity,
+      AddressEntity,
+     ]),
   ],
   controllers: [
     UserController,
   ],
   providers: [
-    {
-      provide: "USER_REPOSITORY",
-      useClass: UserRepositoryImpl
-    },
 
     // usecases
-    GetAllUsersUseCase,
+    UserService,
   ]
 })
 export class UserModule {}

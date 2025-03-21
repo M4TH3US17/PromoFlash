@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { EstablishmentController } from './establishment.controller';
-import { EstablishmentRepositoryImpl } from './establishment.repository-impl';
 import { GetAllEstablishmentsUseCase } from './usecases/get-all-establishments.usecase';
 import { EstablishmentEntity } from './establishment.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -9,11 +8,17 @@ import { TwilioSMSService } from '@infrastructure/external_services/twilio/sms/s
 import { TwilioModule } from '@infrastructure/external_services/twilio/twilio.module';
 import { CNPJServiceModule } from '@infrastructure/external_services/cnpj_service/cnpj-service.module';
 import { BrazilFederalRevenueService } from '@infrastructure/external_services/cnpj_service/brazil_federal_revenue/brazil-federal-revenue.service';
+import { EmailEntity, PhoneEntity } from '@modules/contact_verification/contact_methods';
+import { EstablishmentService } from './establishment.service';
+import { AddressEntity } from '@modules/address/address.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([ 
-      EstablishmentEntity, 
+      EstablishmentEntity,
+      PhoneEntity,
+      EmailEntity,
+      AddressEntity,
     ]),
 
     CNPJServiceModule,
@@ -22,10 +27,6 @@ import { BrazilFederalRevenueService } from '@infrastructure/external_services/c
   ],
   controllers: [ EstablishmentController ],
   providers: [
-    {
-      provide: "ESTABLISHMENT_REPOSITORY",
-      useClass: EstablishmentRepositoryImpl
-    },
 
     // external_services
     BrazilFederalRevenueService,
@@ -34,6 +35,7 @@ import { BrazilFederalRevenueService } from '@infrastructure/external_services/c
     // usecases
     GetAllEstablishmentsUseCase,
     CreateEstablishmentsUseCase, 
+    EstablishmentService
   ],
 })
 export class EstablishmentModule {}

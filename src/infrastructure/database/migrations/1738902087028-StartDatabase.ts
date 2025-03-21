@@ -28,7 +28,22 @@ export class StartDatabase1738902087028 implements MigrationInterface {
                     CREATE TYPE product_management.product_category AS ENUM ('DRINKS', 'OTHER'); 
                 END IF;
             END $$;`);
+
+            await queryRunner.query(`
+                CREATE TYPE product_management.establishment_type AS ENUM (
+                    'HEADQUARTERS', 
+                    'SUB_HEADQUARTERS', 
+                    'BRANCH', 
+                    'FRANCHISE'
+                );`);
                 
+        // await queryRunner.query(`
+        // CREATE TYPE product_management.establishment_validate_status AS ENUM (
+        //     '0', -- Não confiável (informações insuficientes ou inválidas)
+        //     '1', -- Válido (informações verificadas e confirmadas)
+        //     '2'  -- Em análise (pendente de verificação ou validação)
+        // );`);
+
         console.log(`\n[StartDatabase1738902087028] Criando tabela "addresses"`);
         await queryRunner.query(`
             CREATE TABLE IF NOT EXISTS common.addresses (
@@ -36,6 +51,7 @@ export class StartDatabase1738902087028 implements MigrationInterface {
                 street             VARCHAR(255) NOT NULL,
                 number             INT          NOT NULL,
                 neighborhood       VARCHAR(255) NOT NULL,
+                deleted_at TIMESTAMP    DEFAULT NULL,
                 city               VARCHAR(255) NOT NULL,
                 state              VARCHAR(255) NOT NULL,
                 cep                VARCHAR(20)  NOT NULL,
@@ -53,6 +69,7 @@ export class StartDatabase1738902087028 implements MigrationInterface {
                 id               SERIAL,
                 email            VARCHAR(255) NOT NULL,
                 first_contact    VARCHAR(50)  NOT NULL,
+                deleted_at TIMESTAMP    DEFAULT NULL,
                 second_contact   VARCHAR(50),
                 created_at     TIMESTAMP      DEFAULT CURRENT_TIMESTAMP NOT NULL,
                 updated_at     TIMESTAMP      DEFAULT CURRENT_TIMESTAMP NOT NULL
@@ -74,14 +91,18 @@ export class StartDatabase1738902087028 implements MigrationInterface {
                 created_at     TIMESTAMP                           DEFAULT CURRENT_TIMESTAMP NOT NULL,
                 updated_at     TIMESTAMP                           DEFAULT CURRENT_TIMESTAMP NOT NULL,
                 cnpj           VARCHAR                             NOT NULL,
+                business_name  VARCHAR,
+                deleted_at     TIMESTAMP                           DEFAULT NULL,
                 name           VARCHAR                             NOT NULL,
                 description    VARCHAR                             NOT NULL,
                 stars          INT                                 NOT NULL,
-                status         common.status                       NOT NULL DEFAULT 'ACTIVE',
                 is_verified    INT                                 DEFAULT 0,
                 main_fk        INT                                 DEFAULT NULL,
                 contact_fk     INT                                 UNIQUE,
-                address_fk     INT                                 UNIQUE
+                address_fk     INT                                 UNIQUE,
+                establishment_type                                 product_management.establishment_type DEFAULT 'HEADQUARTERS' NOT NULL,
+                establishment_validate_status                      INT DEFAULT 0 NOT NULL
+                --establishment_validate_status                      product_management.establishment_validate_status DEFAULT '0' NOT NULL
             );
 
             --COMMENT ON COLUMN product_management.establishments.is_verified Status de verificação da filial, conforme determinado pela loja matriz. 1 indica que a filial foi validada pela matriz, enquanto 0 significa que a filial ainda não foi validada.
@@ -94,6 +115,7 @@ export class StartDatabase1738902087028 implements MigrationInterface {
                 id         SERIAL,
                 created_at TIMESTAMP     DEFAULT CURRENT_TIMESTAMP NOT NULL,
                 updated_at TIMESTAMP     DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                deleted_at TIMESTAMP    DEFAULT NULL,
                 name       VARCHAR       NOT NULL,
                 brand      VARCHAR       NOT NULL,
                 status     common.status NOT NULL DEFAULT 'ACTIVE'
@@ -106,6 +128,7 @@ export class StartDatabase1738902087028 implements MigrationInterface {
                 id               SERIAL,
                 created_at       TIMESTAMP     DEFAULT CURRENT_TIMESTAMP NOT NULL,
                 updated_at       TIMESTAMP     DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                deleted_at TIMESTAMP    DEFAULT NULL,
                 title            VARCHAR(255)  NOT NULL,
                 description      TEXT          NOT NULL,
                 status           common.status NOT NULL DEFAULT 'ACTIVE',
@@ -125,6 +148,7 @@ export class StartDatabase1738902087028 implements MigrationInterface {
                 id         SERIAL,
                 created_at TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+                deleted_at TIMESTAMP    DEFAULT NULL,
                 username   VARCHAR(255) NOT NULL,
                 password   VARCHAR(255) NOT NULL,
                 role       VARCHAR(255) CHECK (role IN ('USER', 'ADMIN')) DEFAULT 'USER',

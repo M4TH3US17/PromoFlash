@@ -1,37 +1,36 @@
 import { SCHEMA } from "@infrastructure/database/enums/schemas";
-import { EstablishmentEntity } from "@modules/establishment/establishment.entity";
-import { UserEntity } from "@modules/user/user.entity";
 import { BaseEntity } from "src/shared/bases/base.entity";
-import { Column, Entity, OneToOne, TableInheritance } from "typeorm";
+import { Column, Entity, ManyToOne, } from "typeorm";
+import { ContactType } from "./others/enums/contact-type.enum";
+import { OwnerType } from "./others/enums/owner-type.enum";
+import { TokenType } from "./others/enums/token-type.enum";
+import { UserEntity } from "@modules/user/user.entity";
 
-@Entity({ schema: SCHEMA.COMMON, name: "contact_verification" })
-@TableInheritance({ column: { type: 'varchar', name: 'contact_method' } })
+@Entity({ 
+    schema: SCHEMA.COMMON, 
+    name: "contact_verification",
+})
 export class ContactVerificationEntity extends BaseEntity {
 
-    @Column({ type: "int", name: "code_verification", nullable: false })
-    codeVerification: number;
+    @Column({ type: "int", name: "token", nullable: false })
+    token: number;
 
-    @Column({ type: "timestamp", name: "code_expiration", nullable: false })
-    codeExpiration: Date;
-    
-    @Column({ type: "boolean", name: "is_valid", nullable: false })
-    isValid: boolean;
-    
-    // 1. Relações com estabelecimento
-    @OneToOne(() => EstablishmentEntity, (establishment) => establishment.firstPhone)
-    establishmentfirstPhone: EstablishmentEntity;
-    
-    @OneToOne(() => EstablishmentEntity, (establishment) => establishment.secondPhone)
-    establishmentSecondPhone?: EstablishmentEntity;
-    
-    @OneToOne(() => EstablishmentEntity, (establishment) => establishment.email)
-    establishmentEmail?: EstablishmentEntity;
+    @Column({ type: "timestamp", name: "expired_at", nullable: false })
+    expired_at: Date;
 
-    // 2. Relações com usuário
-    @OneToOne(() => UserEntity, (user) => user.phone)
-    userPhone: UserEntity;
+    @Column({ type: "timestamp", name: "used_at", nullable: false })
+    used_at: Date;
 
-    @OneToOne(() => UserEntity, (user) => user.email)
-    userEmail: UserEntity;
+    @Column({ type: "enum", enum: ContactType, default: ContactType.SMS })
+    contact_type: ContactType;
+
+    @Column({ type: "enum", enum: OwnerType, default: OwnerType.ESTABLISHMENT })
+    owner_type: OwnerType;
+
+    @Column({ type: "enum", enum: TokenType, default: TokenType.CONFIRMATION })
+    token_type: TokenType;
+    
+    @ManyToOne(() => UserEntity, (user) => user.contactTokens)
+    user: UserEntity
     
 };

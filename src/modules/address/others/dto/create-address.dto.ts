@@ -1,5 +1,5 @@
-export class ResponseAddressDTO {
-    id: number;
+
+export class CreateAddressRequestDTO {
     street: string;
     number:  number;
     neighborhood: string;
@@ -7,5 +7,6 @@ export class ResponseAddressDTO {
     state: string;
     cep: string;
     country: string;
-    complement: string;
+    complement?: string;
+
 };

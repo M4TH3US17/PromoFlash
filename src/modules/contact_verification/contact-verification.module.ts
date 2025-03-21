@@ -1,29 +1,27 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ContactVerificationEntity } from "./contact-verification.entity";
-import { ContactVerificationRepositoryImpl } from "./contact-verification.repository-impl";
 import { ContactVerificationController } from "./contact-verification.controller";
-import { 
-    EmailMethod, 
-    PhoneMethod 
-} from "./contact_methods";
+import { ContactVerificationService } from "./contact-verification.service";
+import { EmailEntity, PhoneEntity } from "./contact_methods";
+import { UserEntity } from "@modules/user/user.entity";
+import { EstablishmentEntity } from "@modules/establishment/establishment.entity";
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([
             ContactVerificationEntity,
-            EmailMethod, 
-            PhoneMethod, 
+            EmailEntity, 
+            PhoneEntity,
+            UserEntity,
+            EstablishmentEntity,
         ])
     ],
     controllers: [
         ContactVerificationController,
     ],
     providers: [
-        {
-            provide: "CONTACT_VERIFICATION_CONTRACT",
-            useClass: ContactVerificationRepositoryImpl
-        }
+        ContactVerificationService,
     ]
 })
 export class ContactVerificationModule {};

@@ -1,4 +1,5 @@
 import { Column } from "typeorm";
+import { establishmentValidateStatusEnum } from "../enums/establishment-validate-status.enum";
 
 export class EstablishmentValidationsEntity {
 
@@ -9,16 +10,17 @@ export class EstablishmentValidationsEntity {
      Os documentos enviados serão utilizados para confirmar a categoria (franqueado, matriz ou filial) e a autenticidade 
      das informações fornecidas, garantindo que o estabelecimento esteja devidamente registrado e em conformidade com 
      os critérios do sistema. */
-    proofDocuments: Object[] //Media[]
+   // proofDocuments: Object[] //Media[]
 
+    // @Column({
+    //     type: "enum",
+    //     name: "establishment_validate_status",
+    //     enum: establishmentValidateStatusEnum,
+    //     default: establishmentValidateStatusEnum.UNTRUSTED,
+    // })
     @Column({
-        name: "is_validated",
-        enum: [0, 1, 2],
-        default: 0,
-        comment: "Indica o status de validação do estabelecimento: "
-                 + "0: Não confiável (informações insuficientes ou inválidas), "
-                 + "1: Válido (informações verificadas e confirmadas), "
-                 + "2: Em análise (pendente de verificação ou validação).",
+        name: "establishment_validate_status",
+        default: 0
     })
     isValid: number;
 

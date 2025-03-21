@@ -6,6 +6,9 @@ docker compose up --build
 npm run build
 npx typeorm migration:run -d "dist\infrastructure\database\data-source.js"
 
+## 2.1 Criar migration
+npx typeorm migration:create "src\infrastructure\database\migrations\[nomeDaMigration]"
+
 ## 3 Acessar o PgAdmin:
 http://localhost:5050/
 

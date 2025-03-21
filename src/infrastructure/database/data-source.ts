@@ -9,29 +9,36 @@ import { UserEntity } from "src/modules/user/user.entity";
 import { DataSource } from "typeorm";
 import { StartDatabase1738902087028 } from "./migrations/1738902087028-StartDatabase";
 import { ContactVerificationEntity } from "@modules/contact_verification/contact-verification.entity";
+import { EmailEntity, PhoneEntity } from "@modules/contact_verification/contact_methods";
+import { ContactRelations1742422776288 } from "./migrations/1742422776288-ContactRelations";
 import "dotenv/config";
 
-export const AppDataSource = new DataSource({ 
-      type: "postgres",
-      database:  process.env.DB_NAME,
-      host:      process.env.DB_HOST,
-      port:      Number(process.env.DB_PORT) || 5432,
-      username:  process.env.DB_USERNAME,
-      password:  process.env.DB_PASSWORD.toString(),
-      entities: [
-          UserEntity,
-          ContactVerificationEntity,
-          AddressEntity,
-          CouponEntity,
-          PromotionEntity,
-          ProductEntity,
-          EstablishmentEntity,
-          EstablishmentCustomers,
-          EstablishmentProduct, 
-      ],
-      logging: true,
-      synchronize: false,
-      migrationsRun: true,
-      migrationsTableName: "migrations",
-      migrations: [ StartDatabase1738902087028 ],
+export const AppDataSource = new DataSource({
+    type: "postgres",
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT) || 5432,
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD.toString(),
+    entities: [
+        UserEntity,
+        ContactVerificationEntity,
+        AddressEntity,
+        CouponEntity,
+        PromotionEntity,
+        ProductEntity,
+        EstablishmentEntity,
+        EstablishmentCustomers,
+        EstablishmentProduct,
+        PhoneEntity,
+        EmailEntity,
+    ],
+    logging: true,
+    synchronize: false,
+    migrationsRun: true,
+    migrationsTableName: "migrations",
+    migrations: [
+        StartDatabase1738902087028,
+        ContactRelations1742422776288,
+    ],
 }); 

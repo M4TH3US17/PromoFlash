@@ -1,5 +1,5 @@
 import { BaseEntity } from "src/shared/bases/base.entity";
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne } from "typeorm";
 import { UserRole } from "./others/enums/user.enums";
 import { AddressEntity } from "../address/address.entity";
 import { Status } from "src/shared/enums/status";
@@ -7,6 +7,7 @@ import { EstablishmentEntity } from "../establishment/establishment.entity";
 import { SCHEMA } from "src/infrastructure/database/enums/schemas";
 import { Exclude } from "class-transformer";
 import { ContactVerificationEntity } from "@modules/contact_verification/contact-verification.entity";
+import { EmailEntity, PhoneEntity } from "@modules/contact_verification/contact_methods";
 
 @Entity({ 
     schema: SCHEMA.USER, 
@@ -17,7 +18,6 @@ export class UserEntity extends BaseEntity {
     @Column()
     username: string;
 
-    @Exclude()
     @Column()
     password: string;
 
@@ -33,22 +33,17 @@ export class UserEntity extends BaseEntity {
         joinColumn: { name: "user_fk" },
         inverseJoinColumn: { name: "address_fk" },
     })
-    @ManyToMany(() => AddressEntity)
-    address: AddressEntity[];
+    @ManyToMany(() => AddressEntity, { cascade: true })
+    addresses: AddressEntity[];
 
-    @JoinColumn({ 
-        name: "contact_fk",
-        foreignKeyConstraintName: "fk_user_contact1"
-    })
-    @OneToOne(() => ContactVerificationEntity, (contact) => contact.userPhone)
-    phone: ContactVerificationEntity;
+    @OneToMany(() => ContactVerificationEntity, (contactToken) => contactToken.user)
+    contactTokens?: ContactVerificationEntity[]
 
-    @JoinColumn({ 
-        name: "contact_fk",
-        foreignKeyConstraintName: "fk_user_contact2"
-    })
-    @OneToOne(() => ContactVerificationEntity, (contact) => contact.userEmail)
-    email: ContactVerificationEntity;
+    @OneToMany(() => PhoneEntity, (phones) => phones.user, { cascade: true })
+    phones: PhoneEntity[]
+
+    @OneToMany(() => EmailEntity, (emails) => emails.user, { cascade: true })
+    emails: EmailEntity[]
 
     @JoinTable({
         schema: SCHEMA.USER,
@@ -57,5 +52,5 @@ export class UserEntity extends BaseEntity {
         inverseJoinColumn: { name: "establishments_fk" },
     })
     @ManyToMany(() => EstablishmentEntity)
-    followingEstablishments: EstablishmentEntity[]
+    followingEstablishments?: EstablishmentEntity[]
 };
