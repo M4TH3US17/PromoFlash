@@ -1,4 +1,4 @@
-export class EstablishmentDTO {
+export class ResponseBrazilianFederalRevenueDTO {
     abertura: string;
     situacao: string;
     tipo: string;

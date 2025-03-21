@@ -1,11 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { EstablishmentDTO } from "./dto/response-cnpj-searched.dto";
 import axios from "axios";
+import { ResponseBrazilianFederalRevenueDTO } from "./dto/response-cnpj-searched.dto";
 
 @Injectable()
 export class BrazilFederalRevenueService {
 
-    public async findEstablishmentByCNPJ(cnpj: string): Promise<EstablishmentDTO> {
+    public async findEstablishmentByCNPJ(cnpj: string): Promise<ResponseBrazilianFederalRevenueDTO> {
         try {
             const response = await axios.get(`https://brasilapi.com.br/api/cnpj/v1/${cnpj}`);
 
@@ -15,7 +15,7 @@ export class BrazilFederalRevenueService {
             if(response.data.descricao_situacao_cadastral !== "ATIVA") 
                 throw new HttpException(`CNPJ informado não está ativo na Receita Federal.`, HttpStatus.BAD_REQUEST);
             
-            return Object.assign(new EstablishmentDTO(), response.data);
+            return Object.assign(new ResponseBrazilianFederalRevenueDTO(), response.data);
 
         } catch (error) {
             if (axios.isAxiosError(error))

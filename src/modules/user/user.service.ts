@@ -7,11 +7,17 @@ import { ResponseUserDTO } from "./others/dto/response-user.dto";
 import { mapUserEntityToDTO, mapUserRequestToEntity } from "./others";
 import { UserPaginationDTO } from "./others/dto/pagination-user.dto";
 import { AddressEntity } from "@modules/address/address.entity";
+import { TwilioSMSService } from "@infrastructure/external_services/twilio/sms/sms.service";
+import { formatPhoneNumberToSendSMS } from "@infrastructure/external_services/twilio/sms/sms.utils";
+import { PhoneEntity } from "@modules/contact_verification/contact_methods";
+import { generateRandomCode } from "@modules/contact_verification/others";
 
 @Injectable()
 export class UserService {
 
     constructor(
+        private readonly SMSService: TwilioSMSService,
+
         @InjectRepository(UserEntity)
         private readonly repository: Repository<UserEntity>,
         @InjectRepository(AddressEntity)
@@ -43,8 +49,15 @@ export class UserService {
             throw new HttpException(`Usuário de username ${request.username} já existe na base de dados!`, HttpStatus.CONFLICT);
 
         const userToBeCreated: UserEntity = mapUserRequestToEntity(request);
-        const userCreated: UserEntity = await this.repository.save(userToBeCreated);
-        return mapUserEntityToDTO(userCreated);
+
+        userToBeCreated.phones.forEach((phone: PhoneEntity) => {
+            let verificationCode: number = generateRandomCode();
+            let message: string = `[USUÁRIO] Olá, seu código de verificação PromoFlash é: ${verificationCode}`;
+            //this.SMSService.sendSMS(formatPhoneNumberToSendSMS(phone), message);
+        });
+
+        //const userCreated: UserEntity = await this.repository.save(userToBeCreated);
+        return null//mapUserEntityToDTO(userCreated);
     };
 
     public async existsByUsername(username: string): Promise<boolean> {
