@@ -7,7 +7,7 @@ import { ResponseEstablishmentDTO } from "@modules/establishment/others/dto/resp
 export class ResponseUserDTO {
     id: number;
     username: string;
-    role: UserRole;
+    //role: UserRole;
     addresses: ResponseAddressDTO[];
     phones: ResponsePhoneDTO[]
     emails: ResponseEmailDTO[]

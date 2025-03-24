@@ -8,9 +8,9 @@ import { mapUserEntityToDTO, mapUserRequestToEntity } from "./others";
 import { UserPaginationDTO } from "./others/dto/pagination-user.dto";
 import { AddressEntity } from "@modules/address/address.entity";
 import { TwilioSMSService } from "@infrastructure/external_services/twilio/sms/sms.service";
-import { formatPhoneNumberToSendSMS } from "@infrastructure/external_services/twilio/sms/sms.utils";
 import { PhoneEntity } from "@modules/contact_verification/contact_methods";
 import { generateRandomCode } from "@modules/contact_verification/others";
+import { hashPassword } from "@modules/authentication/authentication.utils";
 
 @Injectable()
 export class UserService {
@@ -48,16 +48,19 @@ export class UserService {
         if (userAlreadyExists)
             throw new HttpException(`Usuário de username ${request.username} já existe na base de dados!`, HttpStatus.CONFLICT);
 
-        const userToBeCreated: UserEntity = mapUserRequestToEntity(request);
+        let userToBeCreated: UserEntity = mapUserRequestToEntity(request);
+        userToBeCreated.password = await hashPassword(userToBeCreated.password);
 
-        userToBeCreated.phones.forEach((phone: PhoneEntity) => {
-            let verificationCode: number = generateRandomCode();
-            let message: string = `[USUÁRIO] Olá, seu código de verificação PromoFlash é: ${verificationCode}`;
-            //this.SMSService.sendSMS(formatPhoneNumberToSendSMS(phone), message);
+        userToBeCreated.phones.forEach((phone: PhoneEntity, index: number) => {
+            if (index <= 1) {
+                let verificationCode: number = generateRandomCode();
+                let message: string = `[USUÁRIO] Olá, seu código de verificação PromoFlash é: ${verificationCode}`;
+                //this.SMSService.sendSMS(formatPhoneNumberToSendSMS(phone), message);
+            }
         });
 
-        //const userCreated: UserEntity = await this.repository.save(userToBeCreated);
-        return null//mapUserEntityToDTO(userCreated);
+        const userCreated: UserEntity = await this.repository.save(userToBeCreated);
+        return mapUserEntityToDTO(userCreated);
     };
 
     public async existsByUsername(username: string): Promise<boolean> {

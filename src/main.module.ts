@@ -14,16 +14,17 @@ import { HttpExceptionFilter } from './config/filters/http-exception.filter';
 import { ContactVerificationModule } from '@modules/contact_verification/contact-verification.module';
 import { CNPJServiceModule } from '@infrastructure/external_services/cnpj_service/cnpj-service.module';
 import { TwilioModule } from '@infrastructure/external_services/twilio/twilio.module';
+import { AuthenticationModule } from '@modules/authentication/authentication.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthorizationGuard } from '@modules/authentication/others/guards/authorization.guard';
 
 @Module({
   imports: [
-
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: envValidationSchema,
     }),
-
-    TypeOrmModule.forRoot(AppDataSource.options), 
+    TypeOrmModule.forRoot(AppDataSource.options),
 
     // External Services
     CNPJServiceModule,
@@ -37,11 +38,16 @@ import { TwilioModule } from '@infrastructure/external_services/twilio/twilio.mo
     ProductModule,
     PromotionModule,
     UserModule,
+    AuthenticationModule,
   ],
   providers: [
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthorizationGuard,
     },
   ]
 })

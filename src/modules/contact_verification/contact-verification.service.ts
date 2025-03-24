@@ -5,6 +5,8 @@ import { ResponseContactVerificationDTO } from "./others/dto/response-contact-ve
 import { ContactVerificationEntity } from "./contact-verification.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
+import { ConfirmCodeRequestDTO } from "./others/dto/request-confirm-code.dto";
+import { UserEntity } from "@modules/user/user.entity";
 
 @Injectable()
 export class ContactVerificationService {
@@ -14,23 +16,19 @@ export class ContactVerificationService {
         private readonly repository: Repository<ContactVerificationEntity>,
     ) {}
 
-    public async validateContact(request: ContactVerificationRequestDTO): Promise<ResponseContactVerificationDTO> {
-        const contact: ContactVerificationEntity = await this.repository.
-        findOne({
-            where: {
-                id: request.contactId,
-                contact_type: request.contactType,
-                // adicionar o id do usuario (pegar no header da requisição)
-            },
-            relations: ["user"]
-        });
+    public async confirmCode(request: ConfirmCodeRequestDTO, tokenJWT: string) {
 
-        if(!contact) 
-            throw new HttpException(`${request.contactType} não foi encontrado na base de dados!`, HttpStatus.NOT_FOUND);
+        // const contact: ContactVerificationEntity = await this.repository.
+        // findOne({
+        //     where: {
+        //         id: request.contactId,
+        //         contact_type: request.contactType,
+        //         // adicionar o id do usuario (pegar no header da requisição)
+        //     },
+        //     relations: ["user"]
+        // });
 
-        return {
-            
-        }
+        return null;
     };
 
 };

@@ -1,6 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import * as twilio from 'twilio';
 import "dotenv/config";
+import { UserEntity } from "@modules/user/user.entity";
+import { ConfirmCodeRequestDTO } from "../../../../modules/contact_verification/others/dto/request-confirm-code.dto";
 
 @Injectable()
 export class TwilioSMSService {

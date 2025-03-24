@@ -8,6 +8,7 @@ import { UserEntity } from './user.entity';
 import { UserPaginationDTO } from './others/dto/pagination-user.dto';
 import { UseCaseResponseDTO } from '@shared/bases/usecase-response.dto';
 import { PaginatedList } from '@shared/types/pagination.types';
+import { Public } from '@modules/authentication/others';
 
 @Controller({path: "users"})
 export class UserController {
@@ -17,6 +18,7 @@ export class UserController {
     ) { }
 
     @Get()
+    @Public()
     @UsePipes(new PaginationParserPipe(UserEntity))
     public async getAll(
         @Res() res: Response,

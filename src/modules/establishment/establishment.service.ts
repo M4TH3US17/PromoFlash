@@ -42,7 +42,7 @@ export class EstablishmentService {
 
             const establishmentsDTO: ResponseEstablishmentDTO[] = establishmentsFound.map((item: EstablishmentEntity) => mapEstablishmentEntityToDTO(item));
             return establishmentsDTO;
-            
+
         } catch (error) {
             if (error instanceof HttpException) throw error;
             throw new HttpException("Desculpe, houve um erro interno no servidor. Por favor, contatar o suporte.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -61,15 +61,15 @@ export class EstablishmentService {
             throw new HttpException(`Já existe um estabelecimento cadastrado no endereço informado!`, HttpStatus.CONFLICT);
 
         const establishmentToBeCreated: EstablishmentEntity = mapEstablishmentRequestToEntity(request);
-
-        establishmentToBeCreated.phones.forEach((phone: PhoneEntity) => {
-            let verificationCode: number = generateRandomCode();
-            let message: string = `[ESTABELECIMENTO] Olá, seu código de verificação PromoFlash é: ${verificationCode}`;
-            //this.SMSService.sendSMS(formatPhoneNumberToSendSMS(phone), message);
+        establishmentToBeCreated.phones.forEach((phone: PhoneEntity, index: number) => {
+            if (index <= 1) {
+                let verificationCode: number = generateRandomCode();
+                let message: string = `[ESTABELECIMENTO] Olá, seu código de verificação PromoFlash é: ${verificationCode}`;
+                //this.SMSService.sendSMS(formatPhoneNumberToSendSMS(phone), message);
+            }
         });
 
         const establishmentCreated: EstablishmentEntity = await this.repository.save(establishmentToBeCreated);
-
         return mapEstablishmentEntityToDTO(establishmentCreated);
     };
 

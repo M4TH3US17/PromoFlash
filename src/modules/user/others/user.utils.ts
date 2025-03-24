@@ -40,7 +40,6 @@ export function mapUserEntityToDTO(entity: UserEntity): ResponseUserDTO {
     return {
         id: entity.id,
         username: entity.username,
-        role: entity.role,
         addresses: addressesDTO,
         phones: phonesDTO,
         emails: emailsDTO,
