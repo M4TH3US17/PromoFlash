@@ -16,7 +16,7 @@ import { CNPJServiceModule } from '@infrastructure/external_services/cnpj_servic
 import { TwilioModule } from '@infrastructure/external_services/twilio/twilio.module';
 import { AuthenticationModule } from '@modules/authentication/authentication.module';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthorizationGuard } from '@modules/authentication/others/guards/authorization.guard';
+import { RolesGuard } from '@modules/authentication/others/guards/roles.guard';
 
 @Module({
   imports: [
@@ -47,7 +47,7 @@ import { AuthorizationGuard } from '@modules/authentication/others/guards/author
     },
     {
       provide: APP_GUARD,
-      useClass: AuthorizationGuard,
+      useClass: RolesGuard,
     },
   ]
 })

@@ -9,8 +9,14 @@ import { UserPaginationDTO } from "./others/dto/pagination-user.dto";
 import { AddressEntity } from "@modules/address/address.entity";
 import { TwilioSMSService } from "@infrastructure/external_services/twilio/sms/sms.service";
 import { PhoneEntity } from "@modules/contact_verification/contact_methods";
-import { generateRandomCode } from "@modules/contact_verification/others";
+import { generateRandomCode, mapPhoneRequestToEntity } from "@modules/contact_verification/others";
 import { hashPassword } from "@modules/authentication/authentication.utils";
+import { ContactVerificationEntity } from "@modules/contact_verification/contact-verification.entity";
+import { OwnerType } from "@modules/contact_verification/others/enums/owner-type.enum";
+import { TokenType } from "@modules/contact_verification/others/enums/token-type.enum";
+import { ContactType } from "@modules/contact_verification/others/enums/contact-type.enum";
+import { formatPhoneNumberToSendSMS } from "@infrastructure/external_services/twilio/sms/sms.utils";
+import moment from 'moment';
 
 @Injectable()
 export class UserService {
@@ -22,6 +28,10 @@ export class UserService {
         private readonly repository: Repository<UserEntity>,
         @InjectRepository(AddressEntity)
         private readonly addressRepository: Repository<AddressEntity>,
+        @InjectRepository(PhoneEntity)
+        private readonly phoneRepository: Repository<PhoneEntity>,
+        @InjectRepository(ContactVerificationEntity)
+        private readonly contactVerificationRepository: Repository<ContactVerificationEntity>,
     ) { }
 
     public async getAll(pagination: UserPaginationDTO): Promise<ResponseUserDTO[]> {
@@ -50,19 +60,31 @@ export class UserService {
 
         let userToBeCreated: UserEntity = mapUserRequestToEntity(request);
         userToBeCreated.password = await hashPassword(userToBeCreated.password);
-
-        userToBeCreated.phones.forEach((phone: PhoneEntity, index: number) => {
+        
+        
+        const userCreated: UserEntity = await this.repository.save(userToBeCreated);
+        userToBeCreated.phones.forEach(async (phone: PhoneEntity, index: number) => {
             if (index <= 1) {
                 let verificationCode: number = generateRandomCode();
                 let message: string = `[USUÁRIO] Olá, seu código de verificação PromoFlash é: ${verificationCode}`;
-                //this.SMSService.sendSMS(formatPhoneNumberToSendSMS(phone), message);
+                
+                await this.phoneRepository.save(mapPhoneRequestToEntity(phone));
+                await this.contactVerificationRepository.save({
+                    used_at: null,
+                    user: userCreated,
+                    token: verificationCode,
+                    owner_type: OwnerType.USER,
+                    token_type: TokenType.CONFIRMATION,
+                    contact_type: ContactType.SMS,
+                    expired_at: moment().add(5, 'minutes').toDate()
+                });
+                
+                // this.SMSService.sendSMS(formatPhoneNumberToSendSMS(phone), message);
             }
         });
-
-        const userCreated: UserEntity = await this.repository.save(userToBeCreated);
         return mapUserEntityToDTO(userCreated);
     };
-
+    
     public async existsByUsername(username: string): Promise<boolean> {
         const userFound: UserEntity = await this.repository.findOne({
             where: { username: Raw(alias => `REPLACE(LOWER(${alias}), ' ', '') = REPLACE(LOWER(:username), ' ', '')`, { username }) }

@@ -11,6 +11,7 @@ import { StartDatabase1738902087028 } from "./migrations/1738902087028-StartData
 import { ContactVerificationEntity } from "@modules/contact_verification/contact-verification.entity";
 import { EmailEntity, PhoneEntity } from "@modules/contact_verification/contact_methods";
 import { ContactRelations1742422776288 } from "./migrations/1742422776288-ContactRelations";
+import { ContactVerificationTableAndRelations1743304438478 } from "./migrations/1743304438478-ContactVerificationTableAndRelations";
 import "dotenv/config";
 
 export const AppDataSource = new DataSource({
@@ -40,5 +41,6 @@ export const AppDataSource = new DataSource({
     migrations: [
         StartDatabase1738902087028,
         ContactRelations1742422776288,
+        ContactVerificationTableAndRelations1743304438478,
     ],
 }); 

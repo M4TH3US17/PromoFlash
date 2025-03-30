@@ -36,7 +36,7 @@ export class UserEntity extends BaseEntity {
     @ManyToMany(() => AddressEntity, { cascade: true })
     addresses: AddressEntity[];
 
-    @OneToMany(() => ContactVerificationEntity, (contactToken) => contactToken.user)
+    @OneToMany(() => ContactVerificationEntity, (contactToken) => contactToken.user, { cascade: true })
     contactTokens?: ContactVerificationEntity[]
 
     @OneToMany(() => PhoneEntity, (phones) => phones.user, { cascade: true })

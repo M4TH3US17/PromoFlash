@@ -1,6 +1,6 @@
 import { SCHEMA } from "@infrastructure/database/enums/schemas";
 import { BaseEntity } from "src/shared/bases/base.entity";
-import { Column, Entity, ManyToOne, } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, } from "typeorm";
 import { ContactType } from "./others/enums/contact-type.enum";
 import { OwnerType } from "./others/enums/owner-type.enum";
 import { TokenType } from "./others/enums/token-type.enum";
@@ -30,6 +30,11 @@ export class ContactVerificationEntity extends BaseEntity {
     @Column({ type: "enum", enum: TokenType, default: TokenType.CONFIRMATION })
     token_type: TokenType;
     
+    @JoinColumn({
+        name: "user_fk",
+        referencedColumnName: "id",
+        foreignKeyConstraintName: "fk_contact_veri_user"
+    })
     @ManyToOne(() => UserEntity, (user) => user.contactTokens)
     user: UserEntity
     

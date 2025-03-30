@@ -5,7 +5,6 @@ import { RegisterService } from "./register/register.service";
 import { Response } from "express";
 import { SignInRequestDTO } from "./login/dto/request-signIn.dto";
 import { ResponseJsonWebTokenDTO } from "./login/dto/response-jwt.dto";
-import { Public } from "./others";
 
 @Controller("auth")
 export class AuthenticationController {
@@ -16,7 +15,6 @@ export class AuthenticationController {
         private readonly registerService: RegisterService,
     ) {}
 
-    @Public()
     @Post("login")
     public async signIn(
         @Body() request: SignInRequestDTO,

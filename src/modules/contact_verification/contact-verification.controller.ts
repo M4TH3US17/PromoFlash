@@ -1,11 +1,13 @@
-import { Body, Controller, Headers, HttpException, HttpStatus, Inject, Put, Req, Res } from "@nestjs/common";
+import { Body, Controller, Headers, HttpException, HttpStatus, Inject, Param, Put, Req, Res } from "@nestjs/common";
 import { ContactVerificationService } from "./contact-verification.service";
 import { ContactVerificationRequestDTO } from "./others/dto/request-contact-verification.dto";
-import { Response } from "express";
+import { Request, Response } from "express";
 import { APIResponseDTO } from "@shared/bases/usecase-response.dto";
 import { ResponseContactVerificationDTO } from "./others/dto/response-contact-verification.dto";
 import { ConfirmCodeRequestDTO } from "./others/dto/request-confirm-code.dto";
 import { ApiOperation } from "@nestjs/swagger";
+import { Roles } from "@modules/authentication/others";
+import { UserRole } from "@modules/user/others/enums/user.enums";
 
 @Controller({ 
     path: "verification"
@@ -30,14 +32,17 @@ export class ContactVerificationController {
     //     }
     // };
 
-    @Put()
+    @Put(":id")
+    @Roles([UserRole.ADMIN, UserRole.USER])
     @ApiOperation({ summary: "Realiza a validação do token de verificação enviado para o usuário" })
     public async confirmCode(
+        @Param("id") contactId: number,
         @Body() request: ConfirmCodeRequestDTO,
         @Res() res: Response,
-        @Headers() headers: Record<string, string>
+        @Req() req
     ) {
-        const data = this.service.confirmCode(request, headers['authorization']);
+        const userAttemptingValidation: string = req.user.username;
+        const data = this.service.confirmCode(contactId, request, userAttemptingValidation);
         return res.status(HttpStatus.OK).send(data);
     };
 
