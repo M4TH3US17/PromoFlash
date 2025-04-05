@@ -60,15 +60,27 @@ export class UserService {
 
         let userToBeCreated: UserEntity = mapUserRequestToEntity(request);
         userToBeCreated.password = await hashPassword(userToBeCreated.password);
-        
-        
+
         const userCreated: UserEntity = await this.repository.save(userToBeCreated);
         userToBeCreated.phones.forEach(async (phone: PhoneEntity, index: number) => {
             if (index <= 1) {
                 let verificationCode: number = generateRandomCode();
                 let message: string = `[USUÁRIO] Olá, seu código de verificação PromoFlash é: ${verificationCode}`;
-                
-                await this.phoneRepository.save(mapPhoneRequestToEntity(phone));
+
+                let phoneAlreadyInUse = await this.phoneRepository.findOne({
+                    where: {
+                        ddd: phone.ddd,
+                        countryCode: phone.countryCode,
+                        number: phone.number
+                    }
+                });
+
+                if (phoneAlreadyInUse) // tentativa de cadastro com um contato existente. Não criar um novo contato, apenas reutilizar.
+                    message = `[USUÁRIO] Olá, verificamos que houve uma tentativa de cadastro no nosso aplicativo PromoFlash
+                    utilizando seu contato. Se foi você, confirme no app este código: ${verificationCode}`;
+                else
+                    await this.phoneRepository.save(mapPhoneRequestToEntity(phone));
+
                 await this.contactVerificationRepository.save({
                     used_at: null,
                     user: userCreated,
@@ -78,13 +90,14 @@ export class UserService {
                     contact_type: ContactType.SMS,
                     expired_at: moment().add(5, 'minutes').toDate()
                 });
-                
+
                 // this.SMSService.sendSMS(formatPhoneNumberToSendSMS(phone), message);
             }
         });
+
         return mapUserEntityToDTO(userCreated);
     };
-    
+
     public async existsByUsername(username: string): Promise<boolean> {
         const userFound: UserEntity = await this.repository.findOne({
             where: { username: Raw(alias => `REPLACE(LOWER(${alias}), ' ', '') = REPLACE(LOWER(:username), ' ', '')`, { username }) }

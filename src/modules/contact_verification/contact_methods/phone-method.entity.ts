@@ -24,7 +24,7 @@ export class PhoneEntity extends BaseEntity {
         foreignKeyConstraintName: "fk_phone_user",
         referencedColumnName: "id"
     })
-    @ManyToOne(() => UserEntity, (user) => user.phones)
+    @ManyToOne(() => UserEntity, (user) => user.phones, { cascade: false })
     user?: UserEntity
 
     @JoinColumn({ 
@@ -32,7 +32,7 @@ export class PhoneEntity extends BaseEntity {
         foreignKeyConstraintName: "fk_phone_establishment",
         referencedColumnName: "id"
     })
-    @ManyToOne(() => EstablishmentEntity, (establishment) => establishment.phones)
+    @ManyToOne(() => EstablishmentEntity, (establishment) => establishment.phones, { cascade: false })
     establishment?: EstablishmentEntity
 
 };

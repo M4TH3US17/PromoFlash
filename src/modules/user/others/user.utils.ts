@@ -11,10 +11,11 @@ import { mapEmailEntityToDTO, mapEmailRequestToEntity, mapPhoneEntityToDTO, mapP
 import { ResponseEstablishmentDTO } from "@modules/establishment/others/dto/response-establishment.dto";
 import { EstablishmentEntity } from "@modules/establishment/establishment.entity";
 import { mapEstablishmentEntityToDTO } from "@modules/establishment/others";
-import { UserRole } from "./enums/user.enums";
+import { UserRole } from "./enums/user-role.enum";
 import { CreateAddressRequestDTO } from "@modules/address/others/dto/create-address.dto";
 import { CreateEmailRequestDTO } from "@modules/contact_verification/others/dto/create-email.dto";
 import { CreatePhoneRequestDTO } from "@modules/contact_verification/others/dto/create-phone.dto";
+import { AccountStatus } from "../../../shared/enums/account-status.enum";
 
 export function mapUserRequestToEntity(request: CreateUserRequestDTO): UserEntity {
     const addresses: AddressEntity[] = request.addresses ? request.addresses.map((dto: CreateAddressRequestDTO) => mapAddressRequestToEntity(dto)) : [];
@@ -24,10 +25,11 @@ export function mapUserRequestToEntity(request: CreateUserRequestDTO): UserEntit
     return {
          username: request.username,
          password: request.password,
-         role: UserRole.USER,
-         addresses: addresses,
          emails: emails,
          phones: phones,
+         addresses: addresses,
+         role: UserRole.USER,
+         accountStatus: AccountStatus.PENDING,
     } 
 };
 

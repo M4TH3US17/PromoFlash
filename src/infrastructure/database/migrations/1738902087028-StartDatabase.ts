@@ -151,9 +151,7 @@ export class StartDatabase1738902087028 implements MigrationInterface {
                 deleted_at TIMESTAMP    DEFAULT NULL,
                 username   VARCHAR(255) NOT NULL,
                 password   VARCHAR(255) NOT NULL,
-                role       VARCHAR(255) CHECK (role IN ('USER', 'ADMIN')) DEFAULT 'USER',
-                status     common.status NOT NULL DEFAULT 'ACTIVE',
-                contact_fk INT
+                role       VARCHAR(255) CHECK (role IN ('USER', 'ADMIN')) DEFAULT 'USER'
             );`);
 
         console.log(`\n[StartDatabase1738902087028] Criando tabela "user_addresses"`);
@@ -207,12 +205,10 @@ export class StartDatabase1738902087028 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE product_management.establishments_products ADD CONSTRAINT pk_establishments_products PRIMARY KEY (establishment_fk, product_fk);`);
 
         console.log(`\n[StartDatabase1738902087028] Criando CONSTRAINTS das Foreign Keys...`);
-        await queryRunner.query(`ALTER TABLE product_management.establishments ADD CONSTRAINT fk_establishment_contact FOREIGN KEY (contact_fk) REFERENCES common.contacts (id) ON DELETE SET NULL`);
         await queryRunner.query(`ALTER TABLE product_management.establishments ADD CONSTRAINT fk_establishment_address FOREIGN KEY (address_fk) REFERENCES common.addresses (id) ON DELETE SET NULL`);
         await queryRunner.query(`ALTER TABLE promotion_management.promotions ADD CONSTRAINT fk_promotions_establishment FOREIGN KEY (establishment_fk) REFERENCES product_management.establishments (id) ON DELETE CASCADE`);
         await queryRunner.query(`ALTER TABLE promotion_management.promotion_products ADD CONSTRAINT fk_promotion_products_promotion FOREIGN KEY (promotion_fk) REFERENCES promotion_management.promotions (id) ON DELETE CASCADE`);
         await queryRunner.query(`ALTER TABLE promotion_management.promotion_products ADD CONSTRAINT fk_promotion_products_product FOREIGN KEY (product_fk) REFERENCES product_management.products (id) ON DELETE CASCADE`);
-        await queryRunner.query(`ALTER TABLE user_management.users ADD CONSTRAINT fk_user_contact FOREIGN KEY (contact_fk) REFERENCES common.contacts (id) ON DELETE CASCADE`);
         await queryRunner.query(`ALTER TABLE user_management.user_addresses ADD CONSTRAINT fk_user_addresses_user FOREIGN KEY (user_fk) REFERENCES user_management.users (id) ON DELETE CASCADE`);
         await queryRunner.query(`ALTER TABLE user_management.user_addresses ADD CONSTRAINT fk_user_addresses_address FOREIGN KEY (address_fk) REFERENCES common.addresses (id) ON DELETE CASCADE`);
         await queryRunner.query(`ALTER TABLE user_management.user_establishments ADD CONSTRAINT fk_user_establishments_user FOREIGN KEY (user_fk) REFERENCES user_management.users (id) ON DELETE CASCADE`);

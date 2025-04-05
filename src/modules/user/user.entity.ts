@@ -1,6 +1,6 @@
 import { BaseEntity } from "src/shared/bases/base.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne } from "typeorm";
-import { UserRole } from "./others/enums/user.enums";
+import { UserRole } from "./others/enums/user-role.enum";
 import { AddressEntity } from "../address/address.entity";
 import { Status } from "src/shared/enums/status";
 import { EstablishmentEntity } from "../establishment/establishment.entity";
@@ -8,9 +8,10 @@ import { SCHEMA } from "src/infrastructure/database/enums/schemas";
 import { Exclude } from "class-transformer";
 import { ContactVerificationEntity } from "@modules/contact_verification/contact-verification.entity";
 import { EmailEntity, PhoneEntity } from "@modules/contact_verification/contact_methods";
+import { AccountStatus } from "../../shared/enums/account-status.enum";
 
-@Entity({ 
-    schema: SCHEMA.USER, 
+@Entity({
+    schema: SCHEMA.USER,
     name: "users",
 })
 export class UserEntity extends BaseEntity {
@@ -24,9 +25,14 @@ export class UserEntity extends BaseEntity {
     @Column({ type: "enum", enum: UserRole, default: UserRole.USER })
     role: UserRole;
 
-   // @Column({ type: "enum", enum: Status, default: Status.ACTIVE })
-   // status: Status;
-    
+    @Column({
+        type: "enum",
+        enum: AccountStatus,
+        default: AccountStatus.PENDING,
+        name: "account_status",
+    })
+    accountStatus: AccountStatus;
+
     @JoinTable({
         schema: SCHEMA.USER,
         name: "user_addresses",

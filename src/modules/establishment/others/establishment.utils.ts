@@ -13,6 +13,7 @@ import { CreateEmailRequestDTO } from "@modules/contact_verification/others/dto/
 import { CreatePhoneRequestDTO } from "@modules/contact_verification/others/dto/create-phone.dto";
 import { capitalize } from "@shared/utils/global.utils";
 import { HttpException, HttpStatus } from "@nestjs/common";
+import { AccountStatus } from "@shared/enums/account-status.enum";
 
 
 export function mapEstablishmentEntityToDTO(entity: EstablishmentEntity): ResponseEstablishmentDTO {
@@ -47,6 +48,7 @@ export function mapEstablishmentRequestToEntity(dto: CreateEstablishmentRequestD
         stars: 0,
         phones: phones,
         emails: emails,
+        establishmentStatus: AccountStatus.PENDING,
         address: dto.address ? mapAddressRequestToEntity(dto.address) : null,
         establishmentType: dto.establishmentType,
     } 

@@ -26,7 +26,7 @@ export class EmailEntity extends BaseEntity {
         foreignKeyConstraintName: "fk_email_establishment",
         referencedColumnName: "id"
     })
-    @ManyToOne(() => EstablishmentEntity, (establishment) => establishment.emails)
+    @ManyToOne(() => EstablishmentEntity, (establishment) => establishment.emails, { cascade: false })
     establishment?: EstablishmentEntity
 
 };

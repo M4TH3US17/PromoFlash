@@ -9,7 +9,7 @@ import { UserPaginationDTO } from './others/dto/pagination-user.dto';
 import { UseCaseResponseDTO } from '@shared/bases/usecase-response.dto';
 import { PaginatedList } from '@shared/types/pagination.types';
 import { Roles } from '@modules/authentication/others';
-import { UserRole } from './others/enums/user.enums';
+import { UserRole } from './others/enums/user-role.enum';
 
 @Controller({path: "users"})
 export class UserController {

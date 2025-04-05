@@ -5,7 +5,7 @@ import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 import { IS_PUBLIC_KEY } from '../authentication-consts';
 import "dotenv/config";
-import { UserRole } from '@modules/user/others/enums/user.enums';
+import { UserRole } from '@modules/user/others/enums/user-role.enum';
 
 @Injectable()
 export class RolesGuard implements CanActivate {

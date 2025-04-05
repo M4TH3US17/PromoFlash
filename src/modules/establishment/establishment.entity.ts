@@ -5,6 +5,7 @@ import { PromotionEntity } from "../promotion/promotion.entity";
 import { SCHEMA } from "@infrastructure/database/enums/schemas";
 import { EstablishmentType } from "./others/enums/establishment-type.enum";
 import { EmailEntity, PhoneEntity } from "@modules/contact_verification/contact_methods";
+import { AccountStatus } from "@shared/enums/account-status.enum";
 @Entity({
     schema: SCHEMA.PRODUCT,
     name: "establishments",
@@ -28,6 +29,15 @@ export class EstablishmentEntity extends BaseEntity {
     
     // @Column(() => EstablishmentValidationsEntity)
     // validations: EstablishmentValidationsEntity;
+
+    @Column({
+        type: "enum",
+        enum: AccountStatus,
+        default: AccountStatus.PENDING,
+        name: "establishment_status",
+    })
+    establishmentStatus: AccountStatus;
+
 
     @Column({
         name: "establishment_validate_status",

@@ -18,7 +18,7 @@ export class ContactVerificationEntity extends BaseEntity {
     @Column({ type: "timestamp", name: "expired_at", nullable: false })
     expired_at: Date;
 
-    @Column({ type: "timestamp", name: "used_at", nullable: false })
+    @Column({ type: "timestamp", name: "used_at", nullable: true })
     used_at: Date;
 
     @Column({ type: "enum", enum: ContactType, default: ContactType.SMS })
