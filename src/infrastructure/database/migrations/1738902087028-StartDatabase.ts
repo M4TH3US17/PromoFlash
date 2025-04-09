@@ -175,6 +175,7 @@ export class StartDatabase1738902087028 implements MigrationInterface {
             CREATE TABLE common.emails (
                 id               SERIAL    PRIMARY KEY,
                 email            VARCHAR   NOT NULL,
+                receive_email_notifications BOOLEAN DEFAULT FALSE,
                 created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 deleted_at       TIMESTAMP DEFAULT NULL,
@@ -189,6 +190,9 @@ export class StartDatabase1738902087028 implements MigrationInterface {
                 country_code            VARCHAR(3) NOT NULL,
                 ddd                     VARCHAR(2) NOT NULL,
                 number                  VARCHAR(9) NOT NULL,
+                receive_whatsapp_notifications BOOLEAN DEFAULT FALSE,
+                receive_sms_notifications      BOOLEAN DEFAULT FALSE,
+                receive_telegram_notifications BOOLEAN DEFAULT FALSE,
                 created_at              TIMESTAMP  DEFAULT CURRENT_TIMESTAMP,
                 updated_at              TIMESTAMP  DEFAULT CURRENT_TIMESTAMP,
                 deleted_at              TIMESTAMP  DEFAULT NULL,

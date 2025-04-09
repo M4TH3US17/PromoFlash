@@ -26,12 +26,16 @@ export function mapPhoneRequestToEntity(request: CreatePhoneRequestDTO): PhoneEn
         ddd: keepOnlyNumbers(request.ddd),
         countryCode: countryCodeFormatted,
         number: keepOnlyNumbers(request.number),
+        receiveSmsNotifications: false,
+        receiveTelegramNotifications: false,
+        receiveWhatsappNotifications: false
     }
 };
 
 export function mapEmailRequestToEntity(request: CreateEmailRequestDTO): EmailEntity {
     return {
         email: request.email,
+        receiveEmailNotifications: false
     }
 };
 
@@ -40,6 +44,7 @@ export function mapEmailEntityToDTO(entity: EmailEntity): ResponseEmailDTO {
     return {
         id: entity.id,
         email: entity.email,
+        receiveEmailNotifications: entity.receiveEmailNotifications
     }
 }; 
 
@@ -49,5 +54,8 @@ export function mapPhoneEntityToDTO(entity: PhoneEntity): ResponsePhoneDTO {
         ddd: entity.ddd,
         countryCode: entity.countryCode,
         number: entity.number,
+        receiveSmsNotifications: entity.receiveSmsNotifications,
+        receiveTelegramNotifications: entity.receiveTelegramNotifications,
+        receiveWhatsappNotifications: entity.receiveWhatsappNotifications
     }
 }; 

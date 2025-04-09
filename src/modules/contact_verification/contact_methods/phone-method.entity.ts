@@ -19,6 +19,16 @@ export class PhoneEntity extends BaseEntity {
     @Column({ length: 9 })
     number: string;
 
+    // Notification preference flags
+    @Column({ name: "receive_whatsapp_notifications", default: false })
+    receiveWhatsappNotifications: boolean;
+
+    @Column({ name: "receive_sms_notifications", default: false })
+    receiveSmsNotifications: boolean;
+
+    @Column({ name: "receive_telegram_notifications", default: false })
+    receiveTelegramNotifications: boolean;
+
     @JoinColumn({ 
         name: "user_fk",
         foreignKeyConstraintName: "fk_phone_user",

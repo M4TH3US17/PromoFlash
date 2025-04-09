@@ -21,6 +21,10 @@ export class EmailEntity extends BaseEntity {
     @ManyToOne(() => UserEntity, (user) => user.emails)
     user?: UserEntity
 
+    // Notification preference flags
+    @Column({ name: "receive_email_notifications", default: false })
+    receiveEmailNotifications: boolean;
+
     @JoinColumn({ 
         name: "establishment_fk",
         foreignKeyConstraintName: "fk_email_establishment",
