@@ -19,6 +19,9 @@ export class PhoneEntity extends BaseEntity {
     @Column({ length: 9 })
     number: string;
 
+    @Column({ name: "confirmed ", default: false })
+    confirmed: boolean;
+
     // Notification preference flags
     @Column({ name: "receive_whatsapp_notifications", default: false })
     receiveWhatsappNotifications: boolean;

@@ -26,15 +26,17 @@ export function mapPhoneRequestToEntity(request: CreatePhoneRequestDTO): PhoneEn
         ddd: keepOnlyNumbers(request.ddd),
         countryCode: countryCodeFormatted,
         number: keepOnlyNumbers(request.number),
+        confirmed: false,
         receiveSmsNotifications: false,
         receiveTelegramNotifications: false,
-        receiveWhatsappNotifications: false
+        receiveWhatsappNotifications: false,
     }
 };
 
 export function mapEmailRequestToEntity(request: CreateEmailRequestDTO): EmailEntity {
     return {
         email: request.email,
+        confirmed: false,
         receiveEmailNotifications: false
     }
 };

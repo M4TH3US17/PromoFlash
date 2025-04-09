@@ -13,6 +13,9 @@ export class EmailEntity extends BaseEntity {
     @Column({ type: "varchar", name: "email" })
     email: string;
 
+    @Column({ name: "confirmed ", default: false })
+    confirmed: boolean;
+
     @JoinColumn({ 
         name: "user_fk",
         foreignKeyConstraintName: "fk_email_user",

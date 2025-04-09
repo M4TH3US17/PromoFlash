@@ -15,8 +15,6 @@ import { ContactVerificationEntity } from "@modules/contact_verification/contact
 import { OwnerType } from "@modules/contact_verification/others/enums/owner-type.enum";
 import { TokenType } from "@modules/contact_verification/others/enums/token-type.enum";
 import { ContactType } from "@modules/contact_verification/others/enums/contact-type.enum";
-import { formatPhoneNumberToSendSMS } from "@infrastructure/external_services/twilio/sms/sms.utils";
-import moment from 'moment';
 
 @Injectable()
 export class UserService {
@@ -64,8 +62,8 @@ export class UserService {
         userToBeCreated.password = await hashPassword(userToBeCreated.password);
 
         const userCreated: UserEntity = await this.repository.save(userToBeCreated);
-        this.createUserPhones(userToBeCreated.phones, userCreated);
-        this.createUserEmail(userCreated.emails, userCreated);
+        this.createUserPhones(userCreated.phones, userCreated);
+        this.createUserEmails(userCreated.emails, userCreated);
 
         return mapUserEntityToDTO(userCreated);
     };
@@ -114,7 +112,7 @@ export class UserService {
         });
     };
 
-    private async createUserEmail(emails: EmailEntity[], userOwner: UserEntity) {
+    private async createUserEmails(emails: EmailEntity[], userOwner: UserEntity) {
         emails.forEach(async (email: EmailEntity, index: number) => {
             if (index <= 1) {
                 let verificationCode: number = generateRandomCode();
