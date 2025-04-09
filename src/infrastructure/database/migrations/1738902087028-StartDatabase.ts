@@ -36,13 +36,6 @@ export class StartDatabase1738902087028 implements MigrationInterface {
                     'BRANCH', 
                     'FRANCHISE'
                 );`);
-                
-        // await queryRunner.query(`
-        // CREATE TYPE product_management.establishment_validate_status AS ENUM (
-        //     '0', -- Não confiável (informações insuficientes ou inválidas)
-        //     '1', -- Válido (informações verificadas e confirmadas)
-        //     '2'  -- Em análise (pendente de verificação ou validação)
-        // );`);
 
         console.log(`\n[StartDatabase1738902087028] Criando tabela "addresses"`);
         await queryRunner.query(`
@@ -190,6 +183,68 @@ export class StartDatabase1738902087028 implements MigrationInterface {
             category         product_management.product_category NOT NULL DEFAULT 'OTHER'
         );`);
 
+        await queryRunner.query(`
+            CREATE TABLE common.emails (
+                id               SERIAL    PRIMARY KEY,
+                email            VARCHAR   NOT NULL,
+                created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                deleted_at       TIMESTAMP DEFAULT NULL,
+                user_fk          INTEGER,
+                establishment_fk INTEGER
+            );
+        `);
+
+        await queryRunner.query(`
+            CREATE TABLE common.phones (
+                id                      SERIAL     PRIMARY KEY,
+                country_code            VARCHAR(3) NOT NULL,
+                ddd                     VARCHAR(2) NOT NULL,
+                number                  VARCHAR(9) NOT NULL,
+                created_at              TIMESTAMP  DEFAULT CURRENT_TIMESTAMP,
+                updated_at              TIMESTAMP  DEFAULT CURRENT_TIMESTAMP,
+                deleted_at              TIMESTAMP  DEFAULT NULL,
+                user_fk                 INTEGER,
+                establishment_fk        INTEGER
+            );
+        `);
+
+        queryRunner.query(`
+            CREATE TYPE common.contact_type AS ENUM ('SMS', 'EMAIL');
+            CREATE TYPE common.owner_type AS ENUM ('USER', 'ESTABLISHMENT');
+            CREATE TYPE common.token_type AS ENUM ('RECOVERY', 'CONFIRMATION');
+
+            CREATE TABLE common.contact_verification (
+                id           SERIAL,
+                token        INTEGER               NOT NULL,
+                expired_at   TIMESTAMP             NOT NULL,
+                used_at      TIMESTAMP             NOT NULL,
+                contact_type common.contact_type   NOT NULL DEFAULT 'SMS',
+                owner_type   common.owner_type     NOT NULL DEFAULT 'ESTABLISHMENT',
+                token_type   common.token_type     NOT NULL DEFAULT 'CONFIRMATION',
+                user_fk      INT                   NOT NULL,
+                created_at   TIMESTAMP DEFAULT     CURRENT_TIMESTAMP,
+                updated_at   TIMESTAMP DEFAULT     CURRENT_TIMESTAMP,
+                deleted_at   TIMESTAMP DEFAULT     NULL
+            );    
+        `);
+
+        queryRunner.query(`
+            CREATE TYPE common.account_status AS ENUM (
+                'PENDING',
+                'ACTIVE',
+                'INACTIVE',
+                'SUSPENDED',
+                'BANNED',
+                'UNDER_REVIEW',
+                'LOCKED',
+                'DELETED'
+            );
+            
+            ALTER TABLE user_management.users ADD COLUMN IF NOT EXISTS account_status common.account_status NOT NULL DEFAULT 'PENDING';
+            ALTER TABLE product_management.establishments ADD COLUMN IF NOT EXISTS status common.account_status NOT NULL DEFAULT 'PENDING';
+        `);
+
         console.log(`\n[StartDatabase1738902087028] Criando CONSTRAINTS das Primary Keys...`);
         await queryRunner.query(`ALTER TABLE common.addresses ADD CONSTRAINT pk_addresses PRIMARY KEY (id);`);
         await queryRunner.query(`ALTER TABLE common.contacts ADD CONSTRAINT pk_contacts PRIMARY KEY (id);`);
@@ -203,6 +258,7 @@ export class StartDatabase1738902087028 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE user_management.user_establishments ADD CONSTRAINT pk_user_establishments PRIMARY KEY (user_fk, establishments_fk);`);
         await queryRunner.query(`ALTER TABLE product_management.establishments_customers ADD CONSTRAINT pk_establishments_customers PRIMARY KEY (user_fk, establishment_fk);`);
         await queryRunner.query(`ALTER TABLE product_management.establishments_products ADD CONSTRAINT pk_establishments_products PRIMARY KEY (establishment_fk, product_fk);`);
+        await queryRunner.query(`ALTER TABLE common.contact_verification ADD CONSTRAINT pk_contact_verification PRIMARY KEY (id)`);
 
         console.log(`\n[StartDatabase1738902087028] Criando CONSTRAINTS das Foreign Keys...`);
         await queryRunner.query(`ALTER TABLE product_management.establishments ADD CONSTRAINT fk_establishment_address FOREIGN KEY (address_fk) REFERENCES common.addresses (id) ON DELETE SET NULL`);
@@ -217,7 +273,11 @@ export class StartDatabase1738902087028 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE product_management.establishments_customers ADD CONSTRAINT fk_establishments_customers_establishment FOREIGN KEY (establishment_fk) REFERENCES product_management.establishments (id) ON DELETE CASCADE`);
         await queryRunner.query(`ALTER TABLE product_management.establishments_products ADD CONSTRAINT fk_establishments_products_establishment FOREIGN KEY (establishment_fk) REFERENCES product_management.establishments (id) ON DELETE CASCADE`);
         await queryRunner.query(`ALTER TABLE product_management.establishments_products ADD CONSTRAINT fk_establishments_products_product FOREIGN KEY (product_fk) REFERENCES product_management.products (id) ON DELETE CASCADE`);
-
+        await queryRunner.query(`ALTER TABLE common.contact_verification ADD CONSTRAINT fk_contact_veri_user FOREIGN KEY (user_fk) REFERENCES user_management.users (id) ON DELETE SET NULL`);
+        await queryRunner.query(`ALTER TABLE common.emails ADD CONSTRAINT fk_email_user FOREIGN KEY (user_fk) REFERENCES user_management.users(id) ON DELETE CASCADE`);
+        await queryRunner.query(`ALTER TABLE common.emails ADD CONSTRAINT fk_email_establi FOREIGN KEY (establishment_fk) REFERENCES product_management.establishments(id) ON DELETE CASCADE`);
+        await queryRunner.query(`ALTER TABLE common.phones ADD CONSTRAINT fk_phone_user FOREIGN KEY (user_fk) REFERENCES user_management.users(id) ON DELETE CASCADE`);
+        await queryRunner.query(`ALTER TABLE common.phones ADD CONSTRAINT fk_phone_establi FOREIGN KEY (establishment_fk) REFERENCES product_management.establishments(id) ON DELETE CASCADE`);
     };
 
     public async down(queryRunner: QueryRunner): Promise<void> {
@@ -258,6 +318,22 @@ export class StartDatabase1738902087028 implements MigrationInterface {
 
         console.log(`[StartDatabase1738902087028] Deletando tabela "users"`);
         await queryRunner.dropTable("users", true, true, true);
+
+        await queryRunner.query(`DROP TABLE common.emails`);
+        await queryRunner.query(`DROP TABLE common.phones`);
+
+        await queryRunner.query(`ALTER TABLE common.contact_verification DROP CONSTRAINT IF EXISTS pk_contact_verification`);
+        await queryRunner.query(`DROP TYPE IF EXISTS common.token_type`);
+        await queryRunner.query(`DROP TYPE IF EXISTS common.owner_type`);
+        await queryRunner.query(`DROP TYPE IF EXISTS common.contact_type`);
+
+        await queryRunner.query(`
+            ALTER TABLE user_management.users DROP COLUMN IF EXISTS account_status;
+            ALTER TABLE product_management.establishments DROP COLUMN IF EXISTS status;
+        `);
+        await queryRunner.query(`
+            DROP TYPE IF EXISTS common.account_status;
+        `);
     };
 
 };
