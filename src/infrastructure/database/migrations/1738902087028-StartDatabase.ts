@@ -218,7 +218,7 @@ export class StartDatabase1738902087028 implements MigrationInterface {
                 id           SERIAL,
                 token        INTEGER               NOT NULL,
                 expired_at   TIMESTAMP             NOT NULL,
-                used_at      TIMESTAMP             NOT NULL,
+                used_at      TIMESTAMP             NULL,
                 contact_type common.contact_type   NOT NULL DEFAULT 'SMS',
                 owner_type   common.owner_type     NOT NULL DEFAULT 'ESTABLISHMENT',
                 token_type   common.token_type     NOT NULL DEFAULT 'CONFIRMATION',

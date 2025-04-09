@@ -6,13 +6,14 @@ import { UserService } from './user.service';
 import { AddressEntity } from '@modules/address/address.entity';
 import { TwilioSMSService } from '@infrastructure/external_services/twilio/sms/sms.service';
 import { ContactVerificationEntity } from '@modules/contact_verification/contact-verification.entity';
-import { PhoneEntity } from '@modules/contact_verification/contact_methods';
+import { EmailEntity, PhoneEntity } from '@modules/contact_verification/contact_methods';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([ 
       UserEntity,
       PhoneEntity,
+      EmailEntity,
       ContactVerificationEntity,
       AddressEntity,
      ]),

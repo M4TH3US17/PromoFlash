@@ -8,8 +8,8 @@ import { mapUserEntityToDTO, mapUserRequestToEntity } from "./others";
 import { UserPaginationDTO } from "./others/dto/pagination-user.dto";
 import { AddressEntity } from "@modules/address/address.entity";
 import { TwilioSMSService } from "@infrastructure/external_services/twilio/sms/sms.service";
-import { PhoneEntity } from "@modules/contact_verification/contact_methods";
-import { generateRandomCode, mapPhoneRequestToEntity } from "@modules/contact_verification/others";
+import { EmailEntity, PhoneEntity } from "@modules/contact_verification/contact_methods";
+import { generateRandomCode, mapEmailRequestToEntity, mapPhoneRequestToEntity } from "@modules/contact_verification/others";
 import { hashPassword } from "@modules/authentication/authentication.utils";
 import { ContactVerificationEntity } from "@modules/contact_verification/contact-verification.entity";
 import { OwnerType } from "@modules/contact_verification/others/enums/owner-type.enum";
@@ -30,6 +30,8 @@ export class UserService {
         private readonly addressRepository: Repository<AddressEntity>,
         @InjectRepository(PhoneEntity)
         private readonly phoneRepository: Repository<PhoneEntity>,
+        @InjectRepository(EmailEntity)
+        private readonly emailRepository: Repository<EmailEntity>,
         @InjectRepository(ContactVerificationEntity)
         private readonly contactVerificationRepository: Repository<ContactVerificationEntity>,
     ) { }
@@ -62,7 +64,23 @@ export class UserService {
         userToBeCreated.password = await hashPassword(userToBeCreated.password);
 
         const userCreated: UserEntity = await this.repository.save(userToBeCreated);
-        userToBeCreated.phones.forEach(async (phone: PhoneEntity, index: number) => {
+        this.createUserPhones(userToBeCreated.phones, userCreated);
+        this.createUserEmail(userCreated.emails, userCreated);
+
+        return mapUserEntityToDTO(userCreated);
+    };
+
+    public async existsByUsername(username: string): Promise<boolean> {
+        const userFound: UserEntity = await this.repository.findOne({
+            where: { username: Raw(alias => `REPLACE(LOWER(${alias}), ' ', '') = REPLACE(LOWER(:username), ' ', '')`, { username }) }
+        });
+
+        return userFound ? true : false;
+    };
+
+    // MÉTODOS AUXILIARES
+    private async createUserPhones(phones: PhoneEntity[], userOwner: UserEntity) {
+        phones.forEach(async (phone: PhoneEntity, index: number) => {
             if (index <= 1) {
                 let verificationCode: number = generateRandomCode();
                 let message: string = `[USUÁRIO] Olá, seu código de verificação PromoFlash é: ${verificationCode}`;
@@ -81,29 +99,49 @@ export class UserService {
                 else
                     await this.phoneRepository.save(mapPhoneRequestToEntity(phone));
 
-                await this.contactVerificationRepository.save({
+               await this.contactVerificationRepository.save({
                     used_at: null,
-                    user: userCreated,
+                    user: userOwner,
                     token: verificationCode,
                     owner_type: OwnerType.USER,
                     token_type: TokenType.CONFIRMATION,
                     contact_type: ContactType.SMS,
-                    expired_at: moment().add(5, 'minutes').toDate()
+                    expired_at: new Date(Date.now() + 5 * 60 * 1000)// moment().add(5, 'minutes').toDate()
                 });
 
                 // this.SMSService.sendSMS(formatPhoneNumberToSendSMS(phone), message);
             }
         });
-
-        return mapUserEntityToDTO(userCreated);
     };
 
-    public async existsByUsername(username: string): Promise<boolean> {
-        const userFound: UserEntity = await this.repository.findOne({
-            where: { username: Raw(alias => `REPLACE(LOWER(${alias}), ' ', '') = REPLACE(LOWER(:username), ' ', '')`, { username }) }
+    private async createUserEmail(emails: EmailEntity[], userOwner: UserEntity) {
+        emails.forEach(async (email: EmailEntity, index: number) => {
+            if (index <= 1) {
+                let verificationCode: number = generateRandomCode();
+                let message: string = `[USUÁRIO] Olá, seu código de verificação PromoFlash é: ${verificationCode}`;
+
+                let emailAlreadyInUse = await this.emailRepository.findOne({ where: { email: email.email } });
+
+                if (emailAlreadyInUse) // tentativa de cadastro com um contato existente. Não criar um novo contato, apenas reutilizar.
+                    message = `[USUÁRIO] Olá, verificamos que houve uma tentativa de cadastro no nosso aplicativo PromoFlash
+                    utilizando seu email. Se foi você, confirme no app este código: ${verificationCode}`;
+                else
+                    await this.emailRepository.save(mapEmailRequestToEntity(email));
+
+               await this.contactVerificationRepository.save({
+                    used_at: null,
+                    user: userOwner,
+                    token: verificationCode,
+                    owner_type: OwnerType.USER,
+                    token_type: TokenType.CONFIRMATION,
+                    contact_type: ContactType.EMAIL,
+                    expired_at: new Date(Date.now() + 5 * 60 * 1000)// moment().add(5, 'minutes').toDate()
+                });
+
+                // this.SMSService.sendSMS(formatPhoneNumberToSendSMS(phone), message);
+            }
         });
+    }
 
-        return userFound ? true : false;
-    };
 
 };
