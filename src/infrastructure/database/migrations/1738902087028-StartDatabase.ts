@@ -56,18 +56,6 @@ export class StartDatabase1738902087028 implements MigrationInterface {
                 updated_at     TIMESTAMP        DEFAULT CURRENT_TIMESTAMP NOT NULL
             );`);
 
-        console.log(`\n[StartDatabase1738902087028] Criando tabela "contacts"`);
-        await queryRunner.query(`
-            CREATE TABLE IF NOT EXISTS common.contacts (
-                id               SERIAL,
-                email            VARCHAR(255) NOT NULL,
-                first_contact    VARCHAR(50)  NOT NULL,
-                deleted_at TIMESTAMP    DEFAULT NULL,
-                second_contact   VARCHAR(50),
-                created_at     TIMESTAMP      DEFAULT CURRENT_TIMESTAMP NOT NULL,
-                updated_at     TIMESTAMP      DEFAULT CURRENT_TIMESTAMP NOT NULL
-            );`);
-
         console.log(`\n[StartDatabase1738902087028] Criando tabela "coupons"`);
         await queryRunner.query(`
             CREATE TABLE IF NOT EXISTS promotion_management.coupons (
@@ -247,7 +235,6 @@ export class StartDatabase1738902087028 implements MigrationInterface {
 
         console.log(`\n[StartDatabase1738902087028] Criando CONSTRAINTS das Primary Keys...`);
         await queryRunner.query(`ALTER TABLE common.addresses ADD CONSTRAINT pk_addresses PRIMARY KEY (id);`);
-        await queryRunner.query(`ALTER TABLE common.contacts ADD CONSTRAINT pk_contacts PRIMARY KEY (id);`);
         await queryRunner.query(`ALTER TABLE promotion_management.coupons ADD CONSTRAINT pk_coupons PRIMARY KEY (id);`);
         await queryRunner.query(`ALTER TABLE product_management.establishments ADD CONSTRAINT pk_establishments PRIMARY KEY (id);`);
         await queryRunner.query(`ALTER TABLE product_management.products ADD CONSTRAINT pk_products PRIMARY KEY (id);`);
@@ -291,9 +278,6 @@ export class StartDatabase1738902087028 implements MigrationInterface {
 
         console.log(`[StartDatabase1738902087028] Deletando tabela "addresses"`);
         await queryRunner.dropTable("addresses", true, true, true);
-
-        console.log(`[StartDatabase1738902087028] Deletando tabela "contacts"`);
-        await queryRunner.dropTable("contacts", true, true, true);
 
         console.log(`[StartDatabase1738902087028] Deletando tabela "coupons"`);
         await queryRunner.dropTable("coupons", true, true, true);
