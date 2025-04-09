@@ -1,54 +1,74 @@
 import { BaseEntity } from "src/shared/bases/base.entity";
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
-import { ContactEntity } from "../contact/contact.entity";
 import { AddressEntity } from "../address/address.entity";
-import { Status } from "src/shared/enums/status";
 import { PromotionEntity } from "../promotion/promotion.entity";
-import { SCHEMA } from "src/infrastructure/database/enums/schemas";
-
+import { SCHEMA } from "@infrastructure/database/enums/schemas";
+import { EstablishmentType } from "./others/enums/establishment-type.enum";
+import { EmailEntity, PhoneEntity } from "@modules/contact_verification/contact_methods";
+import { AccountStatus } from "@shared/enums/account-status.enum";
 @Entity({
     schema: SCHEMA.PRODUCT,
     name: "establishments",
 })
 export class EstablishmentEntity extends BaseEntity {
 
-    @Column({ unique: true })
-    cnpj: string;
+    @Column()
+    cnpj: string; 
 
     @Column()
     name: string;
 
+    @Column({ name: "business_name", comment: "nome fantasia da empresa" })
+    businessName: string;
+
+    @Column()
+    stars?: number;
+
     @Column()
     description: string;
+    
+    // @Column(() => EstablishmentValidationsEntity)
+    // validations: EstablishmentValidationsEntity;
 
-    @Column({ type: "enum", enum: Status, default: Status.ACTIVE })
-    status: Status;
-
-    @JoinColumn({
-        name: "contact_fk",
-        foreignKeyConstraintName: "fk_establishment_contact",
+    @Column({
+        type: "enum",
+        enum: AccountStatus,
+        default: AccountStatus.PENDING,
+        name: "establishment_status",
     })
-    @OneToOne(() => ContactEntity, (contact) => contact.establishment, { nullable: false, cascade: true })
-    contact: ContactEntity;
+    establishmentStatus: AccountStatus;
 
-    @JoinColumn({
+
+    @Column({
+        name: "establishment_validate_status",
+        default: 0
+    })
+    isValid?: number;
+    
+    @Column({
+        type: "enum",
+        name: "establishment_type",
+        enum: EstablishmentType,
+        default: EstablishmentType.HEADQUARTERS,
+        comment: "Tipo de estabelecimento, indicando se é a matriz, uma sub-matriz, filial ou uma franquia.",
+    })
+    establishmentType: EstablishmentType;
+
+    @JoinColumn({ 
         name: "address_fk",
+        referencedColumnName: "id",
         foreignKeyConstraintName: "fk_establishment_address",
     })
     @OneToOne(() => AddressEntity, (address) => address.establishment, { nullable: false, cascade: true })
     address: AddressEntity;
-
-    @OneToMany(() => PromotionEntity, (promotion) => promotion.establishment)
-    promotions: PromotionEntity[]
-
     
+    @OneToMany(() => PromotionEntity, (promotion) => promotion.establishment)
+    promotions?: PromotionEntity[]
+    
+    @OneToMany(() => PhoneEntity, (phones) => phones.establishment, { cascade: true })
+    phones: PhoneEntity[]
+
+    @OneToMany(() => EmailEntity, (emails) => emails.establishment, { cascade: true })
+    emails: EmailEntity[]
+
 };
-// @OneToMany(() => EstablishmentProduct, (products) => products.establishment)
-// products: EstablishmentProduct[];
-
-// @OneToMany(() => EstablishmentProduct, (products) => products.pk._establishment, { cascade: true })
-// _items: EstablishmentProduct[];
-
-// get products(): ProductEntity[] {
-//     return this._items.map((item: EstablishmentProduct) => item.product);
-// };

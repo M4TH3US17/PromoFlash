@@ -38,10 +38,10 @@ export class AddressEntity extends BaseEntity {
     @Column(() => LocationEntity)
     location: LocationEntity;
 
-    @ManyToMany(() => UserEntity, (user) => user.address)
-    users: UserEntity[];
+    @ManyToMany(() => UserEntity, (user) => user.addresses)
+    users?: UserEntity[];
 
     @OneToOne(() => EstablishmentEntity, (establishment) => establishment.address)
-    establishment: EstablishmentEntity;
+    establishment?: EstablishmentEntity;
 
 };

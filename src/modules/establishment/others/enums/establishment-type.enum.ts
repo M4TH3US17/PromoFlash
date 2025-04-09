@@ -1,0 +1,5 @@
+export enum EstablishmentType {
+    HEADQUARTERS = "HEADQUARTERS", 
+    SUB_HEADQUARTERS = "SUB_HEADQUARTERS",
+    BRANCH = "BRANCH"
+}

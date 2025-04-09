@@ -17,8 +17,8 @@ export class PromotionEntity extends BaseEntity {
     @Column({ nullable: false })
     description: string;
 
-    @Column({ type: "enum", enum: Status, default: Status.ACTIVE })
-    status: Status;
+    // @Column({ type: "enum", enum: Status, default: Status.ACTIVE })
+    // status: Status;
 
     // cupons ?
 

@@ -1,0 +1,28 @@
+{
+  "username": "Matheus Washington",
+  "password": "123",
+  "addresses": [
+    {
+      "street": "av. samaúma",
+      "number": 517,
+      "neighborhood": "Cidade Nova",
+      "city": "Manaus",
+      "state": "AM",
+      "cep": "69132-132",
+      "country": "Brasil",
+      "complement": "nada"
+    }
+  ],
+  "phones": [
+    {
+      "ddd": "92",
+      "countryCode": "+55",
+      "number": "986067356"
+    }
+  ],
+  "emails": [
+    {
+      "email": "matheusdalvino50@gmai.com"
+    }
+  ]
+}

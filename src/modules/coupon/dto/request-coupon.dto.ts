@@ -1,5 +1,6 @@
-import { PartialType } from "@nestjs/mapped-types";
+import { OmitType, PartialType } from "@nestjs/swagger";
+import { CouponEntity } from "../coupon.entity";
 
-export class CreateCouponRequestDTO { };
+export class CreateCouponRequestDTO extends OmitType(CouponEntity, ["createdAt", "updatedAt", "id"]) { };
 
 export class UpdateCouponRequestDTO extends PartialType(CreateCouponRequestDTO) { };
