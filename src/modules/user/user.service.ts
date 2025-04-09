@@ -82,6 +82,7 @@ export class UserService {
             if (index <= 1) {
                 let verificationCode: number = generateRandomCode();
                 let message: string = `[USUÁRIO] Olá, seu código de verificação PromoFlash é: ${verificationCode}`;
+                let phoneCreated = null;
 
                 let phoneAlreadyInUse = await this.phoneRepository.findOne({
                     where: {
@@ -95,7 +96,7 @@ export class UserService {
                     message = `[USUÁRIO] Olá, verificamos que houve uma tentativa de cadastro no nosso aplicativo PromoFlash
                     utilizando seu contato. Se foi você, confirme no app este código: ${verificationCode}`;
                 else
-                    await this.phoneRepository.save(mapPhoneRequestToEntity(phone));
+                    phoneCreated = await this.phoneRepository.save(mapPhoneRequestToEntity(phone));
 
                await this.contactVerificationRepository.save({
                     used_at: null,
@@ -104,6 +105,7 @@ export class UserService {
                     owner_type: OwnerType.USER,
                     token_type: TokenType.CONFIRMATION,
                     contact_type: ContactType.SMS,
+                    contactId: phoneAlreadyInUse ? phoneAlreadyInUse.id : phoneCreated.id,
                     expired_at: new Date(Date.now() + 5 * 60 * 1000)// moment().add(5, 'minutes').toDate()
                 });
 
@@ -117,14 +119,16 @@ export class UserService {
             if (index <= 1) {
                 let verificationCode: number = generateRandomCode();
                 let message: string = `[USUÁRIO] Olá, seu código de verificação PromoFlash é: ${verificationCode}`;
+                let emailCreated = null;
 
                 let emailAlreadyInUse = await this.emailRepository.findOne({ where: { email: email.email } });
 
                 if (emailAlreadyInUse) // tentativa de cadastro com um contato existente. Não criar um novo contato, apenas reutilizar.
                     message = `[USUÁRIO] Olá, verificamos que houve uma tentativa de cadastro no nosso aplicativo PromoFlash
                     utilizando seu email. Se foi você, confirme no app este código: ${verificationCode}`;
-                else
-                    await this.emailRepository.save(mapEmailRequestToEntity(email));
+                else {
+                    emailCreated = await this.emailRepository.save(mapEmailRequestToEntity(email));
+                }
 
                await this.contactVerificationRepository.save({
                     used_at: null,
@@ -133,6 +137,7 @@ export class UserService {
                     owner_type: OwnerType.USER,
                     token_type: TokenType.CONFIRMATION,
                     contact_type: ContactType.EMAIL,
+                    contactId: emailAlreadyInUse ? emailAlreadyInUse.id : emailCreated.id,
                     expired_at: new Date(Date.now() + 5 * 60 * 1000)// moment().add(5, 'minutes').toDate()
                 });
 

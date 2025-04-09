@@ -29,12 +29,15 @@ export class ContactVerificationEntity extends BaseEntity {
 
     @Column({ type: "enum", enum: TokenType, default: TokenType.CONFIRMATION })
     token_type: TokenType;
+
+    @Column({ type: "int", name: "contact_id", nullable: false })
+    contactId: number;
     
     @JoinColumn({
         name: "user_fk",
         referencedColumnName: "id",
         foreignKeyConstraintName: "fk_contact_veri_user"
-    })
+    }) 
     @ManyToOne(() => UserEntity, (user) => user.contactTokens)
     user: UserEntity
     

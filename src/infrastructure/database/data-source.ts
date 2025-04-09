@@ -33,7 +33,7 @@ export const AppDataSource = new DataSource({
         PhoneEntity,
         EmailEntity,
     ],
-    logging: true,
+    logging: false,
     synchronize: false,
     migrationsRun: true,
     migrationsTableName: "migrations",
