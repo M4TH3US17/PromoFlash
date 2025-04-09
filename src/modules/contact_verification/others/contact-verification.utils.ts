@@ -46,6 +46,7 @@ export function mapEmailEntityToDTO(entity: EmailEntity): ResponseEmailDTO {
     return {
         id: entity.id,
         email: entity.email,
+        confirmed: entity.confirmed,
         receiveEmailNotifications: entity.receiveEmailNotifications
     }
 }; 
@@ -56,6 +57,7 @@ export function mapPhoneEntityToDTO(entity: PhoneEntity): ResponsePhoneDTO {
         ddd: entity.ddd,
         countryCode: entity.countryCode,
         number: entity.number,
+        confirmed: entity.confirmed,
         receiveSmsNotifications: entity.receiveSmsNotifications,
         receiveTelegramNotifications: entity.receiveTelegramNotifications,
         receiveWhatsappNotifications: entity.receiveWhatsappNotifications

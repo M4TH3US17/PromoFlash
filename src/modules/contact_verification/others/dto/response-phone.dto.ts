@@ -3,6 +3,7 @@ export class ResponsePhoneDTO {
     ddd: string;
     countryCode: string;
     number: string;
+    confirmed: boolean;
     receiveWhatsappNotifications: boolean;
     receiveSmsNotifications: boolean;
     receiveTelegramNotifications: boolean;

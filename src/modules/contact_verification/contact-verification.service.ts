@@ -27,6 +27,8 @@ export class ContactVerificationService {
                 relations: ["user"]
             });
 
+        console.log(verification)
+
         if (!verification) // verifica se o token informado existe
             throw new HttpException(`Nenhuma verificação de contato cujo ID seja ${contactId} foi encontrado!`, HttpStatus.NOT_FOUND);
 

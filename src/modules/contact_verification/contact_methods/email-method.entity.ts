@@ -13,8 +13,12 @@ export class EmailEntity extends BaseEntity {
     @Column({ type: "varchar", name: "email" })
     email: string;
 
-    @Column({ name: "confirmed ", default: false })
+    @Column({ name: "confirmed", default: false })
     confirmed: boolean;
+
+    // Notification preference flags
+    @Column({ name: "receive_email_notifications", default: false })
+    receiveEmailNotifications: boolean;
 
     @JoinColumn({ 
         name: "user_fk",
@@ -24,9 +28,6 @@ export class EmailEntity extends BaseEntity {
     @ManyToOne(() => UserEntity, (user) => user.emails)
     user?: UserEntity
 
-    // Notification preference flags
-    @Column({ name: "receive_email_notifications", default: false })
-    receiveEmailNotifications: boolean;
 
     @JoinColumn({ 
         name: "establishment_fk",

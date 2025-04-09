@@ -19,7 +19,7 @@ export class PhoneEntity extends BaseEntity {
     @Column({ length: 9 })
     number: string;
 
-    @Column({ name: "confirmed ", default: false })
+    @Column({ name: "confirmed", default: false })
     confirmed: boolean;
 
     // Notification preference flags
