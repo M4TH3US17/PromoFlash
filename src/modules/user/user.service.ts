@@ -15,12 +15,14 @@ import { ContactVerificationEntity } from "@modules/contact_verification/contact
 import { OwnerType } from "@modules/contact_verification/others/enums/owner-type.enum";
 import { TokenType } from "@modules/contact_verification/others/enums/token-type.enum";
 import { ContactType } from "@modules/contact_verification/others/enums/contact-type.enum";
+import { TwilioWhatsappService } from "@infrastructure/external_services/twilio/whatsapp/whatsapp.service";
 
 @Injectable()
 export class UserService {
 
     constructor(
         private readonly SMSService: TwilioSMSService,
+        private readonly whatsappService: TwilioWhatsappService,
 
         @InjectRepository(UserEntity)
         private readonly repository: Repository<UserEntity>,
@@ -64,6 +66,11 @@ export class UserService {
         const userCreated: UserEntity = await this.repository.save(userToBeCreated);
         this.createUserPhones(userCreated.phones, userCreated);
         this.createUserEmails(userCreated.emails, userCreated);
+
+        await this.whatsappService.sendMessage(
+            '+559286067356', 
+            'Mensagem Recebida com sucesso ! (PromoFlash)'
+        );
 
         return mapUserEntityToDTO(userCreated);
     };
