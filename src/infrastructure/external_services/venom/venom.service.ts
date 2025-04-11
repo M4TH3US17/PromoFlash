@@ -1,3 +1,4 @@
+import { PhoneEntity } from '@modules/contact_verification/contact_methods';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as venom from 'venom-bot';
 
@@ -11,6 +12,7 @@ export class VenomWhatsappService implements OnModuleInit {
 
     private async initializeWhatsApp() {
         try {
+            console.log('Escaneie esse QRCode no seu Whatsapp');
             this.client = await venom.create({
                 session: 'session-name',
                 headless: 'new', // Usa o novo modo Headless
@@ -20,10 +22,10 @@ export class VenomWhatsappService implements OnModuleInit {
                     '--disable-dev-shm-usage'
                 ]
             });
-    
+
             console.log('Cliente WhatsApp inicializado com sucesso');
             this.setupListeners();
-        } catch (error) { 
+        } catch (error) {
             console.error('Erro ao inicializar cliente WhatsApp:', error);
         }
     }
@@ -38,30 +40,28 @@ export class VenomWhatsappService implements OnModuleInit {
 
     public async sendMessage(to: string, content: string) {
         try {
-            if (!this.client) {
+            if (!this.client)
                 throw new Error('Cliente WhatsApp não inicializado');
-            }
-            
-            if (!this.validatePhoneNumber(to)) {
-                throw new Error('Número de telefone inválido');
-            }
-            
-            const formattedTo = to.includes('@') ? to : `${to}@c.us`;
-            const result = await this.client.sendText(formattedTo, content);
-            
-            return { 
-                success: true,
-                messageId: result.id.id,
-                timestamp: result.timestamp
-            };
+
+            to = to.replace(/[^\d]/g, '');
+            let numberZDG = null;
+
+            const countryCode = to.substring(0, 2);
+            const ddd = to.substring(2, 4);
+            const number = to.slice(-8);
+
+            if (Number(ddd) <= 30)
+                numberZDG = `${countryCode}${ddd}9${number}@c.us`;
+            else
+                numberZDG = `${countryCode}${ddd}${number}@c.us`;
+
+            const result = await this.client.sendText(numberZDG, content);
+            console.log(result);
+
         } catch (error) {
             console.error('Erro ao enviar mensagem:', error);
             throw new Error(`Falha ao enviar mensagem: ${error.message}`);
         }
     }
 
-    private validatePhoneNumber(phone: string): boolean {
-        const regex = /^(\d{10,15})(@c\.us)?$/;
-        return regex.test(phone);
-    }
 }

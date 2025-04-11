@@ -12,6 +12,8 @@ import { Roles } from '@modules/authentication/others';
 import { UserRole } from './others/enums/user-role.enum';
 import { VenomWhatsappService } from '@infrastructure/external_services/venom/venom.service';
 import { ApiBody } from '@nestjs/swagger';
+import { PhoneEntity } from '@modules/contact_verification/contact_methods';
+import { CreatePhoneRequestDTO } from '@modules/contact_verification/others/dto/create-phone.dto';
 
 @Controller({path: "users"})
 export class UserController {
@@ -50,29 +52,10 @@ export class UserController {
 
     @Post('send')
     @ApiBody({
-        type: 'object',
-        schema: {
-          example: {
-            to: '5511999999999',
-            message: 'Olá, esta é uma mensagem de teste'
-          },
-          required: ['to', 'message'],
-          properties: {
-            to: {
-              type: 'string',
-              description: 'Número de telefone no formato internacional (ex: 5511999999999)',
-              example: '5511999999999'
-            },
-            message: {
-              type: 'string',
-              description: 'Texto da mensagem a ser enviada',
-              example: 'Olá, como vai você?'
-            }
-          }
-        }
       })
-    async sendMessage(@Body() body: { to: string; message: string }) {
-      return this.whatsappService.sendMessage(body.to, body.message);
+    async sendMessage(@Body() body: { phone: CreatePhoneRequestDTO; message: string }) {
+      const contact = `${body.phone.countryCode}${body.phone.ddd}${body.phone.number}`
+      return this.whatsappService.sendMessage(contact, body.message);
     }
 
 
