@@ -67,10 +67,10 @@ export class UserService {
         this.createUserPhones(userCreated.phones, userCreated);
         this.createUserEmails(userCreated.emails, userCreated);
 
-        await this.whatsappService.sendMessage(
-            '+559286067356', 
-            'Mensagem Recebida com sucesso ! (PromoFlash)'
-        );
+        // await this.whatsappService.sendMessage(
+        //     '+559286067356', 
+        //     'Mensagem Recebida com sucesso ! (PromoFlash)'
+        // );
 
         return mapUserEntityToDTO(userCreated);
     };

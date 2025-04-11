@@ -8,6 +8,7 @@ import { TwilioSMSService } from '@infrastructure/external_services/twilio/sms/s
 import { ContactVerificationEntity } from '@modules/contact_verification/contact-verification.entity';
 import { EmailEntity, PhoneEntity } from '@modules/contact_verification/contact_methods';
 import { TwilioWhatsappService } from '@infrastructure/external_services/twilio/whatsapp/whatsapp.service';
+import { VenomWhatsappService } from '@infrastructure/external_services/venom/venom.service';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { TwilioWhatsappService } from '@infrastructure/external_services/twilio/
 
     // usecases
     UserService,
+    VenomWhatsappService,
   ]
 })
 export class UserModule {}

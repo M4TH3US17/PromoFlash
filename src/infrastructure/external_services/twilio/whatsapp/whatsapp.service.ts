@@ -4,7 +4,7 @@ import * as twilio from 'twilio';
 @Injectable()
 export class TwilioWhatsappService {
 
-  async sendMessage(to: string, body: string, from: string = 'whatsapp:+14155238886') {
+  async sendMessage(to: string, body: string, from: string = '+14155238886') {
     try {
       const accountSid: string = process.env.TWILIO_ACCOUNT_SID;
       const authToken: string = process.env.TWILIO_AUTH_TOKEN;
@@ -12,17 +12,12 @@ export class TwilioWhatsappService {
 
       const message = await client.messages.create({
         to: `whatsapp:${to}`,
-        from,
+        from: `whatsapp:${from}`,
         body,
+        // contentVariables: '{"1":"12/1","2":"3pm"}',
+        // contentSid: 'HXb5b62575e6e4ff6129ad7c8efe1f983e',
       });
 
-      // const message = await client.messages.create({
-      //   to: 'whatsapp:+559286067356',
-      //   from: "whatsapp:+14155238886",
-      //   body: 'Your appointment is coming up on July 21 at 3PM',
-      //   //contentVariables: '{"1":"12/1","2":"3pm"}',
-      //   //contentSid: 'HXb5b62575e6e4ff6129ad7c8efe1f983e',
-      // });
       console.log(message);
     } catch (error) {
       console.error('Erro ao enviar Whatsapp:', error);
