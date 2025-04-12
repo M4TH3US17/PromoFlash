@@ -84,15 +84,8 @@ export class EstablishmentService {
         addressFound = await this.addressRepository.findOne({
             where: [
                 {
-                    cep: address.cep,
-                    city: address.city,
-                    country: address.country,
-                    neighborhood: address.neighborhood,
-                    state: address.state,
-                    number: address.number,
-                    street: address.street,
-                },
-                {
+                    address: address.address,
+                    place_id: address.place_id,
                     location: address.location,
                 }
             ]

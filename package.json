@@ -43,6 +43,7 @@
     "rxjs": "^7.8.1",
     "twilio": "^5.4.5",
     "typeorm": "^0.3.20",
+    "typeorm-transactional": "^0.5.0",
     "venom-bot": "^5.3.0",
     "zod": "^3.24.1"
   },

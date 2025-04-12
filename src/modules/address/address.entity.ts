@@ -5,43 +5,52 @@ import { UserEntity } from "../user/user.entity";
 import { EstablishmentEntity } from "../establishment/establishment.entity";
 import { SCHEMA } from "src/infrastructure/database/enums/schemas";
 
-@Entity({ 
-    schema: SCHEMA.COMMON, 
+@Entity({
+    schema: SCHEMA.COMMON,
     name: "addresses"
 })
 export class AddressEntity extends BaseEntity {
-
+    
     @Column()
-    street: string;
-
+    place_id: string;
+    
     @Column()
-    number:  number;
-
+    address: string;
+    
     @Column()
-    neighborhood: string;
-
-    @Column()
-    city: string;
-
-    @Column()
-    state: string;
-
-    @Column()
-    cep: string;
-
-    @Column()
-    country: string;
-
-    @Column()
-    complement: string;
-
+    description: string;
+    
     @Column(() => LocationEntity)
     location: LocationEntity;
-
+    
     @ManyToMany(() => UserEntity, (user) => user.addresses)
     users?: UserEntity[];
-
+    
     @OneToOne(() => EstablishmentEntity, (establishment) => establishment.address)
     establishment?: EstablishmentEntity;
-
+    
 };
+
+// @Column()
+// street: string;
+
+// @Column()
+// number:  number;
+
+// @Column()
+// neighborhood: string;
+
+// @Column()
+// city: string;
+
+// @Column()
+// state: string;
+
+// @Column()
+// cep: string;
+
+// @Column()
+// country: string;
+
+// @Column()
+// complement: string;

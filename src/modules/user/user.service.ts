@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserEntity } from "./user.entity";
-import { Raw, Repository } from "typeorm";
+import { DataSource, EntityManager, Raw, Repository } from "typeorm";
 import { CreateUserRequestDTO } from "./others/dto/create-user.dto";
 import { ResponseUserDTO } from "./others/dto/response-user.dto";
 import { mapUserEntityToDTO, mapUserRequestToEntity } from "./others";
@@ -21,6 +21,7 @@ import { TwilioWhatsappService } from "@infrastructure/external_services/twilio/
 export class UserService {
 
     constructor(
+        private readonly dataSource: DataSource, 
         private readonly SMSService: TwilioSMSService,
         private readonly whatsappService: TwilioWhatsappService,
 
@@ -55,24 +56,26 @@ export class UserService {
     };
 
     public async create(request: CreateUserRequestDTO): Promise<ResponseUserDTO> {
-        const userAlreadyExists: boolean = await this.existsByUsername(request.username);
+        return await this.dataSource.transaction(async transactional => {
+            const userAlreadyExists: boolean = await this.existsByUsername(request.username);
 
-        if (userAlreadyExists)
-            throw new HttpException(`Usuário de username ${request.username} já existe na base de dados!`, HttpStatus.CONFLICT);
+            if (userAlreadyExists)
+                throw new HttpException(`Usuário de username ${request.username} já existe na base de dados!`, HttpStatus.CONFLICT);
 
-        let userToBeCreated: UserEntity = mapUserRequestToEntity(request);
-        userToBeCreated.password = await hashPassword(userToBeCreated.password);
+            let userToBeCreated: UserEntity = mapUserRequestToEntity(request);
+            userToBeCreated.password = await hashPassword(userToBeCreated.password);
 
-        const userCreated: UserEntity = await this.repository.save(userToBeCreated);
-        this.createUserPhones(userCreated.phones, userCreated);
-        this.createUserEmails(userCreated.emails, userCreated);
+            const userCreated: UserEntity = await transactional.save(UserEntity, userToBeCreated);
+            this.createUserPhones(userCreated.phones, userCreated, transactional);
+            this.createUserEmails(userCreated.emails, userCreated, transactional);
 
-        // await this.whatsappService.sendMessage(
-        //     '+559286067356', 
-        //     'Mensagem Recebida com sucesso ! (PromoFlash)'
-        // );
+            // await this.whatsappService.sendMessage(
+            //     '+559286067356', 
+            //     'Mensagem Recebida com sucesso ! (PromoFlash)'
+            // );
 
-        return mapUserEntityToDTO(userCreated);
+            return mapUserEntityToDTO(userCreated);
+        });
     };
 
     public async existsByUsername(username: string): Promise<boolean> {
@@ -84,7 +87,7 @@ export class UserService {
     };
 
     // MÉTODOS AUXILIARES
-    private async createUserPhones(phones: PhoneEntity[], userOwner: UserEntity) {
+    private async createUserPhones(phones: PhoneEntity[], userOwner: UserEntity, transactional: EntityManager) {
         phones.forEach(async (phone: PhoneEntity, index: number) => {
             if (index <= 1) {
                 let verificationCode: number = generateRandomCode();
@@ -103,9 +106,9 @@ export class UserService {
                     message = `[USUÁRIO] Olá, verificamos que houve uma tentativa de cadastro no nosso aplicativo PromoFlash
                     utilizando seu contato. Se foi você, confirme no app este código: ${verificationCode}`;
                 else
-                    phoneCreated = await this.phoneRepository.save(mapPhoneRequestToEntity(phone));
+                    phoneCreated = await transactional.save(PhoneEntity, mapPhoneRequestToEntity(phone));
 
-               await this.contactVerificationRepository.save({
+                await transactional.save(ContactVerificationEntity, {
                     used_at: null,
                     user: userOwner,
                     token: verificationCode,
@@ -121,7 +124,7 @@ export class UserService {
         });
     };
 
-    private async createUserEmails(emails: EmailEntity[], userOwner: UserEntity) {
+    private async createUserEmails(emails: EmailEntity[], userOwner: UserEntity, transactional: EntityManager) {
         emails.forEach(async (email: EmailEntity, index: number) => {
             if (index <= 1) {
                 let verificationCode: number = generateRandomCode();
@@ -134,10 +137,10 @@ export class UserService {
                     message = `[USUÁRIO] Olá, verificamos que houve uma tentativa de cadastro no nosso aplicativo PromoFlash
                     utilizando seu email. Se foi você, confirme no app este código: ${verificationCode}`;
                 else {
-                    emailCreated = await this.emailRepository.save(mapEmailRequestToEntity(email));
+                    emailCreated = await transactional.save(EmailEntity, mapEmailRequestToEntity(email));
                 }
-
-               await this.contactVerificationRepository.save({
+                
+                await transactional.save(ContactVerificationEntity, {
                     used_at: null,
                     user: userOwner,
                     token: verificationCode,
@@ -147,6 +150,7 @@ export class UserService {
                     contactId: emailAlreadyInUse ? emailAlreadyInUse.id : emailCreated.id,
                     expired_at: new Date(Date.now() + 5 * 60 * 1000)// moment().add(5, 'minutes').toDate()
                 });
+
 
                 // this.SMSService.sendSMS(formatPhoneNumberToSendSMS(phone), message);
             }

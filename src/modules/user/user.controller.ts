@@ -50,13 +50,5 @@ export class UserController {
         }
     };
 
-    @Post('send')
-    @ApiBody({
-      })
-    async sendMessage(@Body() body: { phone: CreatePhoneRequestDTO; message: string }) {
-      const contact = `${body.phone.countryCode}${body.phone.ddd}${body.phone.number}`
-      return this.whatsappService.sendMessage(contact, body.message);
-    }
-
 
 };

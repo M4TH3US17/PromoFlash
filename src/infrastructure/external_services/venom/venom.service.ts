@@ -1,13 +1,17 @@
-import { PhoneEntity } from '@modules/contact_verification/contact_methods';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as venom from 'venom-bot';
+import "dotenv/config";
 
 @Injectable()
 export class VenomWhatsappService implements OnModuleInit {
     private client: any;
 
     async onModuleInit() {
-        await this.initializeWhatsApp();
+        const enviromnmnet = String(process.env.NODE_ENV);
+
+        if(enviromnmnet === "dev") {
+            await this.initializeWhatsApp();
+        };
     }
 
     private async initializeWhatsApp() {

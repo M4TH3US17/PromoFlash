@@ -12,25 +12,22 @@ import { ResponseEstablishmentDTO } from "@modules/establishment/others/dto/resp
 import { EstablishmentEntity } from "@modules/establishment/establishment.entity";
 import { mapEstablishmentEntityToDTO } from "@modules/establishment/others";
 import { UserRole } from "./enums/user-role.enum";
-import { CreateAddressRequestDTO } from "@modules/address/others/dto/create-address.dto";
-import { CreateEmailRequestDTO } from "@modules/contact_verification/others/dto/create-email.dto";
-import { CreatePhoneRequestDTO } from "@modules/contact_verification/others/dto/create-phone.dto";
 import { AccountStatus } from "../../../shared/enums/account-status.enum";
 
 export function mapUserRequestToEntity(request: CreateUserRequestDTO): UserEntity {
-    const addresses: AddressEntity[] = request.addresses ? request.addresses.map((dto: CreateAddressRequestDTO) => mapAddressRequestToEntity(dto)) : [];
-    const emails: EmailEntity[] = request.emails ? request.emails.map((dto: CreateEmailRequestDTO) => mapEmailRequestToEntity(dto)) : [];
-    const phones: PhoneEntity[] = request.phones ? request.phones.map((dto: CreatePhoneRequestDTO) => mapPhoneRequestToEntity(dto)) : [];
+    // const addresses: AddressEntity[] = request.addresses ? request.addresses.map((dto: CreateAddressRequestDTO) => mapAddressRequestToEntity(dto)) : [];
+    // const emails: EmailEntity[] = request.emails ? request.emails.map((dto: CreateEmailRequestDTO) => mapEmailRequestToEntity(dto)) : [];
+    // const phones: PhoneEntity[] = request.phones ? request.phones.map((dto: CreatePhoneRequestDTO) => mapPhoneRequestToEntity(dto)) : [];
 
     return {
-         username: request.username,
-         password: request.password,
-         emails: emails,
-         phones: phones,
-         addresses: addresses,
-         role: UserRole.USER,
-         accountStatus: AccountStatus.PENDING,
-    } 
+        username: request.username,
+        password: request.password,
+        role: UserRole.USER,
+        accountStatus: AccountStatus.PENDING,
+        emails: (request.email) ? [mapEmailRequestToEntity({ email: request.email })] : [],
+        phones: (request.phone) ? [mapPhoneRequestToEntity(request.phone)] : [],
+        addresses: (request.address) ? [mapAddressRequestToEntity(request.address)] : [],
+    }
 };
 
 export function mapUserEntityToDTO(entity: UserEntity): ResponseUserDTO {
@@ -46,5 +43,5 @@ export function mapUserEntityToDTO(entity: UserEntity): ResponseUserDTO {
         phones: phonesDTO,
         emails: emailsDTO,
         followingEstablishments: establishmentsDTO,
-    } 
+    }
 };

@@ -39,21 +39,25 @@ export class StartDatabase1738902087028 implements MigrationInterface {
 
         console.log(`\n[StartDatabase1738902087028] Criando tabela "addresses"`);
         await queryRunner.query(`
+            --street             VARCHAR(255)  NOT NULL,
+            --number             INT           NOT NULL,
+            --neighborhood       VARCHAR(255)  NOT NULL,
+            --deleted_at         TIMESTAMP     DEFAULT NULL,
+            --city               VARCHAR(255)  NOT NULL,
+            --state              VARCHAR(255)  NOT NULL,
+            --cep                VARCHAR(20)   NOT NULL,
+            --country            VARCHAR(255)  NOT NULL,
+            --complement         VARCHAR(255),
             CREATE TABLE IF NOT EXISTS common.addresses (
-                id                 SERIAL,
-                street             VARCHAR(255) NOT NULL,
-                number             INT          NOT NULL,
-                neighborhood       VARCHAR(255) NOT NULL,
-                deleted_at TIMESTAMP    DEFAULT NULL,
-                city               VARCHAR(255) NOT NULL,
-                state              VARCHAR(255) NOT NULL,
-                cep                VARCHAR(20)  NOT NULL,
-                country            VARCHAR(255) NOT NULL,
-                complement         VARCHAR(255),
-                location_latitude  DECIMAL(10, 8),
-                location_longitude DECIMAL(11, 8),
-                created_at     TIMESTAMP        DEFAULT CURRENT_TIMESTAMP NOT NULL,
-                updated_at     TIMESTAMP        DEFAULT CURRENT_TIMESTAMP NOT NULL
+                id                   SERIAL,
+                place_id             VARCHAR(255)  NOT NULL,
+                description          VARCHAR(255)  NOT NULL,
+                address              VARCHAR(255)  NOT NULL,
+                location_latitude    DECIMAL(10, 8),
+                location_longitude   DECIMAL(11, 8),
+                deleted_at           TIMESTAMP DEFAULT NULL,
+                created_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                updated_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
             );`);
 
         console.log(`\n[StartDatabase1738902087028] Criando tabela "coupons"`);

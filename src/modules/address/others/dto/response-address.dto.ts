@@ -1,11 +1,9 @@
+import { ResponseLocationDTO } from "@modules/location/others/dto/response-location.dto";
+
 export class ResponseAddressDTO {
     id: number;
-    street: string;
-    number:  number;
-    neighborhood: string;
-    city: string;
-    state: string;
-    cep: string;
-    country: string;
-    complement: string;
+    place_id: string;
+    address: string;
+    description: string;
+    location: ResponseLocationDTO;
 };
