@@ -13,6 +13,7 @@ import { EstablishmentEntity } from "@modules/establishment/establishment.entity
 import { mapEstablishmentEntityToDTO } from "@modules/establishment/others";
 import { UserRole } from "./enums/user-role.enum";
 import { AccountStatus } from "../../../shared/enums/account-status.enum";
+import { ContactVerificationEntity } from "@modules/contact_verification/contact-verification.entity";
 
 export function mapUserRequestToEntity(request: CreateUserRequestDTO): UserEntity {
     // const addresses: AddressEntity[] = request.addresses ? request.addresses.map((dto: CreateAddressRequestDTO) => mapAddressRequestToEntity(dto)) : [];
@@ -30,15 +31,21 @@ export function mapUserRequestToEntity(request: CreateUserRequestDTO): UserEntit
     }
 };
 
-export function mapUserEntityToDTO(entity: UserEntity): ResponseUserDTO {
+export function mapUserEntityToDTO(
+    entity: UserEntity,
+    phoneVerifications: ContactVerificationEntity[],
+    emailVerifications: ContactVerificationEntity[],
+): ResponseUserDTO {
     const addressesDTO: ResponseAddressDTO[] = entity.addresses ? entity.addresses.map((entity: AddressEntity) => mapAddressEntityToDTO(entity)) : [];
-    const phonesDTO: ResponsePhoneDTO[] = entity.phones ? entity.phones.map((entity: PhoneEntity) => mapPhoneEntityToDTO(entity)) : [];
-    const emailsDTO: ResponseEmailDTO[] = entity.emails ? entity.emails.map((entity: EmailEntity) => mapEmailEntityToDTO(entity)) : [];
     const establishmentsDTO: ResponseEstablishmentDTO[] = entity.followingEstablishments ? entity.followingEstablishments.map((entity: EstablishmentEntity) => mapEstablishmentEntityToDTO(entity)) : [];
+    
+    const phonesDTO: ResponsePhoneDTO[] = entity.phones ? entity.phones.map((entity: PhoneEntity) => mapPhoneEntityToDTO(entity, phoneVerifications)) : [];
+    const emailsDTO: ResponseEmailDTO[] = entity.emails ? entity.emails.map((entity: EmailEntity) => mapEmailEntityToDTO(entity, emailVerifications)) : [];
 
     return {
         id: entity.id,
         username: entity.username,
+        accountStatus: entity.accountStatus,
         addresses: addressesDTO,
         phones: phonesDTO,
         emails: emailsDTO,

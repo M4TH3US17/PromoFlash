@@ -1,3 +1,5 @@
+import { ResponseContactVerificationDTO } from "./response-contact-verification.dto";
+
 export class ResponsePhoneDTO {
     id: number;
     ddd: string;
@@ -7,4 +9,5 @@ export class ResponsePhoneDTO {
     receiveWhatsappNotifications: boolean;
     receiveSmsNotifications: boolean;
     receiveTelegramNotifications: boolean;
+    pendingVerifications: ResponseContactVerificationDTO[];
 }

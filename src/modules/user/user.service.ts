@@ -51,7 +51,7 @@ export class UserService {
                 ]
             });
             //const users: PaginatedList<UserEntity> = await this.repository.getAllAsync(pagination);
-            return users.map(user => mapUserEntityToDTO(user));
+            return users.map(user => mapUserEntityToDTO(user, [], []));
         } catch (error) {
             if (error instanceof HttpException) throw error;
             throw new HttpException("Desculpe, houve um erro interno no servidor. Por favor, catatar o suporte.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -63,7 +63,7 @@ export class UserService {
         //     '+559286067356', 
         //     'Mensagem Recebida com sucesso ! (PromoFlash)'
         // );
-        return await this.dataSource.transaction(async tr => {
+        return await this.dataSource.transaction(async manager => {
             const userAlreadyExists: boolean = await this.existsByUsername(request.username);
 
             if (userAlreadyExists)
@@ -72,13 +72,14 @@ export class UserService {
             let userToBeCreated: UserEntity = mapUserRequestToEntity(request);
             userToBeCreated.password = await hashPassword(userToBeCreated.password);
 
-            const userCreated: UserEntity = await tr.save(UserEntity, userToBeCreated);
-            await Promise.all([
-                this.createUserPhones(userCreated.phones, userCreated, tr),
-                this.createUserEmails(userCreated.emails, userCreated, tr)
+            const userCreated: UserEntity = await manager.save(UserEntity, userToBeCreated);
+
+            const [phoneVerificationsResult, emailVerificationsResult] = await Promise.all([
+                this.createUserPhones(userCreated.phones, userCreated, manager),
+                this.createUserEmails(userCreated.emails, userCreated, manager)
             ]);
 
-            return mapUserEntityToDTO(userCreated);
+            return mapUserEntityToDTO(userCreated, phoneVerificationsResult, emailVerificationsResult);
         });
     };
 
@@ -91,10 +92,11 @@ export class UserService {
     };
 
     // MÉTODOS AUXILIARES
-    private async createUserPhones(phones: PhoneEntity[], userOwner: UserEntity, transactional: EntityManager) {
+    private async createUserPhones(phones: PhoneEntity[], userOwner: UserEntity, transactional: EntityManager): Promise<ContactVerificationEntity[]> {
         if (!phones?.length) return;
 
         const phonesToProcess = phones.slice(0, 2);
+        const verifications: ContactVerificationEntity[] = [];
 
         await Promise.all(phonesToProcess.map(async (phone: PhoneEntity, index: number) => {
             let verificationCode: number = generateRandomCode();
@@ -115,7 +117,7 @@ export class UserService {
             else
                 phoneCreated = await transactional.save(PhoneEntity, mapPhoneRequestToEntity(phone));
 
-            await transactional.save(ContactVerificationEntity, {
+            let verification = await transactional.save(ContactVerificationEntity, {
                 used_at: null,
                 user: userOwner,
                 token: verificationCode,
@@ -126,16 +128,20 @@ export class UserService {
                 expired_at: new Date(Date.now() + 5 * 60 * 1000)
             });
 
+            verifications.push(verification)
             await this.venomWhatsappService.sendMessage(`${phone.countryCode}${phone.ddd}${phone.number}`, `[MENSAGEM DE TESTE - SMS] Código de Verificação de telefone: (${verificationCode})`);
             // this.SMSService.sendSMS(formatPhoneNumberToSendSMS(phone), message);
         }
         ));
+
+        return verifications
     };
 
-    private async createUserEmails(emails: EmailEntity[], userOwner: UserEntity, transactional: EntityManager) {
+    private async createUserEmails(emails: EmailEntity[], userOwner: UserEntity, transactional: EntityManager): Promise<ContactVerificationEntity[]> {
         if (!emails?.length) return;
 
         const emailsToProcess = emails.slice(0, 2);
+        const verifications: ContactVerificationEntity[] = [];
 
         await Promise.all(emailsToProcess.map(async (email: EmailEntity) => {
             let verificationCode: number = generateRandomCode();
@@ -151,7 +157,7 @@ export class UserService {
                 emailCreated = await transactional.save(EmailEntity, mapEmailRequestToEntity(email));
             }
 
-            await transactional.save(ContactVerificationEntity, {
+            let verification = await transactional.save(ContactVerificationEntity, {
                 used_at: null,
                 user: userOwner,
                 token: verificationCode,
@@ -162,9 +168,12 @@ export class UserService {
                 expired_at: new Date(Date.now() + 5 * 60 * 1000)// moment().add(5, 'minutes').toDate()
             });
 
+            verifications.push(verification);
             await this.venomWhatsappService.sendMessage(`+5592986067356`, `[MENSAGEM DE TESTE - EMAIL] Código de Verificação de email: (${verificationCode}) ${emailAlreadyInUse ? JSON.stringify(emailAlreadyInUse.email) : email}`);
             // this.SMSService.sendSMS(formatPhoneNumberToSendSMS(phone), message);
         }));
+
+        return verifications;
 
     };
 

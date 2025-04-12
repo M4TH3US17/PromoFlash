@@ -17,8 +17,8 @@ import { AccountStatus } from "@shared/enums/account-status.enum";
 
 
 export function mapEstablishmentEntityToDTO(entity: EstablishmentEntity): ResponseEstablishmentDTO {
-    const phonesDTO: ResponsePhoneDTO[] = entity.phones ? entity.phones.map((entity: PhoneEntity) => mapPhoneEntityToDTO(entity)) : [];
-    const emailsDTO: ResponseEmailDTO[] = entity.emails ? entity.emails.map((entity: EmailEntity) => mapEmailEntityToDTO(entity)) : [];
+    const phonesDTO: ResponsePhoneDTO[] = entity.phones ? entity.phones.map((entity: PhoneEntity) => mapPhoneEntityToDTO(entity, [])) : [];
+    const emailsDTO: ResponseEmailDTO[] = entity.emails ? entity.emails.map((entity: EmailEntity) => mapEmailEntityToDTO(entity, [])) : [];
     const promotionsDTO: ResponsePromotionDTO[] = entity.promotions ? entity.promotions.map((entity: PromotionEntity) => mapPromotionEntityToDTO(entity)) : [];
 
     return {
