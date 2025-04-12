@@ -9,9 +9,9 @@ export class VenomWhatsappService implements OnModuleInit {
     async onModuleInit() {
         const enviromnmnet = String(process.env.NODE_ENV);
 
-        if(enviromnmnet === "dev") {
+        // if(enviromnmnet === "dev") {
             await this.initializeWhatsApp();
-        };
+        // };
     }
 
     private async initializeWhatsApp() {
