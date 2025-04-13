@@ -11,6 +11,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { VenomWhatsappService } from "@infrastructure/external_services/venom/venom.service";
 import { ContactVerificationEntity } from "../verification/verification.entity";
 import { mapPhoneRequestToEntity } from "./phone.utils";
+import { SMSVerificationTemplate } from "src/assets/templates/whatsapp/venom/verification";
 
 
 @Injectable()
@@ -35,7 +36,6 @@ export class PhoneService {
 
         await Promise.all(phonesToProcess.map(async (phone: PhoneEntity) => {
             let verificationCode: number = generateRandomCode();
-            let message: string = `[USUÁRIO] Olá, seu código de verificação PromoFlash é: ${verificationCode}`;
             let phoneCreated = null;
 
             let phoneAlreadyInUse = await this.phoneRepository.findOne({
@@ -46,9 +46,7 @@ export class PhoneService {
                 }
             });
 
-            if (phoneAlreadyInUse) // tentativa de cadastro com um contato existente. Não criar um novo contato, apenas reutilizar.
-                message = `[USUÁRIO] Olá, verificamos que houve uma tentativa de cadastro no nosso aplicativo PromoFlash utilizando seu contato. Se foi você, confirme no app este código: ${verificationCode}`;
-            else
+            if (!phoneAlreadyInUse)
                 phoneCreated = await transactional.save(PhoneEntity, mapPhoneRequestToEntity(phone));
 
             let verification = await transactional.save(ContactVerificationEntity, {
@@ -63,7 +61,15 @@ export class PhoneService {
             });
 
             verifications.push(verification)
-            await this.venomWhatsappService.sendMessage(`${phone.countryCode}${phone.ddd}${phone.number}`, `[MENSAGEM DE TESTE - SMS] Código de Verificação de telefone: (${verificationCode})`);
+
+            let message = SMSVerificationTemplate(
+                String(verificationCode),
+                "PromoFlash",
+                true,
+                phone,
+            );
+
+            await this.venomWhatsappService.sendMessage(`${phone.countryCode}${phone.ddd}${phone.number}`, message);
             // this.SMSService.sendSMS(formatPhoneNumberToSendSMS(phone), message);
         }
         ));

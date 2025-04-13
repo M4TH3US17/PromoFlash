@@ -6,14 +6,7 @@ import { CreateUserRequestDTO } from "./others/dto/create-user.dto";
 import { ResponseUserDTO } from "./others/dto/response-user.dto";
 import { mapUserEntityToDTO, mapUserRequestToEntity } from "./others";
 import { UserPaginationDTO } from "./others/dto/pagination-user.dto";
-import { AddressEntity } from "@modules/address/address.entity";
-import { TwilioSMSService } from "@infrastructure/external_services/twilio/sms/sms.service";
 import { hashPassword } from "@modules/authentication/authentication.utils";
-import { TwilioWhatsappService } from "@infrastructure/external_services/twilio/whatsapp/whatsapp.service";
-import { VenomWhatsappService } from "@infrastructure/external_services/venom/venom.service";
-import { PhoneEntity } from "@modules/contact/phone/phone.entity";
-import { EmailEntity } from "@modules/contact/email/email.entity";
-import { ContactVerificationEntity } from "@modules/contact/verification/verification.entity";
 import { PhoneService } from "@modules/contact/phone/phone.service";
 import { EmailService } from "@modules/contact/email/email.service";
 

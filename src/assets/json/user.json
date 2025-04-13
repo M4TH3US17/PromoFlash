@@ -1,0 +1,19 @@
+{
+  "username": "Matheus Washington",
+  "password": "123",
+  "email": "matheusdalvino50@gmail.com",
+  "phone": {
+    "ddd": "92",
+    "countryCode": "+55",
+    "number": "986067356"
+  },
+  "address": {
+    "place_id": "PLACE_ID",
+    "address": "ENDEREÇO",
+    "description": "DESCRICAO",
+    "location": {
+      "latitude": 0,
+      "longitude": 0
+    }
+  }
+}

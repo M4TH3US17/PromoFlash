@@ -60,7 +60,6 @@ export class VenomWhatsappService implements OnModuleInit {
                 numberZDG = `${countryCode}${ddd}${number}@c.us`;
 
             const result = await this.client.sendText(numberZDG, content);
-            console.log(result);
 
         } catch (error) {
             console.error('Erro ao enviar mensagem:', error);
