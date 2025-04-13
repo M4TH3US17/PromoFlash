@@ -10,11 +10,12 @@ import { HttpException, HttpStatus } from "@nestjs/common";
 import { AccountStatus } from "@shared/enums/account-status.enum";
 import { PhoneEntity } from "@modules/contact/phone/phone.entity";
 import { EmailEntity } from "@modules/contact/email/email.entity";
-import { mapEmailEntityToDTO, mapEmailRequestToEntity, mapPhoneEntityToDTO, mapPhoneRequestToEntity } from "@modules/contact/contact.utils";
 import { CreateEmailRequestDTO } from "@modules/contact/email/dto/create-email.dto";
 import { CreatePhoneRequestDTO } from "@modules/contact/phone/dto/create-phone.dto";
 import { ResponsePhoneDTO } from "@modules/contact/phone/dto/response-phone.dto";
 import { ResponseEmailDTO } from "@modules/contact/email/dto/response-email.dto";
+import { mapPhoneEntityToDTO, mapPhoneRequestToEntity } from "@modules/contact/phone/phone.utils";
+import { mapEmailEntityToDTO, mapEmailRequestToEntity } from "@modules/contact/email/email.utils";
 
 
 export function mapEstablishmentEntityToDTO(entity: EstablishmentEntity): ResponseEstablishmentDTO {

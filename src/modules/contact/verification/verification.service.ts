@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
-import { ConfirmCodeRequestDTO } from "./dto/request-confirm-code.dto";
+import { ConfirmCodeRequestDTO } from "./dto/confirm-code.dto";
 import { ContactVerificationEntity } from "./verification.entity";
 import { AccountStatus } from "@shared/enums/account-status.enum";
 import { TokenType } from "./enums/token-type.enum";
@@ -12,14 +12,8 @@ import { EmailEntity } from "../email/email.entity";
 export class ContactVerificationService {
 
     constructor(
-        // private readonly SMSService: TwilioSMSService,
-        // // private readonly twilioWhatsappService: TwilioWhatsappService,
-        // private readonly venomWhatsappService: VenomWhatsappService,
-
         @InjectRepository(ContactVerificationEntity)
         private readonly repository: Repository<ContactVerificationEntity>,
-        // @InjectRepository(UserEntity)
-        // private readonly userRepository: Repository<UserEntity>,
         @InjectRepository(PhoneEntity)
         private readonly phoneRepository: Repository<PhoneEntity>,
         @InjectRepository(EmailEntity)
@@ -86,6 +80,5 @@ export class ContactVerificationService {
             }
         };
 
-        return null;
     };
 }

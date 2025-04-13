@@ -3,32 +3,24 @@ import { PhoneEntity } from "./phone.entity";
 import { UserEntity } from "@modules/user/user.entity";
 import { EstablishmentEntity } from "@modules/establishment/establishment.entity";
 import { EntityManager, Repository } from "typeorm";
-import { generateRandomCode, mapPhoneRequestToEntity } from "../contact.utils";
+import { generateRandomCode } from "../contact.utils";
 import { TokenType } from "../verification/enums/token-type.enum";
 import { OwnerType } from "../verification/enums/owner-type.enum";
 import { ContactType } from "../verification/enums/contact-type.enum";
 import { InjectRepository } from "@nestjs/typeorm";
 import { VenomWhatsappService } from "@infrastructure/external_services/venom/venom.service";
-import { EmailEntity } from "../email/email.entity";
 import { ContactVerificationEntity } from "../verification/verification.entity";
+import { mapPhoneRequestToEntity } from "./phone.utils";
 
 
 @Injectable()
 export class PhoneService {
 
     constructor(
-        // private readonly SMSService: TwilioSMSService,
-        // // private readonly twilioWhatsappService: TwilioWhatsappService,
         private readonly venomWhatsappService: VenomWhatsappService,
 
-        @InjectRepository(ContactVerificationEntity)
-        private readonly repository: Repository<ContactVerificationEntity>,
-        // @InjectRepository(UserEntity)
-        // private readonly userRepository: Repository<UserEntity>,
         @InjectRepository(PhoneEntity)
         private readonly phoneRepository: Repository<PhoneEntity>,
-        @InjectRepository(EmailEntity)
-        private readonly emailRepository: Repository<EmailEntity>,
     ) { }
 
     public async createPhones(

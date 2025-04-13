@@ -4,26 +4,18 @@ import { EntityManager, Repository } from "typeorm";
 import { EmailEntity } from "./email.entity";
 import { UserEntity } from "@modules/user/user.entity";
 import { EstablishmentEntity } from "@modules/establishment/establishment.entity";
-import { generateRandomCode, mapEmailRequestToEntity } from "../contact.utils";
+import { generateRandomCode } from "../contact.utils";
 import { TokenType } from "../verification/enums/token-type.enum";
 import { OwnerType } from "../verification/enums/owner-type.enum";
 import { ContactType } from "../verification/enums/contact-type.enum";
 import { VenomWhatsappService } from "@infrastructure/external_services/venom/venom.service";
-import { PhoneEntity } from "../phone/phone.entity";
+import { mapEmailRequestToEntity } from "./email.utils";
 
 export class EmailService {
 
     constructor(
-        // private readonly SMSService: TwilioSMSService,
-        // // private readonly twilioWhatsappService: TwilioWhatsappService,
         private readonly venomWhatsappService: VenomWhatsappService,
 
-        @InjectRepository(ContactVerificationEntity)
-        private readonly repository: Repository<ContactVerificationEntity>,
-        // @InjectRepository(UserEntity)
-        // private readonly userRepository: Repository<UserEntity>,
-        @InjectRepository(PhoneEntity)
-        private readonly phoneRepository: Repository<PhoneEntity>,
         @InjectRepository(EmailEntity)
         private readonly emailRepository: Repository<EmailEntity>,
     ) { }

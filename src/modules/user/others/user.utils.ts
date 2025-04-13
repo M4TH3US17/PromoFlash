@@ -9,12 +9,13 @@ import { EstablishmentEntity } from "@modules/establishment/establishment.entity
 import { mapEstablishmentEntityToDTO } from "@modules/establishment/others";
 import { UserRole } from "./enums/user-role.enum";
 import { AccountStatus } from "../../../shared/enums/account-status.enum";
-import { mapEmailEntityToDTO, mapEmailRequestToEntity, mapPhoneEntityToDTO, mapPhoneRequestToEntity } from "@modules/contact/contact.utils";
 import { ContactVerificationEntity } from "@modules/contact/verification/verification.entity";
 import { ResponsePhoneDTO } from "@modules/contact/phone/dto/response-phone.dto";
 import { PhoneEntity } from "@modules/contact/phone/phone.entity";
 import { EmailEntity } from "@modules/contact/email/email.entity";
 import { ResponseEmailDTO } from "@modules/contact/email/dto/response-email.dto";
+import { mapEmailEntityToDTO, mapEmailRequestToEntity } from "@modules/contact/email/email.utils";
+import { mapPhoneEntityToDTO, mapPhoneRequestToEntity } from "@modules/contact/phone/phone.utils";
 
 export function mapUserRequestToEntity(request: CreateUserRequestDTO): UserEntity {
     // const addresses: AddressEntity[] = request.addresses ? request.addresses.map((dto: CreateAddressRequestDTO) => mapAddressRequestToEntity(dto)) : [];

@@ -1,11 +1,10 @@
-import { Body, Controller, Headers, HttpException, HttpStatus, Inject, Param, Put, Req, Res } from "@nestjs/common";
+import { Body, Controller, HttpStatus, Param, Put, Req, Res } from "@nestjs/common";
 import { Request, Response } from "express";
-import { APIResponseDTO } from "@shared/bases/usecase-response.dto";
 import { ApiOperation } from "@nestjs/swagger";
 import { Roles } from "@modules/authentication/others";
 import { UserRole } from "@modules/user/others/enums/user-role.enum";
 import { ContactVerificationService } from "./verification/verification.service";
-import { ConfirmCodeRequestDTO } from "./verification/dto/request-confirm-code.dto";
+import { ConfirmCodeRequestDTO } from "./verification/dto/confirm-code.dto";
 
 @Controller({ 
     path: "verification"
