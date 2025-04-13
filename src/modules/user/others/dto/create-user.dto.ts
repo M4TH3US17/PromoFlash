@@ -1,5 +1,5 @@
 import { CreateAddressRequestDTO } from "@modules/address/others/dto/create-address.dto";
-import { CreatePhoneRequestDTO } from "@modules/contact_verification/others/dto/create-phone.dto";
+import { CreatePhoneRequestDTO } from "@modules/contact/phone/dto/create-phone.dto";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateUserRequestDTO {

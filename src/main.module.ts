@@ -11,12 +11,12 @@ import { AppDataSource } from './infrastructure/database/data-source';
 import { envValidationSchema } from './config/joi.config';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './config/filters/http-exception.filter';
-import { ContactVerificationModule } from '@modules/contact_verification/contact-verification.module';
 import { CNPJServiceModule } from '@infrastructure/external_services/cnpj_service/cnpj-service.module';
 import { TwilioModule } from '@infrastructure/external_services/twilio/twilio.module';
 import { AuthenticationModule } from '@modules/authentication/authentication.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from '@modules/authentication/others/guards/roles.guard';
+import { ContactModule } from '@modules/contact/contact.module';
 
 @Module({
   imports: [
@@ -32,7 +32,7 @@ import { RolesGuard } from '@modules/authentication/others/guards/roles.guard';
 
     // Domains
     AddressModule,
-    ContactVerificationModule,
+    ContactModule,
     CouponModule,
     EstablishmentModule,
     ProductModule,

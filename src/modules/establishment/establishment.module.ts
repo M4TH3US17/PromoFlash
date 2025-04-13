@@ -8,9 +8,10 @@ import { TwilioSMSService } from '@infrastructure/external_services/twilio/sms/s
 import { TwilioModule } from '@infrastructure/external_services/twilio/twilio.module';
 import { CNPJServiceModule } from '@infrastructure/external_services/cnpj_service/cnpj-service.module';
 import { BrazilFederalRevenueService } from '@infrastructure/external_services/cnpj_service/brazil_federal_revenue/brazil-federal-revenue.service';
-import { EmailEntity, PhoneEntity } from '@modules/contact_verification/contact_methods';
 import { EstablishmentService } from './establishment.service';
 import { AddressEntity } from '@modules/address/address.entity';
+import { PhoneEntity } from '@modules/contact/phone/phone.entity';
+import { EmailEntity } from '@modules/contact/email/email.entity';
 
 @Module({
   imports: [

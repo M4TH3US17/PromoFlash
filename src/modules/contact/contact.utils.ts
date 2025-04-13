@@ -1,12 +1,12 @@
 import { keepOnlyNumbers } from "@shared/utils/global.utils";
-import { EmailEntity, PhoneEntity } from "../contact_methods";
-import { CreateEmailRequestDTO } from "./dto/create-email.dto";
-import { CreatePhoneRequestDTO } from "./dto/create-phone.dto";
-import { ResponseEmailDTO } from "./dto/response-email.dto";
-import { ResponsePhoneDTO } from "./dto/response-phone.dto";
-import { ContactVerificationEntity } from "../contact-verification.entity";
-import { ResponseContactVerificationDTO } from "./dto/response-contact-verification.dto";
-import e from "express";
+import { CreatePhoneRequestDTO } from "./phone/dto/create-phone.dto";
+import { PhoneEntity } from "./phone/phone.entity";
+import { CreateEmailRequestDTO } from "./email/dto/create-email.dto";
+import { EmailEntity } from "./email/email.entity";
+import { ContactVerificationEntity } from "./verification/verification.entity";
+import { ResponseContactVerificationDTO } from "./verification/dto/response-contact-verification.dto";
+import { ResponseEmailDTO } from "./email/dto/response-email.dto";
+import { ResponsePhoneDTO } from "./phone/dto/response-phone.dto";
 
 /**
  * Gera um código numérico aleatório de 6 dígitos.

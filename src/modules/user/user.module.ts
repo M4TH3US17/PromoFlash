@@ -5,12 +5,14 @@ import { UserEntity } from './user.entity';
 import { UserService } from './user.service';
 import { AddressEntity } from '@modules/address/address.entity';
 import { TwilioSMSService } from '@infrastructure/external_services/twilio/sms/sms.service';
-import { ContactVerificationEntity } from '@modules/contact_verification/contact-verification.entity';
-import { EmailEntity, PhoneEntity } from '@modules/contact_verification/contact_methods';
 import { TwilioWhatsappService } from '@infrastructure/external_services/twilio/whatsapp/whatsapp.service';
 import { VenomModule } from '@infrastructure/external_services/venom/venom.module';
 import { TwilioModule } from '@infrastructure/external_services/twilio/twilio.module';
-import { ContactVerificationService } from '@modules/contact_verification/contact-verification.service';
+import { ContactVerificationEntity } from '@modules/contact/verification/verification.entity';
+import { EmailEntity } from '@modules/contact/email/email.entity';
+import { PhoneEntity } from '@modules/contact/phone/phone.entity';
+import { ContactVerificationService } from '@modules/contact/verification/verification.service';
+import { ContactModule } from '@modules/contact/contact.module';
 
 @Module({
   imports: [
@@ -24,6 +26,7 @@ import { ContactVerificationService } from '@modules/contact_verification/contac
 
      TwilioModule,
      VenomModule,
+     ContactModule,
   ],
   controllers: [
     UserController,

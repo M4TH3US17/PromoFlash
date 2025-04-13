@@ -12,8 +12,8 @@ import { PaginatedList } from "@shared/types/pagination.types";
 import { TwilioSMSService } from "@infrastructure/external_services/twilio/sms/sms.service";
 import { BrazilFederalRevenueService } from "@infrastructure/external_services/cnpj_service/brazil_federal_revenue/brazil-federal-revenue.service";
 import { ResponseBrazilianFederalRevenueDTO } from "@infrastructure/external_services/cnpj_service/brazil_federal_revenue/dto/response-cnpj-searched.dto";
-import { generateRandomCode } from "@modules/contact_verification/others";
-import { PhoneEntity } from "@modules/contact_verification/contact_methods";
+import { generateRandomCode } from "@modules/contact/contact.utils";
+import { PhoneEntity } from "@modules/contact/phone/phone.entity";
 
 @Injectable()
 export class EstablishmentService {

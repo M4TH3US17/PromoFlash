@@ -6,14 +6,7 @@ import { CreateUserRequestDTO } from './others/dto/create-user.dto';
 import { PaginationParserPipe } from '@shared/pipes/pagination-parser.pipe';
 import { UserEntity } from './user.entity';
 import { UserPaginationDTO } from './others/dto/pagination-user.dto';
-import { UseCaseResponseDTO } from '@shared/bases/usecase-response.dto';
-import { PaginatedList } from '@shared/types/pagination.types';
-import { Roles } from '@modules/authentication/others';
-import { UserRole } from './others/enums/user-role.enum';
 import { VenomWhatsappService } from '@infrastructure/external_services/venom/venom.service';
-import { ApiBody } from '@nestjs/swagger';
-import { PhoneEntity } from '@modules/contact_verification/contact_methods';
-import { CreatePhoneRequestDTO } from '@modules/contact_verification/others/dto/create-phone.dto';
 
 @Controller({path: "users"})
 export class UserController {

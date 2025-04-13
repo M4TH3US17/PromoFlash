@@ -1,7 +1,7 @@
 import { CreateAddressRequestDTO } from "@modules/address/others/dto/create-address.dto";
-import { CreatePhoneRequestDTO } from "@modules/contact_verification/others/dto/create-phone.dto";
-import { CreateEmailRequestDTO } from "@modules/contact_verification/others/dto/create-email.dto";
 import { EstablishmentType } from "../enums/establishment-type.enum";
+import { CreatePhoneRequestDTO } from "@modules/contact/phone/dto/create-phone.dto";
+import { CreateEmailRequestDTO } from "@modules/contact/email/dto/create-email.dto";
 
 export class CreateEstablishmentRequestDTO {
     cnpj: string;

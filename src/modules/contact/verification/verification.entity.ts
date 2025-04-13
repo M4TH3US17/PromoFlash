@@ -1,10 +1,10 @@
 import { SCHEMA } from "@infrastructure/database/enums/schemas";
 import { BaseEntity } from "src/shared/bases/base.entity";
 import { Column, Entity, JoinColumn, ManyToOne, } from "typeorm";
-import { ContactType } from "./others/enums/contact-type.enum";
-import { OwnerType } from "./others/enums/owner-type.enum";
-import { TokenType } from "./others/enums/token-type.enum";
 import { UserEntity } from "@modules/user/user.entity";
+import { OwnerType } from "./enums/owner-type.enum";
+import { ContactType } from "./enums/contact-type.enum";
+import { TokenType } from "./enums/token-type.enum";
 
 @Entity({ 
     schema: SCHEMA.COMMON, 

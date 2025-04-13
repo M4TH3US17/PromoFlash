@@ -6,7 +6,6 @@ import { CreateEstablishmentRequestDTO } from "../others/dto/create-establishmen
 import { TwilioSMSService } from "@infrastructure/external_services/twilio/sms/sms.service";
 import { formatPhoneNumberToSendSMS } from "@infrastructure/external_services/twilio/sms/sms.utils";
 import { BrazilFederalRevenueService } from "@infrastructure/external_services/cnpj_service/brazil_federal_revenue/brazil-federal-revenue.service";
-import { generateRandomCode } from "@modules/contact_verification/others";
 
 @Injectable()
 export class CreateEstablishmentsUseCase {

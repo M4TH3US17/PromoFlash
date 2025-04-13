@@ -8,10 +8,11 @@ import { PromotionEntity } from "src/modules/promotion/promotion.entity";
 import { UserEntity } from "src/modules/user/user.entity";
 import { DataSource } from "typeorm";
 import { StartDatabase1738902087028 } from "./migrations/1738902087028-StartDatabase";
-import { ContactVerificationEntity } from "@modules/contact_verification/contact-verification.entity";
-import { EmailEntity, PhoneEntity } from "@modules/contact_verification/contact_methods";
 
 import "dotenv/config";
+import { PhoneEntity } from "@modules/contact/phone/phone.entity";
+import { EmailEntity } from "@modules/contact/email/email.entity";
+import { ContactVerificationEntity } from "@modules/contact/verification/verification.entity";
 
 export const AppDataSource = new DataSource({
     type: "postgres",

@@ -4,16 +4,17 @@ import { CreateUserRequestDTO } from "./dto/create-user.dto";
 import { ResponseUserDTO } from "./dto/response-user.dto";
 import { AddressEntity } from "@modules/address/address.entity";
 import { mapAddressEntityToDTO, mapAddressRequestToEntity } from "@modules/address/others/addresses.utils";
-import { ResponsePhoneDTO } from "@modules/contact_verification/others/dto/response-phone.dto";
-import { ResponseEmailDTO } from "@modules/contact_verification/others/dto/response-email.dto";
-import { EmailEntity, PhoneEntity } from "@modules/contact_verification/contact_methods";
-import { mapEmailEntityToDTO, mapEmailRequestToEntity, mapPhoneEntityToDTO, mapPhoneRequestToEntity } from "@modules/contact_verification/others";
 import { ResponseEstablishmentDTO } from "@modules/establishment/others/dto/response-establishment.dto";
 import { EstablishmentEntity } from "@modules/establishment/establishment.entity";
 import { mapEstablishmentEntityToDTO } from "@modules/establishment/others";
 import { UserRole } from "./enums/user-role.enum";
 import { AccountStatus } from "../../../shared/enums/account-status.enum";
-import { ContactVerificationEntity } from "@modules/contact_verification/contact-verification.entity";
+import { mapEmailEntityToDTO, mapEmailRequestToEntity, mapPhoneEntityToDTO, mapPhoneRequestToEntity } from "@modules/contact/contact.utils";
+import { ContactVerificationEntity } from "@modules/contact/verification/verification.entity";
+import { ResponsePhoneDTO } from "@modules/contact/phone/dto/response-phone.dto";
+import { PhoneEntity } from "@modules/contact/phone/phone.entity";
+import { EmailEntity } from "@modules/contact/email/email.entity";
+import { ResponseEmailDTO } from "@modules/contact/email/dto/response-email.dto";
 
 export function mapUserRequestToEntity(request: CreateUserRequestDTO): UserEntity {
     // const addresses: AddressEntity[] = request.addresses ? request.addresses.map((dto: CreateAddressRequestDTO) => mapAddressRequestToEntity(dto)) : [];

@@ -6,9 +6,10 @@ import { Status } from "src/shared/enums/status";
 import { EstablishmentEntity } from "../establishment/establishment.entity";
 import { SCHEMA } from "src/infrastructure/database/enums/schemas";
 import { Exclude } from "class-transformer";
-import { ContactVerificationEntity } from "@modules/contact_verification/contact-verification.entity";
-import { EmailEntity, PhoneEntity } from "@modules/contact_verification/contact_methods";
 import { AccountStatus } from "../../shared/enums/account-status.enum";
+import { ContactVerificationEntity } from "@modules/contact/verification/verification.entity";
+import { EmailEntity } from "@modules/contact/email/email.entity";
+import { PhoneEntity } from "@modules/contact/phone/phone.entity";
 
 @Entity({
     schema: SCHEMA.USER,

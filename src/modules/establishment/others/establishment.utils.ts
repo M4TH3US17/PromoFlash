@@ -1,19 +1,20 @@
 import { EstablishmentEntity } from "../establishment.entity";
 import { ResponseEstablishmentDTO } from "./dto/response-establishment.dto";
 import { mapAddressEntityToDTO, mapAddressRequestToEntity } from "@modules/address/others/addresses.utils";
-import { ResponsePhoneDTO } from "@modules/contact_verification/others/dto/response-phone.dto";
-import { ResponseEmailDTO } from "@modules/contact_verification/others/dto/response-email.dto";
-import { EmailEntity, PhoneEntity } from "@modules/contact_verification/contact_methods";
-import { mapEmailEntityToDTO, mapEmailRequestToEntity, mapPhoneEntityToDTO, mapPhoneRequestToEntity } from "@modules/contact_verification/others";
 import { ResponsePromotionDTO } from "@modules/promotion/others/dto/response-promotion.dto";
 import { PromotionEntity } from "@modules/promotion/promotion.entity";
 import { mapPromotionEntityToDTO } from "@modules/promotion/others/promotion.utils";
 import { CreateEstablishmentRequestDTO } from "./dto/create-establishment.dto";
-import { CreateEmailRequestDTO } from "@modules/contact_verification/others/dto/create-email.dto";
-import { CreatePhoneRequestDTO } from "@modules/contact_verification/others/dto/create-phone.dto";
 import { capitalize } from "@shared/utils/global.utils";
 import { HttpException, HttpStatus } from "@nestjs/common";
 import { AccountStatus } from "@shared/enums/account-status.enum";
+import { PhoneEntity } from "@modules/contact/phone/phone.entity";
+import { EmailEntity } from "@modules/contact/email/email.entity";
+import { mapEmailEntityToDTO, mapEmailRequestToEntity, mapPhoneEntityToDTO, mapPhoneRequestToEntity } from "@modules/contact/contact.utils";
+import { CreateEmailRequestDTO } from "@modules/contact/email/dto/create-email.dto";
+import { CreatePhoneRequestDTO } from "@modules/contact/phone/dto/create-phone.dto";
+import { ResponsePhoneDTO } from "@modules/contact/phone/dto/response-phone.dto";
+import { ResponseEmailDTO } from "@modules/contact/email/dto/response-email.dto";
 
 
 export function mapEstablishmentEntityToDTO(entity: EstablishmentEntity): ResponseEstablishmentDTO {

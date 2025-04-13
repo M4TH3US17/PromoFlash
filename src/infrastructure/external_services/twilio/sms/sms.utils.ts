@@ -1,4 +1,4 @@
-import { CreatePhoneRequestDTO } from "@modules/contact_verification/others/dto/create-phone.dto";
+import { CreatePhoneRequestDTO } from "@modules/contact/phone/dto/create-phone.dto";
 import { HttpException, HttpStatus } from "@nestjs/common";
 
 export function formatPhoneNumberToSendSMS(contact: CreatePhoneRequestDTO): string {

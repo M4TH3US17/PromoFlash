@@ -8,34 +8,37 @@ import { mapUserEntityToDTO, mapUserRequestToEntity } from "./others";
 import { UserPaginationDTO } from "./others/dto/pagination-user.dto";
 import { AddressEntity } from "@modules/address/address.entity";
 import { TwilioSMSService } from "@infrastructure/external_services/twilio/sms/sms.service";
-import { EmailEntity, PhoneEntity } from "@modules/contact_verification/contact_methods";
 import { hashPassword } from "@modules/authentication/authentication.utils";
-import { ContactVerificationEntity } from "@modules/contact_verification/contact-verification.entity";
 import { TwilioWhatsappService } from "@infrastructure/external_services/twilio/whatsapp/whatsapp.service";
 import { VenomWhatsappService } from "@infrastructure/external_services/venom/venom.service";
-import { ContactVerificationService } from "@modules/contact_verification/contact-verification.service";
+import { PhoneEntity } from "@modules/contact/phone/phone.entity";
+import { EmailEntity } from "@modules/contact/email/email.entity";
+import { ContactVerificationEntity } from "@modules/contact/verification/verification.entity";
+import { PhoneService } from "@modules/contact/phone/phone.service";
+import { EmailService } from "@modules/contact/email/email.service";
 
 @Injectable()
 export class UserService {
 
     constructor(
         private readonly dataSource: DataSource,
-        private readonly SMSService: TwilioSMSService,
-        private readonly twilioWhatsappService: TwilioWhatsappService,
-        private readonly venomWhatsappService: VenomWhatsappService,
+        // private readonly SMSService: TwilioSMSService,
+        // private readonly twilioWhatsappService: TwilioWhatsappService,
+        // private readonly venomWhatsappService: VenomWhatsappService,
 
-        private readonly contactVerificationService:  ContactVerificationService,
+        private readonly phoneService:  PhoneService,
+        private readonly emailService:  EmailService,
 
         @InjectRepository(UserEntity)
         private readonly repository: Repository<UserEntity>,
-        @InjectRepository(AddressEntity)
-        private readonly addressRepository: Repository<AddressEntity>,
-        @InjectRepository(PhoneEntity)
-        private readonly phoneRepository: Repository<PhoneEntity>,
-        @InjectRepository(EmailEntity)
-        private readonly emailRepository: Repository<EmailEntity>,
-        @InjectRepository(ContactVerificationEntity)
-        private readonly contactVerificationRepository: Repository<ContactVerificationEntity>,
+        // @InjectRepository(AddressEntity)
+        // private readonly addressRepository: Repository<AddressEntity>,
+        // @InjectRepository(PhoneEntity)
+        // private readonly phoneRepository: Repository<PhoneEntity>,
+        // @InjectRepository(EmailEntity)
+        // private readonly emailRepository: Repository<EmailEntity>,
+        // @InjectRepository(ContactVerificationEntity)
+        // private readonly contactVerificationRepository: Repository<ContactVerificationEntity>,
     ) { }
 
     public async getAll(pagination: UserPaginationDTO): Promise<ResponseUserDTO[]> {
@@ -69,8 +72,8 @@ export class UserService {
             const userCreated: UserEntity = await manager.save(UserEntity, userToBeCreated);
 
             const [phoneVerificationsResult, emailVerificationsResult] = await Promise.all([
-                this.contactVerificationService.createPhones(userCreated.phones, userCreated, manager),
-                this.contactVerificationService.createEmails(userCreated.emails, userCreated, manager)
+                this.phoneService.createPhones(userCreated.phones, userCreated, manager),
+                this.emailService.createEmails(userCreated.emails, userCreated, manager)
             ]);
 
             return mapUserEntityToDTO(userCreated, phoneVerificationsResult, emailVerificationsResult);

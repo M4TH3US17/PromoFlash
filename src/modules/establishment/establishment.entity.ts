@@ -4,8 +4,9 @@ import { AddressEntity } from "../address/address.entity";
 import { PromotionEntity } from "../promotion/promotion.entity";
 import { SCHEMA } from "@infrastructure/database/enums/schemas";
 import { EstablishmentType } from "./others/enums/establishment-type.enum";
-import { EmailEntity, PhoneEntity } from "@modules/contact_verification/contact_methods";
 import { AccountStatus } from "@shared/enums/account-status.enum";
+import { EmailEntity } from "@modules/contact/email/email.entity";
+import { PhoneEntity } from "@modules/contact/phone/phone.entity";
 @Entity({
     schema: SCHEMA.PRODUCT,
     name: "establishments",
