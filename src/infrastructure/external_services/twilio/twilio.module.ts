@@ -11,6 +11,9 @@ import { HttpModule } from "@nestjs/axios";
         TwilioSMSService,
         TwilioWhatsappService,
     ],
-    exports: [],
+    exports: [
+        TwilioSMSService,
+        TwilioWhatsappService,
+    ],
 })
 export class TwilioModule {} 

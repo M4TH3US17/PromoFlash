@@ -8,6 +8,8 @@ import { VenomWhatsappService } from "./venom.service";
     providers: [
         VenomWhatsappService
     ],
-    exports: [],
+    exports: [
+        VenomWhatsappService
+    ],
 })
 export class VenomModule {} 

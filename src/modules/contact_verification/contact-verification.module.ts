@@ -6,9 +6,11 @@ import { ContactVerificationService } from "./contact-verification.service";
 import { EmailEntity, PhoneEntity } from "./contact_methods";
 import { UserEntity } from "@modules/user/user.entity";
 import { EstablishmentEntity } from "@modules/establishment/establishment.entity";
+import { VenomModule } from "@infrastructure/external_services/venom/venom.module";
 
 @Module({
     imports: [
+        VenomModule,
         TypeOrmModule.forFeature([
             ContactVerificationEntity,
             EmailEntity, 

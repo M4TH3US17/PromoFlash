@@ -3,7 +3,7 @@ import { APIResponseDTO } from "@shared/bases/usecase-response.dto";
 import { ContactVerificationRequestDTO } from "./others/dto/request-contact-verification.dto";
 import { ResponseContactVerificationDTO } from "./others/dto/response-contact-verification.dto";
 import { ContactVerificationEntity } from "./contact-verification.entity";
-import { Repository } from "typeorm";
+import { EntityManager, Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ConfirmCodeRequestDTO } from "./others/dto/request-confirm-code.dto";
 import { UserEntity } from "@modules/user/user.entity";
@@ -11,11 +11,19 @@ import { TokenType } from "./others/enums/token-type.enum";
 import { capitalize } from "@shared/utils/global.utils";
 import { EmailEntity, PhoneEntity } from "./contact_methods";
 import { AccountStatus } from "@shared/enums/account-status.enum";
+import { EstablishmentEntity } from "@modules/establishment/establishment.entity";
+import { generateRandomCode, mapEmailRequestToEntity, mapPhoneRequestToEntity } from "./others";
+import { OwnerType } from "./others/enums/owner-type.enum";
+import { ContactType } from "./others/enums/contact-type.enum";
+import { VenomWhatsappService } from "@infrastructure/external_services/venom/venom.service";
 
-@Injectable()
 export class ContactVerificationService {
 
     constructor(
+        // private readonly SMSService: TwilioSMSService,
+        // private readonly twilioWhatsappService: TwilioWhatsappService,
+        private readonly venomWhatsappService: VenomWhatsappService,
+
         @InjectRepository(ContactVerificationEntity)
         private readonly repository: Repository<ContactVerificationEntity>,
         @InjectRepository(UserEntity)
@@ -57,30 +65,30 @@ export class ContactVerificationService {
 
         // ATUALIZAÇÕES DOS DADOS
         verification.used_at = new Date();
-        verification.updatedAt = new Date(); 
+        verification.updatedAt = new Date();
         await this.repository.save(verification);
 
         // Se é um usuário pendente (pendente = criado recentemente), é pq precisa confirmar o token enviado para o email ou número de celular
         if (verification.user.accountStatus === AccountStatus.PENDING) {
             if (verification.token_type === TokenType.CONFIRMATION && verification.contact_type === "SMS") {
-                const unconfirmedPhone: PhoneEntity = await this.phoneRepository.findOne({ 
-                    where: { 
+                const unconfirmedPhone: PhoneEntity = await this.phoneRepository.findOne({
+                    where: {
                         confirmed: false,
                         id: verification.contactId
-                    } 
+                    }
                 });
-                unconfirmedPhone.confirmed = true; 
+                unconfirmedPhone.confirmed = true;
                 this.phoneRepository.save(unconfirmedPhone);
             }
 
-            if (verification.token_type === TokenType.CONFIRMATION && verification.contact_type === "EMAIL") { 
-                const unconfirmedEmail: EmailEntity = await this.emailRepository.findOne({ 
-                    where: { 
+            if (verification.token_type === TokenType.CONFIRMATION && verification.contact_type === "EMAIL") {
+                const unconfirmedEmail: EmailEntity = await this.emailRepository.findOne({
+                    where: {
                         confirmed: false,
                         id: verification.contactId
-                    } 
+                    }
                 });
-                unconfirmedEmail.confirmed = true; 
+                unconfirmedEmail.confirmed = true;
                 this.emailRepository.save(unconfirmedEmail);
             }
         };
@@ -88,11 +96,100 @@ export class ContactVerificationService {
         return null;
     };
 
-};
-// if(verification.token_type === TokenType.CONFIRMATION) {
-//     await this.repository.save(verification);
-// };
+    // DEIXAR ESSA CRIAÇÃO DE TELEFONE E EMAIL MAIS FLEXÍVEL (ESTABELECIMENTO E USUÁRIO)
+    public async createPhones(
+        phones: PhoneEntity[],
+        owner: UserEntity | EstablishmentEntity,
+        transactional: EntityManager,
+    ): Promise<ContactVerificationEntity[]> {
+        if (!phones?.length) return;
 
-// if(verification.token_type === TokenType.RECOVERY) {
-//     await this.repository.save(verification);
-// };
+        const phonesToProcess = phones.slice(0, 2);
+        const verifications: ContactVerificationEntity[] = [];
+
+        await Promise.all(phonesToProcess.map(async (phone: PhoneEntity) => {
+            let verificationCode: number = generateRandomCode();
+            let message: string = `[USUÁRIO] Olá, seu código de verificação PromoFlash é: ${verificationCode}`;
+            let phoneCreated = null;
+
+            let phoneAlreadyInUse = await this.phoneRepository.findOne({
+                where: {
+                    ddd: phone.ddd,
+                    countryCode: phone.countryCode,
+                    number: phone.number
+                }
+            });
+
+            if (phoneAlreadyInUse) // tentativa de cadastro com um contato existente. Não criar um novo contato, apenas reutilizar.
+                message = `[USUÁRIO] Olá, verificamos que houve uma tentativa de cadastro no nosso aplicativo PromoFlash utilizando seu contato. Se foi você, confirme no app este código: ${verificationCode}`;
+            else
+                phoneCreated = await transactional.save(PhoneEntity, mapPhoneRequestToEntity(phone));
+
+            let verification = await transactional.save(ContactVerificationEntity, {
+                used_at: null,
+                user: owner,
+                token: verificationCode,
+                owner_type: OwnerType.USER,
+                token_type: TokenType.CONFIRMATION,
+                contact_type: ContactType.SMS,
+                contactId: phoneAlreadyInUse ? phoneAlreadyInUse.id : phoneCreated.id,
+                expired_at: new Date(Date.now() + 5 * 60 * 1000)
+            });
+
+            verifications.push(verification)
+            await this.venomWhatsappService.sendMessage(`${phone.countryCode}${phone.ddd}${phone.number}`, `[MENSAGEM DE TESTE - SMS] Código de Verificação de telefone: (${verificationCode})`);
+            // this.SMSService.sendSMS(formatPhoneNumberToSendSMS(phone), message);
+        }
+        ));
+
+        return verifications
+    };
+
+    public async createEmails(
+        emails: EmailEntity[],
+        owner: UserEntity | EstablishmentEntity,
+        transactional: EntityManager
+    ): Promise<ContactVerificationEntity[]> {
+        if (!emails?.length) return;
+
+        const emailsToProcess = emails.slice(0, 2);
+        const verifications: ContactVerificationEntity[] = [];
+
+        await Promise.all(emailsToProcess.map(async (email: EmailEntity) => {
+            let verificationCode: number = generateRandomCode();
+            let message: string = `[USUÁRIO] Olá, seu código de verificação PromoFlash é: ${verificationCode}`;
+            let emailCreated: EmailEntity = null;
+
+            let emailAlreadyInUse = await this.emailRepository.findOne({ where: { email: email.email } });
+
+            if (emailAlreadyInUse) // tentativa de cadastro com um contato existente. Não criar um novo contato, apenas reutilizar.
+                message = `[USUÁRIO] Olá, verificamos que houve uma tentativa de cadastro no nosso aplicativo PromoFlash
+                        utilizando seu email. Se foi você, confirme no app este código: ${verificationCode}`;
+            else {
+                emailCreated = await transactional.save(EmailEntity, mapEmailRequestToEntity(email));
+            }
+
+            let verification = await transactional.save(ContactVerificationEntity, {
+                used_at: null,
+                user: owner,
+                token: verificationCode,
+                owner_type: OwnerType.USER,
+                token_type: TokenType.CONFIRMATION,
+                contact_type: ContactType.EMAIL,
+                contactId: emailAlreadyInUse ? emailAlreadyInUse.id : emailCreated.id,
+                expired_at: new Date(Date.now() + 5 * 60 * 1000)// moment().add(5, 'minutes').toDate()
+            });
+
+            verifications.push(verification);
+            await this.venomWhatsappService.sendMessage(`+5592986067356`, `[MENSAGEM DE TESTE - EMAIL] Código de Verificação de email: (${verificationCode}) ${emailAlreadyInUse ? JSON.stringify(emailAlreadyInUse.email) : email}`);
+            // this.SMSService.sendSMS(formatPhoneNumberToSendSMS(phone), message);
+        }));
+
+        return verifications;
+
+    };
+};
+        // await this.twilioWhatsappService.sendMessage(
+        //     '+559286067356', 
+        //     'Mensagem Recebida com sucesso ! (PromoFlash)'
+        // );
