@@ -62,7 +62,7 @@ export class UserService {
             let userToBeCreated: UserEntity = mapUserRequestToEntity(request);
             userToBeCreated.password = await hashPassword(userToBeCreated.password);
 
-            const userCreated: UserEntity = await manager.save(UserEntity, userToBeCreated);
+            const userCreated: UserEntity = await manager.save(UserEntity, userToBeCreated); 
 
             const [phoneVerificationsResult, emailVerificationsResult] = await Promise.all([
                 this.phoneService.createPhones(userCreated.phones, userCreated, manager),

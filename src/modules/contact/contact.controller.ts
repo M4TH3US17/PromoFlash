@@ -1,19 +1,20 @@
 import { Body, Controller, HttpStatus, Param, Put, Req, Res } from "@nestjs/common";
 import { Request, Response } from "express";
-import { ApiOperation } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation } from "@nestjs/swagger";
 import { Roles } from "@modules/authentication/others";
 import { UserRole } from "@modules/user/others/enums/user-role.enum";
 import { ContactVerificationService } from "./verification/verification.service";
 import { ConfirmCodeRequestDTO } from "./verification/dto/confirm-code.dto";
 
-@Controller({ 
+@Controller({
     path: "verification"
- })
+})
+@ApiBearerAuth('JWT-auth')
 export class ContactController {
 
     constructor(
         private readonly service: ContactVerificationService,
-    ) {}
+    ) { }
 
     @Put(":id")
     @Roles([UserRole.ADMIN, UserRole.USER])

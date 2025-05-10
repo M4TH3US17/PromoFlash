@@ -9,9 +9,25 @@ export const createSwaggerConfig = (app) => {
         .setTitle('Documentação PromoFlash')
         .setDescription('Documentação da API PromoFlash')
         .setContact('Matheus Washington', 'https://www.linkedin.com/in/matheus-washington-478400207', null)
+        .addBearerAuth(
+            {
+                type: 'http',
+                scheme: 'bearer',
+                bearerFormat: 'JWT',
+                name: 'JWT',
+                description: 'Insira o token JWT',
+                in: 'header'
+            },
+            'JWT-auth'
+        )
         .build();
 
-    const swaggerUiConfig: SwaggerCustomOptions = { customSiteTitle: 'PromoFlash Documentation' };
+    const swaggerUiConfig: SwaggerCustomOptions = {
+        customSiteTitle: 'PromoFlash Documentation',
+        swaggerOptions: {
+            persistAuthorization: true,
+        }
+    };
 
     const docFactory = () => {
         return SwaggerModule.createDocument(app, swaggerInfos, {

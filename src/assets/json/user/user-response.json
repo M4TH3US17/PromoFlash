@@ -1,0 +1,55 @@
+{
+  "message": "Usuário criado com sucesso!",
+  "data": {
+    "id": 1,
+    "username": "Matheus Galdino",
+    "accountStatus": "PENDING",
+    "addresses": [
+      {
+        "id": 1,
+        "address": "ENDEREÇO",
+        "description": "DESCRICAO",
+        "place_id": "PLACE_ID",
+        "location": {
+          "latitude": 0,
+          "longitude": 0
+        }
+      }
+    ],
+    "phones": [
+      {
+        "id": 1,
+        "ddd": "92",
+        "countryCode": "+55",
+        "number": "94517272",
+        "confirmed": false,
+        "receiveSmsNotifications": false,
+        "receiveTelegramNotifications": false,
+        "receiveWhatsappNotifications": false,
+        "pendingVerifications": [
+          {
+            "id": 1,
+            "contactType": "SMS",
+            "tokenType": "CONFIRMATION"
+          }
+        ]
+      }
+    ],
+    "emails": [
+      {
+        "id": 1,
+        "email": "matheus.galdino@gmail.com",
+        "confirmed": false,
+        "receiveEmailNotifications": false,
+        "pendingVerifications": [
+          {
+            "id": 2,
+            "contactType": "EMAIL",
+            "tokenType": "CONFIRMATION"
+          }
+        ]
+      }
+    ],
+    "followingEstablishments": []
+  }
+}

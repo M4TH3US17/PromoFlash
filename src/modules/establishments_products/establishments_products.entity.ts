@@ -34,37 +34,3 @@ export class EstablishmentProduct {
     promotions: PromotionEntity[];
     
 };
-// @Column({ 
-//     name: "establishment_fk", 
-//     foreignKeyConstraintName: "fk_products_establishments",
-// })
-// @ManyToOne(() => EstablishmentEntity, (establishment) => establishment.products, { nullable: false })
-// establishment: EstablishmentEntity
-
-// constructor(
-//     product: ProductEntity, establishment: EstablishmentEntity, price: number, description: string, category: ProductCategory, status: Status,
-// ) {
-//     this.pk.product = product;
-//     this.pk.establishment = establishment;
-
-//     this.price = price;
-//     this.category = category;
-//     this.status = status;
-//     this.description = description;
-// }
-
-// public get product(): ProductEntity {
-//     return this.pk.product
-// };
-
-// public get establishment(): EstablishmentEntity {
-//     return this.pk.establishment
-// };
-
-// public set product(product: ProductEntity) {
-//     this.pk.product = product;
-// };
-
-// public set establishment(establishment: EstablishmentEntity) {
-//     this.pk.establishment = establishment;
-// };

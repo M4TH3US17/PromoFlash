@@ -10,9 +10,11 @@ import { EmailEntity } from "./email/email.entity";
 import { PhoneEntity } from "./phone/phone.entity";
 import { PhoneService } from "./phone/phone.service";
 import { EmailService } from "./email/email.service";
+import { TwilioModule } from "@infrastructure/external_services/twilio/twilio.module";
 
 @Module({
     imports: [
+        TwilioModule,
         VenomModule,
         TypeOrmModule.forFeature([
             ContactVerificationEntity,

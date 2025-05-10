@@ -18,6 +18,12 @@ async function bootstrap() {
 
   app.useGlobalFilters(new HttpExceptionFilter());
 
+  app.enableCors({
+    origin: '*', // Ou '*' para desenvolvimento
+    allowedHeaders: ['Content-Type', 'Authorization'], // ⚠️ Adicione 'Authorization'
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  });
+
   // Swagger Config
   const { docFactory, swaggerUiConfig } = createSwaggerConfig(app);
   SwaggerModule.setup('promoflash-doc', app, docFactory, swaggerUiConfig);

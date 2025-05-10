@@ -17,7 +17,6 @@ export class RolesGuard implements CanActivate {
 
     async canActivate(context: ExecutionContext,): Promise<boolean> {
         try {
-            ;
             const roles = this.reflector.getAllAndOverride<UserRole[]>(Roles, [
                 context.getHandler(),
                 context.getClass(),
@@ -57,6 +56,7 @@ export class RolesGuard implements CanActivate {
     };
 
     private extractTokenFromHeader(request: Request): string | undefined {
+        console.log(request.headers)
         const [type, token] = request.headers.authorization?.split(' ') ?? [];
         return type === 'Bearer' ? token : undefined;
     }

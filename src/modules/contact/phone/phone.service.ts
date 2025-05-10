@@ -12,12 +12,15 @@ import { VenomWhatsappService } from "@infrastructure/external_services/venom/ve
 import { ContactVerificationEntity } from "../verification/verification.entity";
 import { mapPhoneRequestToEntity } from "./phone.utils";
 import { SMSVerificationTemplate } from "src/assets/templates/whatsapp/venom/verification";
+import { formatPhoneNumberToSendSMS } from "@infrastructure/external_services/twilio/sms/sms.utils";
+import { TwilioSMSService } from "@infrastructure/external_services/twilio/sms/sms.service";
 
 
 @Injectable()
 export class PhoneService {
 
     constructor(
+        private readonly SMSService: TwilioSMSService,
         private readonly venomWhatsappService: VenomWhatsappService,
 
         @InjectRepository(PhoneEntity)
@@ -70,7 +73,7 @@ export class PhoneService {
             );
 
             await this.venomWhatsappService.sendMessage(`${phone.countryCode}${phone.ddd}${phone.number}`, message);
-            // this.SMSService.sendSMS(formatPhoneNumberToSendSMS(phone), message);
+            // this.SMSService.sendSMS(formatPhoneNumberToSendSMS(phone), `Código de verificação: ${verificationCode}`);
         }
         ));
 
