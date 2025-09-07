@@ -72,7 +72,8 @@ export class PhoneService {
                 phone,
             );
 
-            await this.venomWhatsappService.sendMessage(`${phone.countryCode}${phone.ddd}${phone.number}`, message);
+            console.log(message)
+            // await this.venomWhatsappService.sendMessage(`${phone.countryCode}${phone.ddd}${phone.number}`, message);
             // this.SMSService.sendSMS(formatPhoneNumberToSendSMS(phone), `Código de verificação: ${verificationCode}`);
         }
         ));

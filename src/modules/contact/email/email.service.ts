@@ -59,7 +59,9 @@ export class EmailService {
                 true,
                 emailAlreadyInUse ? emailAlreadyInUse.email : email.email,
             );
-            await this.venomWhatsappService.sendMessage(`+5592986067356`, message);
+
+            console.log(message)
+            // await this.venomWhatsappService.sendMessage(`+5592986067356`, message);
             // this.SMSService.sendSMS(formatPhoneNumberToSendSMS(phone), message);
         }));
 

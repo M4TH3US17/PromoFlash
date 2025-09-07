@@ -33,6 +33,7 @@ export class UserController {
     public async create(@Body() request: CreateUserRequestDTO, @Res() res: Response) {
         try {
             const data: ResponseUserDTO = await this.service.create(request);
+            console.log(request)
             return res.status(HttpStatus.CREATED).json({
                 message: `Usuário criado com sucesso!`,
                 data: data
